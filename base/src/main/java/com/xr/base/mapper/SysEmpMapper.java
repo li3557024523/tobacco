@@ -39,7 +39,7 @@ public interface SysEmpMapper {
     @Select("SELECT e.id,e.`name`,e.phone,e.username,e.state ,\n" +
             "(SELECT name from sys_role r where e.role_id = r.id)AS rname,\n" +
             "(SELECT dept_name from sys_dept d where e.dept_id = d.id) AS dname\n" +
-            " FROM sys_emp e LIMIT #{page},#{count}")
+            " FROM sys_emp e where e.`name` like '%#{name}%' LIMIT #{page},#{count}")
     @Results({
             @Result(column ="id",property = "id"),
             @Result(column = "name", property = "name"),
@@ -50,7 +50,7 @@ public interface SysEmpMapper {
             @Result(column = "rname", property = "Rname")
             //  one = @One(select = "com.xr.base.mapper.queryrole", fetchType = FetchType.DEFAULT)
     })
-    public List<SysEmp> list(@Param("page") Integer page,@Param("count") Integer count);
+    public List<SysEmp> list(SysEmp sysEmp, @Param("page") Integer page,@Param("count") Integer count);
     @Select("select count(*) from sys_emp")
     public int empsize();
     /**
@@ -73,10 +73,10 @@ public interface SysEmpMapper {
      */
 
     void update(SysEmp sysEmp);
-
+    //查询用户所有角色
     @Select("SELECT * FROM sys_role r , sys_emp e , sys_emp_role er where e.id = er.emp_id and r.id = er.role_id and e.`name` = #{name}")
     List<SysRole> findRoles(String name);
-
+    //查询用户所有权限
     @Select("SELECT * FROM sys_menu m , sys_role r, sys_role_menu rm ,sys_emp e ,sys_emp_role er where e.id = er.emp_id and r.id = er.role_id and r.id = rm.role_id and m.id = rm.menu_id and e.`name` = #{name}")
     List<SysMenu> findMenu(String name);
 

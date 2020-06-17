@@ -26,7 +26,7 @@ public interface SysEmpService {
     /**
      * 重新所有员工
      */
-    List<SysEmp> list(Integer page,Integer count);
+    List<SysEmp> list(SysEmp sysEmp,Integer page,Integer count);
     int empsize();
 
     /**
@@ -34,4 +34,9 @@ public interface SysEmpService {
      */
     List<SysRole> findRoles(String name);
     List<SysMenu> findMenu(String name);
+
+    /**
+     * 删除
+     */
+    void dele(int id);
 }

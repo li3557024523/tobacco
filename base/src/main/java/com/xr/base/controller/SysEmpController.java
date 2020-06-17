@@ -5,6 +5,7 @@ import com.xr.base.service.SysEmpService;
 import com.xr.base.util.ResponseResult;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,19 +74,21 @@ public class SysEmpController {
     }
 
     @RequestMapping("list")
-    public ResponseResult list(@RequestParam Integer page, Integer limit){
-        System.out.println(page +""+ limit);
-        List<SysEmp> list = sysEmpService.list((page-1)*limit, limit);
+    public ResponseResult list(SysEmp sysEmp, Integer page, Integer limit){
+        List<SysEmp> list = sysEmpService.list(sysEmp,(page-1)*limit, limit);
         int empsize = sysEmpService.empsize();
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i));
-        }
         ResponseResult result = new ResponseResult();
         result.getData().put("items",list);
         result.getData().put("total",empsize);
         return result;
     }
 
-
-
+    @RequestMapping("delete")
+    @RequiresPermissions("emp:delete")
+    public ResponseResult add(Integer id){
+        sysEmpService.dele(id);
+        ResponseResult result = new ResponseResult();
+        result.getData().put("message","删除成功");
+        return result;
+    }
 }

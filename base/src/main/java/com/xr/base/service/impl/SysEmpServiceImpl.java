@@ -33,8 +33,8 @@ public class SysEmpServiceImpl implements SysEmpService {
     }
 
     @Override
-    public List<SysEmp> list(Integer page,Integer count) {
-        return sysEmpMapper.list(page, count);
+    public List<SysEmp> list(SysEmp sysEmp,Integer page,Integer count) {
+        return sysEmpMapper.list(sysEmp,page,count);
     }
 
     @Override
@@ -50,5 +50,10 @@ public class SysEmpServiceImpl implements SysEmpService {
     @Override
     public List<SysMenu> findMenu(String name) {
         return sysEmpMapper.findMenu(name);
+    }
+
+    @Override
+    public void dele(int id) {
+        sysEmpMapper.dele(id);
     }
 }

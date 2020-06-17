@@ -24,18 +24,51 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column label="创建时间" width="150px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+      <el-table-column label="姓名" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="用户名" min-width="150px">
+
+       <el-table-column label="用户名" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type">{{ row.username }}</span>
         </template>
       </el-table-column>
+
+
+       <el-table-column label="手机号" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.phone }}</span>
+        </template>
+      </el-table-column>
+
+
+       <el-table-column label="所在部门" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.dname}}</span>
+        </template>
+      </el-table-column>
+
+       <el-table-column label="员工编号" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.id }}</span>
+        </template>
+      </el-table-column>
+      
+       <el-table-column label="角色" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.rname}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="员工状态" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.state }}</span>
+        </template>
+      </el-table-column>
+      
       <!--     自定义列-->
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
@@ -137,7 +170,7 @@
         listLoading: true, // 是否使用动画
         listQuery: {
           page: 1, // 分页需要的当前页
-          limit: 20, // 分页需要的每页显示多少条
+          limit: 10, // 分页需要的每页显示多少条
           sex: 1,
           username: ''
         },
@@ -179,6 +212,7 @@
         this.listLoading = true
         // debugger // 调试
         list(this.listQuery).then(response => {
+          console.log(response)
           this.list = response.data.items
           this.total = response.data.total
           // 转圈圈结束

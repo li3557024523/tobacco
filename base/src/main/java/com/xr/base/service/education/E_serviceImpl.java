@@ -1,7 +1,7 @@
 package com.xr.base.service.education;
 
 import com.xr.base.entity.Education;
-import com.xr.base.dao.E_mapper;
+import com.xr.base.mapper.E_mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

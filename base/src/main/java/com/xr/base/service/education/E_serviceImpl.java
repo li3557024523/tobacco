@@ -38,6 +38,7 @@ public class E_serviceImpl implements E_service {
 
     @Override
     public List<Education> E_ListByType(Integer type,Integer page,Integer limit) {
+       System.out.println(type);
         return e_mapper.E_ListByType(type,page,limit);
     }
 }

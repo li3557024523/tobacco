@@ -1,10 +1,7 @@
 package com.xr.base.mapper;
 
 import com.xr.base.entity.Education;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -24,5 +21,5 @@ public interface E_mapper {
     @Select("delete from education where id=#{id}")
     public int E_Del(int id);
     @Select("select * from education where InformationTypes=#{type} limit #{page},#{limit} ")
-    public List<Education> E_ListByType(Integer type, Integer page, Integer limit);
+    public List<Education> E_ListByType(@Param("type") Integer type, @Param("page")Integer page,@Param("limit")Integer limit);
 }

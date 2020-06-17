@@ -28,7 +28,7 @@ public class E_controller {
     @RequestMapping("/listType")
     //@RequiresPermissions("user:list")
     public ResponseResult listtype(Integer page, Integer limit,Integer listType) {
-        //System.out.println(listType);
+        System.out.println(listType);
         //System.out.println("limit:"+limit+"page:"+page);
         List<Education> list = e_service.E_ListByType(listType,(page-1)*limit,limit);
         ResponseResult result = new ResponseResult();

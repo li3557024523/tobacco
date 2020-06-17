@@ -31,6 +31,9 @@ export function list(data) {
   return request({
     url: '/emp/list',
     method: 'post',
-    data
+    params:{
+      page: data.page,
+      limit: data.limit
+    }
   })
 }

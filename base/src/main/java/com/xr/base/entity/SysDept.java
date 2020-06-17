@@ -12,10 +12,10 @@ public class SysDept {
   private String principalName;
   private String info;
   private String leadership;
-  private java.sql.Time data;
+  private java.sql.Time date;
   private Integer createId;
   private String createName;
-  private Integer state;
+  private String state;
 
 
   public Integer getId() {
@@ -81,12 +81,12 @@ public class SysDept {
   }
 
 
-  public java.sql.Time getData() {
-    return data;
+  public java.sql.Time getDate() {
+    return date;
   }
 
-  public void setData(java.sql.Time data) {
-    this.data = data;
+  public void setDate(java.sql.Time date) {
+    this.date = date;
   }
 
 
@@ -108,11 +108,11 @@ public class SysDept {
   }
 
 
-  public Integer getState() {
+  public String getState() {
     return state;
   }
 
-  public void setState(Integer state) {
+  public void setState(String state) {
     this.state = state;
   }
 

@@ -1,8 +1,11 @@
 package com.xr.base.service.impl;
 
 import com.xr.base.entity.SysEmp;
+import com.xr.base.entity.SysMenu;
+import com.xr.base.entity.SysRole;
 import com.xr.base.mapper.SysEmpMapper;
 import com.xr.base.service.SysEmpService;
+import com.xr.base.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +33,22 @@ public class SysEmpServiceImpl implements SysEmpService {
     }
 
     @Override
-    public List<SysEmp> list() {
-        return sysEmpMapper.list();
+    public List<SysEmp> list(Integer page,Integer count) {
+        return sysEmpMapper.list(page, count);
+    }
+
+    @Override
+    public int empsize() {
+        return sysEmpMapper.empsize();
+    }
+
+    @Override
+    public List<SysRole> findRoles(String name) {
+        return sysEmpMapper.findRoles(name);
+    }
+
+    @Override
+    public List<SysMenu> findMenu(String name) {
+        return sysEmpMapper.findMenu(name);
     }
 }

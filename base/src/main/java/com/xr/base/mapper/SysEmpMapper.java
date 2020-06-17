@@ -1,8 +1,11 @@
 package com.xr.base.mapper;
 
+import com.xr.base.entity.SysDept;
 import com.xr.base.entity.SysEmp;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import com.xr.base.entity.SysMenu;
+import com.xr.base.entity.SysRole;
+import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,6 +36,48 @@ public interface SysEmpMapper {
     /**
      * 查询所有员工
      */
-    @Select("select * from sys_emp")
-    public List<SysEmp> list();
+    @Select("SELECT e.id,e.`name`,e.phone,e.username,e.state ,\n" +
+            "(SELECT name from sys_role r where e.role_id = r.id)AS rname,\n" +
+            "(SELECT dept_name from sys_dept d where e.dept_id = d.id) AS dname\n" +
+            " FROM sys_emp e LIMIT #{page},#{count}")
+    @Results({
+            @Result(column ="id",property = "id"),
+            @Result(column = "name", property = "name"),
+            @Result(column = "username", property = "username"),
+            @Result(column = "phone", property = "phone"),
+            @Result(column = "state", property = "state"),
+            @Result(column = "dname", property = "Dname"),
+            @Result(column = "rname", property = "Rname")
+            //  one = @One(select = "com.xr.base.mapper.queryrole", fetchType = FetchType.DEFAULT)
+    })
+    public List<SysEmp> list(@Param("page") Integer page,@Param("count") Integer count);
+    @Select("select count(*) from sys_emp")
+    public int empsize();
+    /**
+     * 增加
+     */
+    @Insert("INSERT INTO sys_emp VALUES(NULL,#{name},#{sex},#{age},#{education},#{politics},#{phone},#{dept_id},#{username},#{password},#{role_id},#{date},#{create_id},#{create_name},#{state})")
+    void add(SysEmp sysEmp);
+    /**
+     * 删除
+     */
+    @Delete("delete from sys_emp where id = #{id}")
+    void dele(int id);
+    /**
+     * 查询单个
+     */
+    @Select("select * from sys_emp where id = #{id}")
+    SysEmp findOne(int id);
+    /**
+     * 修改
+     */
+
+    void update(SysEmp sysEmp);
+
+    @Select("SELECT * FROM sys_role r , sys_emp e , sys_emp_role er where e.id = er.emp_id and r.id = er.role_id and e.`name` = #{name}")
+    List<SysRole> findRoles(String name);
+
+    @Select("SELECT * FROM sys_menu m , sys_role r, sys_role_menu rm ,sys_emp e ,sys_emp_role er where e.id = er.emp_id and r.id = er.role_id and r.id = rm.role_id and m.id = rm.menu_id and e.`name` = #{name}")
+    List<SysMenu> findMenu(String name);
+
 }

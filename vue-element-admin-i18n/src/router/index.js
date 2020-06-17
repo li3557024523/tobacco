@@ -412,32 +412,32 @@ export const asyncRoutes = [
     meta: {
       title: '系统管理',
       icon: 'example',
-      roles: ['admin','editor','Bos'] // 您可以在根导航中设置角色
+      roles: ['admin','editor','超级管理员'] // 您可以在根导航中设置角色
     },
     children: [
       {
         path: 'user',
         component: () => import('@/views/sys/user'),
         name: 'user',
-        meta: { title: '用户管理' ,roles: ['admin','Bos']}
+        meta: { title: '用户管理' ,roles: ['admin','超级管理员']}
       },
       {
         path: 'role',
         component: () => import('@/views/sys/role'),
         name: 'role',
-        meta: { title: '角色管理' ,roles: ['admin','Bos']}
+        meta: { title: '角色管理' ,roles: ['admin','超级管理员']}
       },
       {
         path: 'menu',
         component: () => import('@/views/sys/menu'),
         name: 'menu',
-        meta: { title: '菜单管理' ,roles: ['admin','Bos']}
+        meta: { title: '菜单管理' ,roles: ['admin','超级管理员']}
       },
       {
         path: 'dept',
         component: () => import('@/views/sys/dept'),
         name: 'dept',
-        meta: { title: '部门管理',roles: ['admin','Bos'] },
+        meta: { title: '部门管理',roles: ['admin','超级管理员'] },
       }
     ]
   },
@@ -450,26 +450,26 @@ export const asyncRoutes = [
     meta: {
       title: '基础档案设置',
       icon: 'example',
-      roles: ['editor','admin','Bos'] // you can set roles in root nav
+      roles: ['editor','admin','超级管理员'] // you can set roles in root nav
     },
     children: [
       {
         path: 'recordset',
         component: () => import('../views/table/complex-table'),
         name: '基础档案设置',
-        meta: { title: '基础档案设置' ,roles: ['admin','editor','Bos']}
+        meta: { title: '基础档案设置' ,roles: ['admin','editor','超级管理员']}
       },
       {
         path: 'pick',
         component: () => import('../views/table/complex-table'),
         name: 'pick',
-        meta: { title: '收派标准' ,roles: ['editor','Bos']}
+        meta: { title: '收派标准' ,roles: ['editor','超级管理员']}
       },
       {
         path: 'regular',
         component: () => import('../views/table/complex-table'),
         name: '班车线路',
-        meta: { title: '班车线路' ,roles: ['editor','Bos']}
+        meta: { title: '班车线路' ,roles: ['editor','超级管理员']}
       }
     ]
   },

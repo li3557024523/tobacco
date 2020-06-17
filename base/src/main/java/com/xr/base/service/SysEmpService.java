@@ -26,7 +26,7 @@ public interface SysEmpService {
     /**
      * 重新所有员工
      */
-    List<SysEmp> list(SysEmp sysEmp,Integer page,Integer count);
+    List<SysEmp> list(String name,Integer page,Integer count);
     int empsize();
 
     /**

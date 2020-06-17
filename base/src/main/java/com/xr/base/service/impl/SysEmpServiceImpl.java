@@ -33,8 +33,8 @@ public class SysEmpServiceImpl implements SysEmpService {
     }
 
     @Override
-    public List<SysEmp> list(SysEmp sysEmp,Integer page,Integer count) {
-        return sysEmpMapper.list(sysEmp,page,count);
+    public List<SysEmp> list(String name,Integer page,Integer count) {
+        return sysEmpMapper.list(name,page,count);
     }
 
     @Override

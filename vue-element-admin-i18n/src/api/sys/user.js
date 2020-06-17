@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { date } from 'jszip/lib/defaults'
 // 添加用户
 export function add(data) {
   return request({
@@ -32,6 +33,7 @@ export function list(data) {
     url: '/emp/list',
     method: 'post',
     params:{
+      
       page: data.page,
       limit: data.limit
     }

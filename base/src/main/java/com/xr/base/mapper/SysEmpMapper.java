@@ -36,10 +36,16 @@ public interface SysEmpMapper {
     /**
      * 查询所有员工
      */
-    @Select("SELECT e.id,e.`name`,e.phone,e.username,e.state ,\n" +
+    @Select({"<script>"
+            ,"SELECT e.id,e.`name`,e.phone,e.username,e.state ,\n" +
             "(SELECT name from sys_role r where e.role_id = r.id)AS rname,\n" +
             "(SELECT dept_name from sys_dept d where e.dept_id = d.id) AS dname\n" +
-            " FROM sys_emp e where e.`name` like '%#{name}%' LIMIT #{page},#{count}")
+            " FROM sys_emp e where 1=1" ,
+            "<when test = 'name!=null'>" ,
+                "and e.`name` like '%${name}%'",
+            "</when>",
+            " LIMIT #{page},#{count} ",
+            "</script>"})
     @Results({
             @Result(column ="id",property = "id"),
             @Result(column = "name", property = "name"),
@@ -50,7 +56,7 @@ public interface SysEmpMapper {
             @Result(column = "rname", property = "Rname")
             //  one = @One(select = "com.xr.base.mapper.queryrole", fetchType = FetchType.DEFAULT)
     })
-    public List<SysEmp> list(SysEmp sysEmp, @Param("page") Integer page,@Param("count") Integer count);
+    public List<SysEmp> list(@Param("name")String name, @Param("page") Integer page,@Param("count") Integer count);
     @Select("select count(*) from sys_emp")
     public int empsize();
     /**

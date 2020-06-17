@@ -74,8 +74,9 @@ public class SysEmpController {
     }
 
     @RequestMapping("list")
-    public ResponseResult list(SysEmp sysEmp, Integer page, Integer limit){
-        List<SysEmp> list = sysEmpService.list(sysEmp,(page-1)*limit, limit);
+    public ResponseResult list(String name, Integer page, Integer limit){
+        System.out.println(name);
+        List<SysEmp> list = sysEmpService.list(name,(page-1)*limit, limit);
         int empsize = sysEmpService.empsize();
         ResponseResult result = new ResponseResult();
         result.getData().put("items",list);

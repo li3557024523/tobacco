@@ -99,6 +99,7 @@
             </el-option-group>
           </el-select>
         </el-form-item>
+
         <el-form-item label="姓名" prop="deptName">
           <el-input placeholder="请输入用户名" v-model="temp.deptName" />
         </el-form-item>
@@ -106,27 +107,12 @@
           <el-input placeholder="请输入密码" v-model="temp.password" show-password></el-input>
         </el-form-item>
         
-        <el-form-item label="部门" prop="deptId">
-            <el-select v-model="temp.deptId" placeholder="请选择">
-              <el-option-group
-                v-for="group in deptList"
-                :key="group.id"
-                :label="group.name">
-                <el-option-group
-                  v-for="item in group.items"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
-                  <el-option
-                    v-for="m in item.items"
-                    :key="m.id"
-                    :label="m.name"
-                    :value="m.id">
-                  </el-option>
-                </el-option-group>
-              </el-option-group>
-            </el-select>
-        </el-form-item>
+        <div class="block">
+          <el-cascader
+            :options="options"
+            :props="{ checkStrictly: true }"
+            clearable></el-cascader>
+        </div>
 
 
 
@@ -186,7 +172,8 @@
         rules: {
           // 校验规则
           name: [{ required: true, message: '用户名必填', trigger: 'blur' }]
-        }
+        },
+        options: []
       }
     },
     // 创建实例时的钩子函数
@@ -199,7 +186,8 @@
       // 获得分好组的部门信息
       getGroupDept(){
         groupDept().then((response) => {
-          this.deptList = response.data.deptList
+          console.log(response)
+          this.options = response.data.deptList
         })
       },
       // 去后台取数据的

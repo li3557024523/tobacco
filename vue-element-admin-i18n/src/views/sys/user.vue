@@ -94,7 +94,7 @@
       -->
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
         <!--        数据校验要求prop值和temp.属性名一致-->
-        <el-form-item label="部门" prop="sex">
+        <el-form-item label="部门" prop="sex">  
           <el-select v-model="temp.deptId" placeholder="请选择">
             <el-option-group
               v-for="group in deptList"

@@ -39,4 +39,19 @@ public interface SysEmpService {
      * 删除
      */
     void dele(int id);
+    /**
+     * 新增
+     */
+    void add(SysEmp sysEmp);
+    /**
+     * 修改
+     */
+    void update(SysEmp sysEmp);
+
+    /**
+     * 查询单个
+     * @param id
+     * @return
+     */
+    SysEmp findOne(int id);
 }

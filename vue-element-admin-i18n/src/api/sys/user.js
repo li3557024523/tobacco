@@ -33,7 +33,7 @@ export function list(data) {
     url: '/emp/list',
     method: 'post',
     params:{
-      
+      username:data.username,
       page: data.page,
       limit: data.limit
     }

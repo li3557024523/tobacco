@@ -1,9 +1,10 @@
 import request from '@/utils/request'
+import { date } from 'jszip/lib/defaults'
 
 // 返回分好组的部门集合
 export function groupDept() {
   return request({
-    url: '/dept/groupDept',
+    url: '/dept/deptlist',
     method: 'get'
   })
 }
@@ -15,7 +16,7 @@ export function add(data) {
   })
 }
 
-export function deleteUser(id) {
+export function deleteEmp(id) {
   return request({
     url: '/dept/delete',
     method: 'get',
@@ -35,6 +36,10 @@ export function list(data) {
   return request({
     url: '/dept/list',
     method: 'post',
-    data
+    params:{
+      name:data.name,
+      page: data.page,
+      limit: data.limit
+    } 
   })
 }

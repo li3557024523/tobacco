@@ -77,8 +77,8 @@ public interface SysEmpMapper {
     /**
      * 修改
      */
-
     void update(SysEmp sysEmp);
+
     //查询用户所有角色
     @Select("SELECT * FROM sys_role r , sys_emp e , sys_emp_role er where e.id = er.emp_id and r.id = er.role_id and e.`name` = #{name}")
     List<SysRole> findRoles(String name);

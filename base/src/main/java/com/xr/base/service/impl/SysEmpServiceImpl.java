@@ -56,4 +56,19 @@ public class SysEmpServiceImpl implements SysEmpService {
     public void dele(int id) {
         sysEmpMapper.dele(id);
     }
+
+    @Override
+    public void add(SysEmp sysEmp) {
+        sysEmpMapper.add(sysEmp);
+    }
+
+    @Override
+    public void update(SysEmp sysEmp) {
+        sysEmpMapper.update(sysEmp);
+    }
+
+    @Override
+    public SysEmp findOne(int id) {
+        return sysEmpMapper.findOne(id);
+    }
 }

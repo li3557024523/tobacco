@@ -6,11 +6,17 @@ import com.xr.base.util.ResponseResult;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -74,9 +80,10 @@ public class SysEmpController {
     }
 
     @RequestMapping("list")
-    public ResponseResult list(String name, Integer page, Integer limit){
-        System.out.println(name);
-        List<SysEmp> list = sysEmpService.list(name,(page-1)*limit, limit);
+    public ResponseResult list(String username, Integer page, Integer limit){
+        System.out.println(username);
+        System.out.println(page+""+limit);
+        List<SysEmp> list = sysEmpService.list(username,(page-1)*limit, limit);
         int empsize = sysEmpService.empsize();
         ResponseResult result = new ResponseResult();
         result.getData().put("items",list);
@@ -86,10 +93,37 @@ public class SysEmpController {
 
     @RequestMapping("delete")
     @RequiresPermissions("emp:delete")
-    public ResponseResult add(Integer id){
+    public ResponseResult delete(Integer id){
         sysEmpService.dele(id);
         ResponseResult result = new ResponseResult();
         result.getData().put("message","删除成功");
         return result;
     }
+
+    @RequestMapping("add")
+    @RequiresPermissions("emp:add")
+    public ResponseResult add(SysEmp sysEmp){
+        //获取系统当前时间
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date time=null;
+        try {
+            time=sdf.parse(sdf.format(new Date()));
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+        sysEmp.setDate((Time) time);
+
+        //生成盐（部分，需要存入数据库中）
+        String salt=new SecureRandomNumberGenerator().nextBytes().toHex();
+        //将原始密码加盐（上面生成的盐），并且用md5算法加密两次，将最后结果存入数据库中
+        String password = new Md5Hash(sysEmp.getPassword(),salt,2).toString();
+        sysEmp.setSalt(salt);
+        sysEmp.setPassword(password);
+        sysEmpService.add(sysEmp);
+        ResponseResult result = new ResponseResult();
+        result.getData().put("message","添加成功");
+        return result;
+    }
+
+
 }

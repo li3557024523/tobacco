@@ -2,13 +2,15 @@ package com.xr.base.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SysDept {
 
   private Integer id;
   private String deptName;
   private Integer parentId;
-  private Integer orderNum;
+  private Integer did;
   private String principalName;
   private String info;
   private String leadership;
@@ -16,6 +18,7 @@ public class SysDept {
   private Integer createId;
   private String createName;
   private String state;
+  private List<SysDept> DeptCharlen;
 
 
   public Integer getId() {
@@ -45,13 +48,6 @@ public class SysDept {
   }
 
 
-  public Integer getOrderNum() {
-    return orderNum;
-  }
-
-  public void setOrderNum(Integer orderNum) {
-    this.orderNum = orderNum;
-  }
 
 
   public String getPrincipalName() {

@@ -184,12 +184,12 @@
     },
     methods: {
       // 获得分好组的部门信息
-      getGroupDept(){
-        groupDept().then((response) => {
-          console.log(response)
-          this.options = response.data.deptList
-        })
-      },
+      // getGroupDept(){
+      //   groupDept().then((response) => {
+      //     console.log(response)
+      //     this.options = response.data.deptList
+      //   })
+      // },
       // 去后台取数据的
       getList() {
         // 开始转圈圈

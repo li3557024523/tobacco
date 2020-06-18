@@ -8,8 +8,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
 import java.text.ParseException;
@@ -34,6 +33,13 @@ public class SysDeptController {
     public ResponseResult deptList(){
         ResponseResult result = new ResponseResult();
         result.getData().put("dept",sysDeptService.DeptList());
+        return result;
+    }
+
+    @RequestMapping("leadership")
+    public ResponseResult leadership(){
+        ResponseResult result = new ResponseResult();
+        result.getData().put("leadership",sysDeptService.leadership());
         return result;
     }
 
@@ -67,10 +73,19 @@ public class SysDeptController {
         }catch (ParseException e){
             e.printStackTrace();
         }
-        sysDept.setDate((Time) time);
+        sysDept.setDate(time);
         sysDeptService.add(sysDept);
         ResponseResult result = new ResponseResult();
         result.getData().put("message","添加成功");
+        return result;
+    }
+    @PostMapping("update")
+    @RequiresPermissions("dept:update")
+    public ResponseResult update(SysDept sysDept){
+        System.out.println("修改"+sysDept);
+        sysDeptService.update(sysDept);
+        ResponseResult result = new ResponseResult();
+        result.getData().put("message","修改成功");
         return result;
     }
 

@@ -13,6 +13,8 @@ public interface SysDeptMapper {
     @Select("select * from sys_dept")
     List<SysDept> DeptList();
 
+    @Select("select leadership from sys_dept")
+        List<SysDept> leadership();
 
     @Select("select * from sys_dept where parent_id = #{parent_id}")
     List<SysDept> groupByFidList(int fid);
@@ -30,14 +32,14 @@ public interface SysDeptMapper {
     @Select("select count(*) from sys_dept")
     int deptsize();
 
-    @Insert("INSERT into sys_dept VALUES(NULL,#{dept_name},NULL,NULL,#{principal_name},NULL,#{leadership},#{date}, #{create_id} , #{create_name} , #{state})")
+    @Insert("INSERT into sys_dept VALUES(NULL,#{deptName},NULL,NULL,#{principalName},NULL,#{leadership},#{date}, #{createId} , #{createName} , #{state})")
     void add(SysDept sysDept);
 
     @Update("" +
             "UPDATE sys_dept SET " +
-            "dept_name = #{dept_name},principal_name = #{principal_name},info = #{info},leadership = #{leadership},state = #{state} " +
-            "where id = #{id} ")
-    void update(SysDept sysDept);
+            "dept_name = #{e.deptName},principal_name = #{e.principalName},leadership = #{e.leadership},state = #{e.state},parent_id = #{e.parentId} " +
+            "where id = #{e.id} ")
+    void update(@Param("e") SysDept sysDept);
 
     @Select("SELECT * from sys_dept where id = #{id}")
     SysDept findOne(Integer id);

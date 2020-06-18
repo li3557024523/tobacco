@@ -45,7 +45,18 @@ public class SysEmpController {
         result.getData().put("token",subject.getSession().getId());
         return result;
     }
-
+    /**
+     * 退出
+     * @return
+     */
+    @RequestMapping("logout")
+    public ResponseResult logout(){
+        ResponseResult result = new ResponseResult();
+        Subject subject = SecurityUtils.getSubject();
+        // 只需调用shiro的logout方法就可以了
+        subject.logout();
+        return result;
+    }
     @RequestMapping("info")
     public ResponseResult info(String token){
         // 根据用户名查询用户信息
@@ -124,6 +135,7 @@ public class SysEmpController {
         result.getData().put("message","添加成功");
         return result;
     }
+
 
 
 }

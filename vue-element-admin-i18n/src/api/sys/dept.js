@@ -1,6 +1,15 @@
 import request from '@/utils/request'
 import { date } from 'jszip/lib/defaults'
 
+
+//
+export function leadership() {
+  return request({
+    url: '/dept/leadership',
+    method: 'get'
+  })
+}
+
 // 返回分好组的部门集合
 export function groupDept() {
   return request({
@@ -28,7 +37,14 @@ export function update(data) {
   return request({
     url: '/dept/update',
     method: 'post',
-    data
+    data:{
+      deptName: data.deptName,
+      parentId:data.parentId,
+      id:data.id,
+      leadership:data.leadership,
+      principalName:data.principalName,
+      state:data.state
+    }
   })
 }
 

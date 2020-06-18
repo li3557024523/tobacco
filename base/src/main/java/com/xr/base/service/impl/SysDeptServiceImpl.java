@@ -58,12 +58,20 @@ public class SysDeptServiceImpl implements SysDeptService {
     }
 
     @Override
+    public List<SysDept> leadership() {
+        List<SysDept> leadership = sysDeptMapper.leadership();
+        System.out.print("a");
+        leadership.forEach(System.out::print);
+        return leadership;
+    }
+
+    @Override
     public List<SysDept> groupByFidList(int fid) {
         return sysDeptMapper.groupByFidList(fid);
     }
     //查询子部门
     private  void findSysDeptAllChrlen( List<SysDept> sysDeptList){
-        List<SysDept> sysDeptLists = new ArrayList<>();
+
         for (SysDept sysDept : sysDeptList){
             List<SysDept> sysDepts = sysDeptMapper.groupByFidList(sysDept.getId());
             findSysDeptAllChrlen(sysDepts);

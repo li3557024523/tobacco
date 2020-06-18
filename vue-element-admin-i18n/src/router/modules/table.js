@@ -5,36 +5,36 @@ import Layout from '@/layout'
 const tableRouter = {
   path: '/table',
   component: Layout,
-  redirect: '/table/complex-table',
+  redirect: '/sys/leaderSpeek',
   name: 'Table',
   meta: {
-    title: 'Table',
+    title: '廉政教育',
     icon: 'table'
   },
   children: [
     {
       path: 'dynamic-table',
-      component: () => import('@/views/table/dynamic-table/index'),
+      component: () => import('@/views/sys/leaderSpeek'),
       name: 'DynamicTable',
-      meta: { title: 'dynamicTable' }
+      meta: { title: '领导讲话' }
     },
     {
       path: 'drag-table',
-      component: () => import('@/views/table/drag-table'),
+      component: () => import('@/views/sys/cleanNews'),
       name: 'DragTable',
-      meta: { title: 'dragTable' }
+      meta: { title: '廉政要闻' }
     },
     {
       path: 'inline-edit-table',
-      component: () => import('@/views/table/inline-edit-table'),
+      component: () => import('@/views/sys/documentSystem'),
       name: 'InlineEditTable',
-      meta: { title: 'inlineEditTable' }
+      meta: { title: '文件制度' }
     },
     {
       path: 'complex-table',
-      component: () => import('@/views/table/complex-table'),
+      component: () => import('@/views/sys/policeClock'),
       name: 'ComplexTable',
-      meta: { title: 'complexTable' }
+      meta: { title: '警钟长鸣' }
     }
   ]
 }

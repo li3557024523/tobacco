@@ -52,75 +52,123 @@ export const constantRoutes = [
   },
   {
     path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
+    component:
+  () =>
+  import('@/views/login/index'),
+    hidden:
+  true
   },
   {
     path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
+    component:
+  () =>
+  import('@/views/login/auth-redirect'),
+    hidden:
+  true
   },
   {
     path: '/404',
-    component: () => import('@/views/error-page/404'),
-    hidden: true
+    component:
+  () =>
+  import('@/views/error-page/404'),
+    hidden:
+  true
   },
   {
     path: '/401',
-    component: () => import('@/views/error-page/401'),
-    hidden: true
+    component:
+  () =>
+  import('@/views/error-page/401'),
+    hidden:
+  true
   },
   {
     path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
+    component:
+  Layout,
+    redirect:
+  '/dashboard',
+    children:
+  [
+    {
+      path: 'dashboard',
+      component: () => import('@/views/dashboard/index'),
+      name:
+  'Dashboard',
+      meta:
+  {
+    title: 'dashboard', icon:
+    'dashboard', affix:
+    true
+  }
+    }
+  ]
   },
   {
     path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'documentation', icon: 'documentation', affix: true }
-      }
-    ]
+    component:
+  Layout,
+    children:
+  [
+    {
+      path: 'index',
+      component: () => import('@/views/documentation/index'),
+      name:
+  'Documentation',
+      meta:
+  {
+    title: 'documentation', icon:
+    'documentation', affix:
+    true
+  }
+    }
+  ]
   },
   {
     path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'guide', icon: 'guide', noCache: true }
-      }
-    ]
+    component:
+  Layout,
+    redirect:
+  '/guide/index',
+    children:
+  [
+    {
+      path: 'index',
+      component: () => import('@/views/guide/index'),
+      name:
+  'Guide',
+      meta:
+  {
+    title: 'guide', icon:
+    'guide', noCache:
+    true
+  }
+    }
+  ]
   },
   {
     path: '/profile',
-    component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'profile', icon: 'user', noCache: true }
-      }
-    ]
+    component:
+  Layout,
+    redirect:
+  '/profile/index',
+    hidden:
+  true,
+    children:
+  [
+    {
+      path: 'index',
+      component: () => import('@/views/profile/index'),
+      name:
+  'Profile',
+      meta:
+  {
+    title: 'profile', icon:
+    'user', noCache:
+    true
+  }
+    }
+  ]
   }
 ]
 
@@ -186,10 +234,6 @@ export const constantRoutes = [
 //   },
 
 //   /** when your routing map is too long, you can split it into small modules **/
-//   componentsRouter,
-//   chartsRouter,
-//   nestedRouter,
-//   tableRouter,
 
 //   {
 //     path: '/example',
@@ -401,88 +445,247 @@ export const constantRoutes = [
 //   { path: '*', redirect: '/404', hidden: true }
 // ]
 
-
 export const asyncRoutes = [
   {
     path: '/sys',
     component: Layout,
-    redirect: '/sys/user',
+    redirect: '',
     alwaysShow: true, // 总是显示根菜单
     name: 'sys',
     meta: {
       title: '系统管理',
       icon: 'example',
-      roles: ['admin','editor','超级管理员'] // 您可以在根导航中设置角色
+      roles: ['admin', 'editor', '超级管理员'] // 您可以在根导航中设置角色
     },
     children: [
       {
         path: 'user',
         component: () => import('@/views/sys/user'),
-        name: 'user',
-        meta: { title: '用户管理' ,roles: ['admin','超级管理员']}
+        name:
+'user',
+        meta:
+{
+  title: '用户管理', roles:
+  ['admin', '超级管理员']
+}
       },
       {
         path: 'role',
-        component: () => import('@/views/sys/role'),
-        name: 'role',
-        meta: { title: '角色管理' ,roles: ['admin','超级管理员']}
+        component:
+  () =>
+  import('@/views/sys/role'),
+        name:
+  'role',
+        meta:
+  {
+    title: '角色管理', roles:
+    ['admin', '超级管理员']
+  }
       },
       {
         path: 'menu',
-        component: () => import('@/views/sys/menu'),
-        name: 'menu',
-        meta: { title: '菜单管理' ,roles: ['admin','超级管理员']}
+        component:
+  () =>
+  import('@/views/sys/menu'),
+        name:
+  'menu',
+        meta:
+  {
+    title: '菜单管理', roles:
+    ['admin', '超级管理员']
+  }
       },
       {
         path: 'dept',
-        component: () => import('@/views/sys/dept'),
-        name: 'dept',
-        meta: { title: '部门管理',roles: ['admin','超级管理员'] },
+        component:
+  () =>
+  import('@/views/sys/dept'),
+        name:
+  'dept',
+        meta:
+  {
+    title: '部门管理', roles:
+    ['admin', '超级管理员']
+  }
+
       }
     ]
-  },
+  }, /*
+path: '/sys',
+  component
+:
+Layout,
+  redirect
+:
+'/education/user',
+  alwaysShow
+:
+true, // 总是显示根菜单
+  name
+:
+'education',
+  meta
+:
+{
+  title: '廉政教育',
+    icon
+:
+  'example',
+    roles
+:
+  ['admin', 'editor', '超级管理员'] // 您可以在根导航中设置角色
+}
+,
+children: [
+  {
+    path: 'leaderSpeek',
+    component: () = > import('@/views/sys/leaderSpeek'),
+  name
+:
+'leaderSpeek',
+  meta
+:
+{
+  title: '领导讲话' , roles
+:
+  ['admin', '超级管理员']
+}
+},
+{
+  path: 'cleanNews',
+    component
+:
+  () =
+>
+  import('@/views/sys/cleanNews'),
+    name
+:
+  'cleanNews',
+    meta
+:
+  {
+    title: '廉政要闻' , roles
+  :
+    ['admin', '超级管理员']
+  }
+}
+,
+{
+  path: 'documentSystem',
+    component
+:
+  () =
+>
+  import('@/views/sys/documentSystem'),
+    name
+:
+  'documentSystem',
+    meta
+:
+  {
+    title: '文件制度' , roles
+  :
+    ['admin', '超级管理员']
+  }
+}
+,
+{
+  path: 'policeClock',
+    component
+:
+  () =
+>
+  import('@/views/sys/policeClock'),
+    name
+:
+  'policeClock',
+    meta
+:
+  {
+    title: '警钟长鸣', roles
+  :
+    ['admin', '超级管理员']
+  }
+,
+}
+]
+},*///   componentsRouter,
+  chartsRouter,
+  //   nestedRouter,
+  tableRouter,
   {
     path: '/record',
-    component: Layout,
-    redirect: '/record',
-    alwaysShow: true, // 总是显示根菜单
-    name: 'record',
-    meta: {
-      title: '基础档案设置',
-      icon: 'example',
-      roles: ['editor','admin','超级管理员'] // you can set roles in root nav
-    },
+    component:
+  Layout,
+    redirect:
+  '/record',
+    alwaysShow:
+  true, // 总是显示根菜单
+    name:
+  'record',
+    meta:
+  {
+    title: '基础档案设置',
+    icon:
+    'example',
+    roles:
+    ['editor', 'admin', '超级管理员'] // you can set roles in root nav
+  },
     children: [
       {
         path: 'recordset',
         component: () => import('../views/table/complex-table'),
-        name: '基础档案设置',
-        meta: { title: '基础档案设置' ,roles: ['admin','editor','超级管理员']}
+        name:
+  '基础档案设置',
+        meta:
+  {
+    title: '基础档案设置', roles:
+    ['admin', 'editor', '超级管理员']
+  }
       },
       {
         path: 'pick',
-        component: () => import('../views/table/complex-table'),
-        name: 'pick',
-        meta: { title: '收派标准' ,roles: ['editor','超级管理员']}
+        component:
+    () =>
+    import('../views/table/complex-table'),
+        name:
+    'pick',
+        meta:
+    {
+      title: '收派标准', roles:
+      ['editor', '超级管理员']
+    }
       },
       {
         path: 'regular',
-        component: () => import('../views/table/complex-table'),
-        name: '班车线路',
-        meta: { title: '班车线路' ,roles: ['editor','超级管理员']}
+        component:
+    () =>
+    import('../views/table/complex-table'),
+        name:
+    '班车线路',
+        meta:
+    {
+      title: '班车线路', roles:
+      ['editor', '超级管理员']
+    }
       }
     ]
   },
   // 404 页面必须放在最后 !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {
+    path: '*', redirect:
+  '/404', hidden:
+  true
+  }
 ]
 
-
-const createRouter = () => new Router({
+const createRouter = () =>
+  new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+    scrollBehavior: () => ({ y: 0 }),
+    routes:
+constantRoutes
+  })
 
 const router = createRouter()
 

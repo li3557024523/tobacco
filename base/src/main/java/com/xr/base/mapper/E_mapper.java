@@ -20,6 +20,7 @@ public interface E_mapper {
     public int E_Upd(Education e);
     @Select("delete from education where id=#{id}")
     public int E_Del(int id);
-    @Select("select * from education where InformationTypes=#{type} limit #{page},#{limit} ")
-    public List<Education> E_ListByType(@Param("type") Integer type, @Param("page")Integer page,@Param("limit")Integer limit);
+    @Select("select * from education where title like concat( '%',replace('${title}',' ',''), '%') and " +
+            " InformationTypes=#{type} limit #{page},#{limit} ")
+    public List<Education> E_ListByType(@Param("type") Integer type, @Param("page")Integer page,@Param("limit")Integer limit,@Param("title")String title);
 }

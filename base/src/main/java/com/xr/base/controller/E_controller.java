@@ -29,7 +29,7 @@ public class E_controller {
 
     @RequestMapping("/listType")
     //@RequiresPermissions("user:list")
-    public ResponseResult listtype(Integer page, Integer limit,Integer listType,String title) {
+    public ResponseResult listtype( Integer page,  Integer limit, Integer listType,  String title) {
         System.out.println(title);
         String loginAccount = SecurityUtils.getSubject().getPrincipal().toString();
         System.out.println(loginAccount);
@@ -42,23 +42,56 @@ public class E_controller {
         return result;
     }
 
-    @RequestMapping("/eupd")
+    @RequestMapping("/upd")
     //@RequiresPermissions("user:list")
-    public ResponseResult Eupd(Integer page, Integer limit,Integer listType,String type) {
+    public ResponseResult Eupd( @RequestBody Education temp ) {
         //System.out.println(listType);
         //System.out.println("limit:"+limit+"page:"+page);
 
-        List<Education> list = e_service.E_ListByType(listType,(page-1)*limit,limit,type);
+        int i=e_service.E_Upd(temp);
+
         ResponseResult result = new ResponseResult();
-        result.getData().put("items", list);
-        result.getData().put("total", list.size());
+        if(i>0){
+            result.getData().put("message", "success");
+            System.out.println("成功更新");
+        }else{
+            result.getData().put("message", "fail");
+        }
+
+        return result;
+    }
+    @RequestMapping("/ins")
+    //@RequiresPermissions("user:list")
+    public ResponseResult Sel( @RequestBody Education temp ) {
+        //System.out.println(listType);
+        //System.out.println("limit:"+limit+"page:"+page);
+        int i=0;
+        System.out.println(temp.getInformationTypes());
+      if(temp!=null){
+           i=e_service.E_Ins(temp);
+      }
+
+        ResponseResult result = new ResponseResult();
+        if(i>0){
+            result.getData().put("message", "success");
+            System.out.println("成功添加");
+        }else{
+            result.getData().put("message", "fail");
+        }
+
         return result;
     }
 
-    @GetMapping("e_del")
-    public ModelAndView E_del(@RequestParam int id){
-        ModelAndView mv=new ModelAndView();
-        int i =e_service.E_Del(id);
-        return mv;
+    @RequestMapping("/del")
+    public ResponseResult Del( Integer id){
+        int i=e_service.E_Del(id);
+        ResponseResult result = new ResponseResult();
+        if(i>0){
+            result.getData().put("message", "success");
+            System.out.println("成功删除");
+        }else{
+            result.getData().put("message", "fail");
+        }
+        return result;
     }
 }

@@ -108,8 +108,8 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+          <el-select v-model="temp.type"  class="filter-item" placeholder="Please select">
+            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.display_name" />
           </el-select>
         </el-form-item>
         <el-form-item label="origin" prop="origin">
@@ -123,15 +123,13 @@
           <el-input v-model="temp.title" />
         </el-form-item>
         <el-form-item label="Status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+          <el-select v-model="temp.state" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key" />
           </el-select>
         </el-form-item>
-        <el-form-item label="context">
-          <el-input v-model="temp.context" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" label="title"  />
-        </el-form-item>
+
         <el-card style="height: 610px;">
-          <quill-editor v-model="context" ref="myQuillEditor" style="height: 500px;" :options="editorOption">
+          <quill-editor v-model="temp.context" ref="myQuillEditor" style="height: 500px;" :options="editorOption">
           </quill-editor>
         </el-card>
       </el-form>
@@ -169,6 +167,7 @@
     { key: '3', display_name: '文件制度' },
     { key: '4', display_name: '警钟长鸣' }
   ]
+
 
   // arr to obj, such as { CN : "China", US : "USA" }
   const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
@@ -220,7 +219,8 @@
         importanceOptions: [1, 2, 3],
         calendarTypeOptions,
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-        statusOptions: ['开启', '关闭'],
+        statusOptions: [{label:'开启',key:1},{label:'关闭',key:2}],
+
         showReviewer: false,
         temp: {
           id: undefined,
@@ -229,11 +229,15 @@
           timestamp: new Date(),
           title: '',
           type: '',
-          status: 'published',
+          InformationTypes:'',
+          state: '',
           origin:'',
           context:'',
           pubdate:'',
           addTime:'',
+          createId:'',
+          creator:'',
+
 
 
 
@@ -303,8 +307,14 @@
           remark: '',
           timestamp: new Date(),
           title: '',
-          status: 'published',
-          type: ''
+          InformationTypes: '',
+          state: '',
+          origin:'',
+          context:'',
+          pubdate:'',
+          addTime:'',
+          createId:'',
+          creator:'',
         }
       },
       handleCreate() {
@@ -318,7 +328,7 @@
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+            this.temp.id = null // mock a id
             this.temp.author = 'vue-element-admin'
             createArticle(this.temp).then(() => {
               this.list.unshift(this.temp)

@@ -64,8 +64,9 @@ public class SysDeptController {
 
     @RequestMapping("add")
     @RequiresPermissions("dept:add")
-    public ResponseResult add(SysDept sysDept){
+    public ResponseResult add( SysDept sysDept){
         //获取系统当前时间
+        System.out.println(sysDept);
         SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time=null;
         try {
@@ -74,7 +75,7 @@ public class SysDeptController {
             e.printStackTrace();
         }
         sysDept.setDate(time);
-        sysDeptService.add(sysDept);
+      sysDeptService.add(sysDept);
         ResponseResult result = new ResponseResult();
         result.getData().put("message","添加成功");
         return result;

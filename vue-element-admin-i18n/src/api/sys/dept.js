@@ -18,10 +18,17 @@ export function groupDept() {
   })
 }
 export function add(data) {
+  console.log(data)
   return request({
     url: '/dept/add',
     method: 'post',
-    data
+    params:{
+      deptName:data.deptName,
+      leadership:data.leadership,
+      parentId:data.parentId,
+      state:data.state,
+      principalName:data.principalName
+    }
   })
 }
 
@@ -35,15 +42,15 @@ export function deleteEmp(id) {
 
 export function update(data) {
   return request({
-    url: '/dept/update',
-    method: 'post',
-    data:{
+    url: "dept/update",
+    method: "post",
+    params: {
       deptName: data.deptName,
-      parentId:data.parentId,
-      id:data.id,
-      leadership:data.leadership,
-      principalName:data.principalName,
-      state:data.state
+      parentId: data.parentId,
+      id: data.id,
+      leadership: data.leadership,
+      principalName: data.principalName,
+      state: data.state
     }
   })
 }

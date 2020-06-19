@@ -13,7 +13,7 @@ public interface SysDeptMapper {
     @Select("select * from sys_dept")
     List<SysDept> DeptList();
 
-    @Select("select leadership from sys_dept")
+    @Select("SELECT leadership from sys_dept GROUP BY leadership")
         List<SysDept> leadership();
 
     @Select("select * from sys_dept where parent_id = #{parent_id}")
@@ -32,8 +32,8 @@ public interface SysDeptMapper {
     @Select("select count(*) from sys_dept")
     int deptsize();
 
-    @Insert("INSERT into sys_dept VALUES(NULL,#{deptName},NULL,NULL,#{principalName},NULL,#{leadership},#{date}, #{createId} , #{createName} , #{state})")
-    void add(SysDept sysDept);
+    @Insert("INSERT into sys_dept VALUES(NULL,#{e.deptName},NULL,#{e.parentId},#{e.principalName},NULL,#{e.leadership},NULL, NULL , NULL , #{e.state})")
+    void add(@Param("e") SysDept sysDept);
 
     @Update("" +
             "UPDATE sys_dept SET " +

@@ -117,6 +117,7 @@
             <el-cascader
               :placeholder="placeholder"
               v-model="temp.parentId"
+              label="temp.deptName"
               :props="props"
               @change="Change"
               :show-all-levels="false"
@@ -216,12 +217,13 @@ export default {
         }
       ],
       leaderships: [],
-      state: "",
+     // state: "",
       props: {
         children: "deptCharlen",
         label: "deptName",
-        value: "deptName",
-        checkStrictly: true
+        value: "did",
+        checkStrictly: true,
+        emitPath:false
       }
     };
   },
@@ -288,7 +290,7 @@ export default {
       this.resetTemp();
       // 点击确定时，是执行添加操作
       this.dialogStatus = "create";
-      this.title = "添加用户";
+      this.title = "添加部门";
       // 显示对话框
       this.dialogFormVisible = true;
       this.$nextTick(() => {
@@ -304,6 +306,7 @@ export default {
         if (valid) {
           // 调用api里的sys里的user.js的ajax方法
           add(this.temp).then(response => {
+            console.log(this.temp)
             // 关闭对话框
             this.dialogFormVisible = false;
             // 刷新数据表格里的数据
@@ -343,18 +346,7 @@ export default {
           const tempData = Object.assign({}, this.temp);
           console.log(tempData)
           // 进行ajax提交
-          request({
-            url: "dept/update",
-            method: "post",
-            data: {
-              deptName: tempData.deptName,
-              parentId: tempData.parentId,
-              id: tempData.id,
-              leadership: tempData.leadership,
-              principalName: tempData.principalName,
-              state: tempData.state
-            }
-          }).then(response => {
+          update(tempData).then(response => {
             // 提交完毕，关闭对话框
             this.dialogFormVisible = false;
             // 刷新数据表格

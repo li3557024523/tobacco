@@ -48,14 +48,7 @@ public class SysDeptServiceImpl implements SysDeptService {
         sysDeptMapper.dele(id);
     }
 
-    @Override
-    public List<SysDept> DeptList() {
-        //查询所有1级部门
-        List<SysDept> sysDeptParentAll = sysDeptMapper.groupByFidList(0);
-        findSysDeptAllChrlen(sysDeptParentAll);
-        sysDeptParentAll.forEach(System.out::print);
-        return sysDeptParentAll;
-    }
+
 
     @Override
     public List<SysDept> leadership() {
@@ -63,6 +56,19 @@ public class SysDeptServiceImpl implements SysDeptService {
         System.out.print("a");
         leadership.forEach(System.out::print);
         return leadership;
+    }
+
+
+
+    //查询部门，递归
+
+    @Override
+    public List<SysDept> DeptList() {
+        //查询所有1级部门
+        List<SysDept> sysDeptParentAll = sysDeptMapper.groupByFidList(0);
+        findSysDeptAllChrlen(sysDeptParentAll);
+        sysDeptParentAll.forEach(System.out::print);
+        return sysDeptParentAll;
     }
 
     @Override
@@ -76,7 +82,6 @@ public class SysDeptServiceImpl implements SysDeptService {
             List<SysDept> sysDepts = sysDeptMapper.groupByFidList(sysDept.getId());
             findSysDeptAllChrlen(sysDepts);
             sysDept.setDeptCharlen(sysDepts);
-//            sysDe
         }
     }
 }

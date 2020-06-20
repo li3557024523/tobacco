@@ -83,7 +83,6 @@ public class SysDeptController {
     @PostMapping("update")
     @RequiresPermissions("dept:update")
     public ResponseResult update(SysDept sysDept){
-        System.out.println("修改"+sysDept);
         sysDeptService.update(sysDept);
         ResponseResult result = new ResponseResult();
         result.getData().put("message","修改成功");

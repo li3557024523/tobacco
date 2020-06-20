@@ -53,122 +53,122 @@ export const constantRoutes = [
   {
     path: '/login',
     component:
-  () =>
-  import('@/views/login/index'),
+      () =>
+        import('@/views/login/index'),
     hidden:
-  true
+      true
   },
   {
     path: '/auth-redirect',
     component:
-  () =>
-  import('@/views/login/auth-redirect'),
+      () =>
+        import('@/views/login/auth-redirect'),
     hidden:
-  true
+      true
   },
   {
     path: '/404',
     component:
-  () =>
-  import('@/views/error-page/404'),
+      () =>
+        import('@/views/error-page/404'),
     hidden:
-  true
+      true
   },
   {
     path: '/401',
     component:
-  () =>
-  import('@/views/error-page/401'),
+      () =>
+        import('@/views/error-page/401'),
     hidden:
-  true
+      true
   },
   {
     path: '/',
     component:
-  Layout,
+      Layout,
     redirect:
-  '/dashboard',
+      '/dashboard',
     children:
-  [
-    {
-      path: 'dashboard',
-      component: () => import('@/views/dashboard/index'),
-      name:
-  'Dashboard',
-      meta:
-  {
-    title: 'dashboard', icon:
-    'dashboard', affix:
-    true
-  }
-    }
-  ]
+      [
+        {
+          path: 'dashboard',
+          component: () => import('@/views/dashboard/index'),
+          name:
+            'Dashboard',
+          meta:
+          {
+            title: 'dashboard', icon:
+              'dashboard', affix:
+              true
+          }
+        }
+      ]
   },
   {
     path: '/documentation',
     component:
-  Layout,
+      Layout,
     children:
-  [
-    {
-      path: 'index',
-      component: () => import('@/views/documentation/index'),
-      name:
-  'Documentation',
-      meta:
-  {
-    title: 'documentation', icon:
-    'documentation', affix:
-    true
-  }
-    }
-  ]
+      [
+        {
+          path: 'index',
+          component: () => import('@/views/documentation/index'),
+          name:
+            'Documentation',
+          meta:
+          {
+            title: 'documentation', icon:
+              'documentation', affix:
+              true
+          }
+        }
+      ]
   },
   {
     path: '/guide',
     component:
-  Layout,
+      Layout,
     redirect:
-  '/guide/index',
+      '/guide/index',
     children:
-  [
-    {
-      path: 'index',
-      component: () => import('@/views/guide/index'),
-      name:
-  'Guide',
-      meta:
-  {
-    title: 'guide', icon:
-    'guide', noCache:
-    true
-  }
-    }
-  ]
+      [
+        {
+          path: 'index',
+          component: () => import('@/views/guide/index'),
+          name:
+            'Guide',
+          meta:
+          {
+            title: 'guide', icon:
+              'guide', noCache:
+              true
+          }
+        }
+      ]
   },
   {
     path: '/profile',
     component:
-  Layout,
+      Layout,
     redirect:
-  '/profile/index',
+      '/profile/index',
     hidden:
-  true,
+      true,
     children:
-  [
-    {
-      path: 'index',
-      component: () => import('@/views/profile/index'),
-      name:
-  'Profile',
-      meta:
-  {
-    title: 'profile', icon:
-    'user', noCache:
-    true
-  }
-    }
-  ]
+      [
+        {
+          path: 'index',
+          component: () => import('@/views/profile/index'),
+          name:
+            'Profile',
+          meta:
+          {
+            title: 'profile', icon:
+              'user', noCache:
+              true
+          }
+        }
+      ]
   }
 ]
 
@@ -462,51 +462,51 @@ export const asyncRoutes = [
         path: 'user',
         component: () => import('@/views/sys/user'),
         name:
-'user',
+          'user',
         meta:
-{
-  title: '用户管理', roles:
-  ['admin', '超级管理员']
-}
+        {
+          title: '用户管理', roles:
+            ['admin', '超级管理员']
+        }
       },
       {
         path: 'role',
         component:
-  () =>
-  import('@/views/sys/role'),
+          () =>
+            import('@/views/sys/role'),
         name:
-  'role',
+          'role',
         meta:
-  {
-    title: '角色管理', roles:
-    ['admin', '超级管理员']
-  }
+        {
+          title: '角色管理', roles:
+            ['admin', '超级管理员']
+        }
       },
       {
         path: 'menu',
         component:
-  () =>
-  import('@/views/sys/menu'),
+          () =>
+            import('@/views/sys/menu'),
         name:
-  'menu',
+          'menu',
         meta:
-  {
-    title: '菜单管理', roles:
-    ['admin', '超级管理员']
-  }
+        {
+          title: '菜单管理', roles:
+            ['admin', '超级管理员']
+        }
       },
       {
         path: 'dept',
         component:
-  () =>
-  import('@/views/sys/dept'),
+          () =>
+            import('@/views/sys/dept'),
         name:
-  'dept',
+          'dept',
         meta:
-  {
-    title: '部门管理', roles:
-    ['admin', '超级管理员']
-  }
+        {
+          title: '部门管理', roles:
+            ['admin', '超级管理员']
+        }
 
       }
     ]
@@ -616,75 +616,75 @@ children: [
   {
     path: '/record',
     component:
-  Layout,
+      Layout,
     redirect:
-  '/record',
+      '/record',
     alwaysShow:
-  true, // 总是显示根菜单
+      true, // 总是显示根菜单
     name:
-  'record',
+      'record',
     meta:
-  {
-    title: '基础档案设置',
-    icon:
-    'example',
-    roles:
-    ['editor', 'admin', '超级管理员'] // you can set roles in root nav
-  },
+    {
+      title: '基础档案设置',
+      icon:
+        'example',
+      roles:
+        ['editor', 'admin', '超级管理员'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'recordset',
         component: () => import('../views/table/complex-table'),
         name:
-  '基础档案设置',
+          '基础档案设置',
         meta:
-  {
-    title: '基础档案设置', roles:
-    ['admin', 'editor', '超级管理员']
-  }
+        {
+          title: '基础档案设置', roles:
+            ['admin', 'editor', '超级管理员']
+        }
       },
       {
         path: 'pick',
         component:
-    () =>
-    import('../views/table/complex-table'),
+          () =>
+            import('../views/table/complex-table'),
         name:
-    'pick',
+          'pick',
         meta:
-    {
-      title: '收派标准', roles:
-      ['editor', '超级管理员']
-    }
+        {
+          title: '收派标准', roles:
+            ['editor', '超级管理员']
+        }
       },
       {
         path: 'regular',
         component:
-    () =>
-    import('../views/table/complex-table'),
+          () =>
+            import('../views/table/complex-table'),
         name:
-    '班车线路',
+          '班车线路',
         meta:
-    {
-      title: '班车线路', roles:
-      ['editor', '超级管理员']
-    }
+        {
+          title: '班车线路', roles:
+            ['editor', '超级管理员']
+        }
       }
     ]
   },
   // 404 页面必须放在最后 !!!
   {
     path: '*', redirect:
-  '/404', hidden:
-  true
+      '/404', hidden:
+      true
   }
 ]
 
 const createRouter = () =>
   new Router({
-  // mode: 'history', // require service support
+    // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
     routes:
-constantRoutes
+      constantRoutes
   })
 
 const router = createRouter()

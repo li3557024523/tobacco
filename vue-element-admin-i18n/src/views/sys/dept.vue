@@ -55,9 +55,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="部门编号" min-width="150px">
+      <el-table-column label="父部门编号" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.did }}</span>
+          <span class="link-type">{{ row.parentId }}</span>
         </template>
       </el-table-column>
 
@@ -116,8 +116,8 @@
           <div class="block">
             <el-cascader
               :placeholder="placeholder"
-              v-model="temp.parentId"
-              label="temp.deptName"
+              v-model="emp.parentId"
+              label="temtp.deptName"
               :props="props"
               @change="Change"
               :show-all-levels="false"

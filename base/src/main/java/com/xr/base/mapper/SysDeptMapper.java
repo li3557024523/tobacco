@@ -20,7 +20,7 @@ public interface SysDeptMapper {
     List<SysDept> groupByFidList(int fid);
 
     @Select({"<script>"
-            , "select id,did,dept_name,principal_name,leadership,state" ,
+            , "select parent_id,id,did,dept_name,principal_name,leadership,state" ,
             " FROM sys_dept where 1=1" ,
             "<when test = 'name!=null'>" ,
             "and dept_name like '%${name}%'",

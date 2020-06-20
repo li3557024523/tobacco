@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { date } from 'jszip/lib/defaults'
 
 
 //
@@ -17,6 +16,7 @@ export function groupDept() {
     method: 'get'
   })
 }
+
 export function add(data) {
   console.log(data)
   return request({

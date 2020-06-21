@@ -26,6 +26,6 @@ public class TRiskGuard {
     private String mName;
     private String dName;
     private List<SysRole> listRole;
-    private List<SysDept> listDept;
+    private List<SysDept> listDept;//
 
 }

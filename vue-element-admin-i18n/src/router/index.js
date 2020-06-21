@@ -510,7 +510,33 @@ export const asyncRoutes = [
 
       }
     ]
-  }, /*
+  },
+  {
+    path: '/JobsRisk',
+    component: Layout,
+    redirect: '',
+    alwaysShow: true, // 总是显示根菜单
+    name: 'JobsRisk',
+    meta: {
+      title: '风险防控',
+      icon: 'example',
+      //roles: ['admin', 'editor', '超级管理员'] // 您可以在根导航中设置角色
+    },
+    children: [
+      {
+        path: 'JobsRisk',
+        component: () => import('@/views/sys/JobsRisk'),
+        name:
+          'JobsRisk',
+        meta:
+          {
+            title: '风险管理', roles:
+              ['admin', '超级管理员']
+          }
+      },
+
+    ]
+  },/*
 path: '/sys',
   component
 :

@@ -1,0 +1,1271 @@
+Index: vue-element-admin-i18n/src/router/index.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import Vue from 'vue'\r\nimport Router from 'vue-router'\r\n\r\nVue.use(Router)\r\n\r\n/* Layout */\r\nimport Layout from '@/layout'\r\n\r\n/* Router Modules */\r\nimport componentsRouter from './modules/components'\r\nimport chartsRouter from './modules/charts'\r\nimport tableRouter from './modules/table'\r\nimport nestedRouter from './modules/nested'\r\n\r\n/**\r\n * Note: sub-menu only appear when route children.length >= 1\r\n * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html\r\n *\r\n * hidden: true                   if set true, item will not show in the sidebar(default is false)\r\n * alwaysShow: true               if set true, will always show the root menu\r\n *                                if not set alwaysShow, when item has more than one children route,\r\n *                                it will becomes nested mode, otherwise not show the root menu\r\n * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb\r\n * name:'router-name'             the name is used by <keep-alive> (must set!!!)\r\n * meta : {\r\n    roles: ['admin','editor']    control the page roles (you can set multiple roles)\r\n    title: 'title'               the name show in sidebar and breadcrumb (recommend set)\r\n    icon: 'svg-name'             the icon show in the sidebar\r\n    noCache: true                if set true, the page will no be cached(default is false)\r\n    affix: true                  if set true, the tag will affix in the tags-view\r\n    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)\r\n    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set\r\n  }\r\n */\r\n\r\n/**\r\n * constantRoutes\r\n * a base page that does not have permission requirements\r\n * all roles can be accessed\r\n */\r\nexport const constantRoutes = [\r\n  {\r\n    path: '/redirect',\r\n    component: Layout,\r\n    hidden: true,\r\n    children: [\r\n      {\r\n        path: '/redirect/:path*',\r\n        component: () => import('@/views/redirect/index')\r\n      }\r\n    ]\r\n  },\r\n  {\r\n    path: '/login',\r\n    component:\r\n  () =>\r\n  import('@/views/login/index'),\r\n    hidden:\r\n  true\r\n  },\r\n  {\r\n    path: '/auth-redirect',\r\n    component:\r\n  () =>\r\n  import('@/views/login/auth-redirect'),\r\n    hidden:\r\n  true\r\n  },\r\n  {\r\n    path: '/404',\r\n    component:\r\n  () =>\r\n  import('@/views/error-page/404'),\r\n    hidden:\r\n  true\r\n  },\r\n  {\r\n    path: '/401',\r\n    component:\r\n  () =>\r\n  import('@/views/error-page/401'),\r\n    hidden:\r\n  true\r\n  },\r\n  {\r\n    path: '/',\r\n    component:\r\n  Layout,\r\n    redirect:\r\n  '/dashboard',\r\n    children:\r\n  [\r\n    {\r\n      path: 'dashboard',\r\n      component: () => import('@/views/dashboard/index'),\r\n      name:\r\n  'Dashboard',\r\n      meta:\r\n  {\r\n    title: 'dashboard', icon:\r\n    'dashboard', affix:\r\n    true\r\n  }\r\n    }\r\n  ]\r\n  },\r\n  {\r\n    path: '/documentation',\r\n    component:\r\n  Layout,\r\n    children:\r\n  [\r\n    {\r\n      path: 'index',\r\n      component: () => import('@/views/documentation/index'),\r\n      name:\r\n  'Documentation',\r\n      meta:\r\n  {\r\n    title: 'documentation', icon:\r\n    'documentation', affix:\r\n    true\r\n  }\r\n    }\r\n  ]\r\n  },\r\n  {\r\n    path: '/guide',\r\n    component:\r\n  Layout,\r\n    redirect:\r\n  '/guide/index',\r\n    children:\r\n  [\r\n    {\r\n      path: 'index',\r\n      component: () => import('@/views/guide/index'),\r\n      name:\r\n  'Guide',\r\n      meta:\r\n  {\r\n    title: 'guide', icon:\r\n    'guide', noCache:\r\n    true\r\n  }\r\n    }\r\n  ]\r\n  },\r\n  {\r\n    path: '/profile',\r\n    component:\r\n  Layout,\r\n    redirect:\r\n  '/profile/index',\r\n    hidden:\r\n  true,\r\n    children:\r\n  [\r\n    {\r\n      path: 'index',\r\n      component: () => import('@/views/profile/index'),\r\n      name:\r\n  'Profile',\r\n      meta:\r\n  {\r\n    title: 'profile', icon:\r\n    'user', noCache:\r\n    true\r\n  }\r\n    }\r\n  ]\r\n  }\r\n]\r\n\r\n/**\r\n * asyncRoutes\r\n * the routes that need to be dynamically loaded based on user roles\r\n */\r\n// export const asyncRoutes = [\r\n//   {\r\n//     path: '/permission',\r\n//     component: Layout,\r\n//     redirect: '/permission/page',\r\n//     alwaysShow: true, // will always show the root menu\r\n//     name: 'Permission',\r\n//     meta: {\r\n//       title: 'permission',\r\n//       icon: 'lock',\r\n//       roles: ['admin', 'editor' ,'Bos'] // you can set roles in root nav\r\n//     },\r\n//     children: [\r\n//       {\r\n//         path: 'user',\r\n//         component: () => import('@/views/sys/user'),\r\n//         name: 'PagePermission',\r\n//         meta: {\r\n//           title: 'pagePermission',\r\n//           roles: ['admin','Bos'] // or you can only set roles in sub nav\r\n//         }\r\n//       },\r\n//       {\r\n//         path: 'directive',\r\n//         component: () => import('@/views/permission/directive'),\r\n//         name: 'DirectivePermission',\r\n//         meta: {\r\n//           title: 'directivePermission',\r\n//           // if do not set roles, means: this page does not require permission\r\n//           roles: ['admin','Bos']\r\n//         }\r\n//       },\r\n//       {\r\n//         path: 'role',\r\n//         component: () => import('@/views/permission/role'),\r\n//         name: 'RolePermission',\r\n//         meta: {\r\n//           title: 'rolePermission',\r\n//           roles: ['admin','Bos']\r\n//         }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: '/icon',\r\n//     component: Layout,\r\n//     children: [\r\n//       {\r\n//         path: 'index',\r\n//         component: () => import('@/views/icons/index'),\r\n//         name: 'Icons',\r\n//         meta: { title: 'icons', icon: 'icon', noCache: true }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   /** when your routing map is too long, you can split it into small modules **/\r\n\r\n//   {\r\n//     path: '/example',\r\n//     component: Layout,\r\n//     redirect: '/example/list',\r\n//     name: 'Example',\r\n//     meta: {\r\n//       title: 'example',\r\n//       icon: 'example'\r\n//     },\r\n//     children: [\r\n//       {\r\n//         path: 'create',\r\n//         component: () => import('@/views/example/create'),\r\n//         name: 'CreateArticle',\r\n//         meta: { title: 'createArticle', icon: 'edit' }\r\n//       },\r\n//       {\r\n//         path: 'edit/:id(\\\\d+)',\r\n//         component: () => import('@/views/example/edit'),\r\n//         name: 'EditArticle',\r\n//         meta: { title: 'editArticle', noCache: true, activeMenu: '/example/list' },\r\n//         hidden: true\r\n//       },\r\n//       {\r\n//         path: 'list',\r\n//         component: () => import('@/views/example/list'),\r\n//         name: 'ArticleList',\r\n//         meta: { title: 'articleList', icon: 'list' }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: '/tab',\r\n//     component: Layout,\r\n//     children: [\r\n//       {\r\n//         path: 'index',\r\n//         component: () => import('@/views/tab/index'),\r\n//         name: 'Tab',\r\n//         meta: { title: 'tab', icon: 'tab' }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: '/error',\r\n//     component: Layout,\r\n//     redirect: 'noRedirect',\r\n//     name: 'ErrorPages',\r\n//     meta: {\r\n//       title: 'errorPages',\r\n//       icon: '404'\r\n//     },\r\n//     children: [\r\n//       {\r\n//         path: '401',\r\n//         component: () => import('@/views/error-page/401'),\r\n//         name: 'Page401',\r\n//         meta: { title: 'page401', noCache: true }\r\n//       },\r\n//       {\r\n//         path: '404',\r\n//         component: () => import('@/views/error-page/404'),\r\n//         name: 'Page404',\r\n//         meta: { title: 'page404', noCache: true }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: '/error-log',\r\n//     component: Layout,\r\n//     children: [\r\n//       {\r\n//         path: 'log',\r\n//         component: () => import('@/views/error-log/index'),\r\n//         name: 'ErrorLog',\r\n//         meta: { title: 'errorLog', icon: 'bug' }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: '/excel',\r\n//     component: Layout,\r\n//     redirect: '/excel/export-excel',\r\n//     name: 'Excel',\r\n//     meta: {\r\n//       title: 'excel',\r\n//       icon: 'excel'\r\n//     },\r\n//     children: [\r\n//       {\r\n//         path: 'export-excel',\r\n//         component: () => import('@/views/excel/export-excel'),\r\n//         name: 'ExportExcel',\r\n//         meta: { title: 'exportExcel' }\r\n//       },\r\n//       {\r\n//         path: 'export-selected-excel',\r\n//         component: () => import('@/views/excel/select-excel'),\r\n//         name: 'SelectExcel',\r\n//         meta: { title: 'selectExcel' }\r\n//       },\r\n//       {\r\n//         path: 'export-merge-header',\r\n//         component: () => import('@/views/excel/merge-header'),\r\n//         name: 'MergeHeader',\r\n//         meta: { title: 'mergeHeader' }\r\n//       },\r\n//       {\r\n//         path: 'upload-excel',\r\n//         component: () => import('@/views/excel/upload-excel'),\r\n//         name: 'UploadExcel',\r\n//         meta: { title: 'uploadExcel' }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: '/zip',\r\n//     component: Layout,\r\n//     redirect: '/zip/download',\r\n//     alwaysShow: true,\r\n//     name: 'Zip',\r\n//     meta: { title: 'zip', icon: 'zip' },\r\n//     children: [\r\n//       {\r\n//         path: 'download',\r\n//         component: () => import('@/views/zip/index'),\r\n//         name: 'ExportZip',\r\n//         meta: { title: 'exportZip' }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: '/pdf',\r\n//     component: Layout,\r\n//     redirect: '/pdf/index',\r\n//     children: [\r\n//       {\r\n//         path: 'index',\r\n//         component: () => import('@/views/pdf/index'),\r\n//         name: 'PDF',\r\n//         meta: { title: 'pdf', icon: 'pdf' }\r\n//       }\r\n//     ]\r\n//   },\r\n//   {\r\n//     path: '/pdf/download',\r\n//     component: () => import('@/views/pdf/download'),\r\n//     hidden: true\r\n//   },\r\n\r\n//   {\r\n//     path: '/theme',\r\n//     component: Layout,\r\n//     children: [\r\n//       {\r\n//         path: 'index',\r\n//         component: () => import('@/views/theme/index'),\r\n//         name: 'Theme',\r\n//         meta: { title: 'theme', icon: 'theme' }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: '/clipboard',\r\n//     component: Layout,\r\n//     children: [\r\n//       {\r\n//         path: 'index',\r\n//         component: () => import('@/views/clipboard/index'),\r\n//         name: 'ClipboardDemo',\r\n//         meta: { title: 'clipboardDemo', icon: 'clipboard' }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: '/i18n',\r\n//     component: Layout,\r\n//     children: [\r\n//       {\r\n//         path: 'index',\r\n//         component: () => import('@/views/i18n-demo/index'),\r\n//         name: 'I18n',\r\n//         meta: { title: 'i18n', icon: 'international' }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   {\r\n//     path: 'external-link',\r\n//     component: Layout,\r\n//     children: [\r\n//       {\r\n//         path: 'https://github.com/PanJiaChen/vue-element-admin',\r\n//         meta: { title: 'externalLink', icon: 'link' }\r\n//       }\r\n//     ]\r\n//   },\r\n\r\n//   // 404 page must be placed at the end !!!\r\n//   { path: '*', redirect: '/404', hidden: true }\r\n// ]\r\n\r\nexport const asyncRoutes = [\r\n  {\r\n    path: '/sys',\r\n    component: Layout,\r\n    redirect: '',\r\n    alwaysShow: true, // 总是显示根菜单\r\n    name: 'sys',\r\n    meta: {\r\n      title: '系统管理',\r\n      icon: 'example',\r\n      roles: ['admin', 'editor', '超级管理员'] // 您可以在根导航中设置角色\r\n    },\r\n    children: [\r\n      {\r\n        path: 'user',\r\n        component: () => import('@/views/sys/user'),\r\n        name:\r\n'user',\r\n        meta:\r\n{\r\n  title: '用户管理', roles:\r\n  ['admin', '超级管理员']\r\n}\r\n      },\r\n      {\r\n        path: 'role',\r\n        component:\r\n  () =>\r\n  import('@/views/sys/role'),\r\n        name:\r\n  'role',\r\n        meta:\r\n  {\r\n    title: '角色管理', roles:\r\n    ['admin', '超级管理员']\r\n  }\r\n      },\r\n      {\r\n        path: 'menu',\r\n        component:\r\n  () =>\r\n  import('@/views/sys/menu'),\r\n        name:\r\n  'menu',\r\n        meta:\r\n  {\r\n    title: '菜单管理', roles:\r\n    ['admin', '超级管理员']\r\n  }\r\n      },\r\n      {\r\n        path: 'dept',\r\n        component:\r\n  () =>\r\n  import('@/views/sys/dept'),\r\n        name:\r\n  'dept',\r\n        meta:\r\n  {\r\n    title: '部门管理', roles:\r\n    ['admin', '超级管理员']\r\n  }\r\n\r\n      }\r\n    ]\r\n  }, /*\r\npath: '/sys',\r\n  component\r\n:\r\nLayout,\r\n  redirect\r\n:\r\n'/education/user',\r\n  alwaysShow\r\n:\r\ntrue, // 总是显示根菜单\r\n  name\r\n:\r\n'education',\r\n  meta\r\n:\r\n{\r\n  title: '廉政教育',\r\n    icon\r\n:\r\n  'example',\r\n    roles\r\n:\r\n  ['admin', 'editor', '超级管理员'] // 您可以在根导航中设置角色\r\n}\r\n,\r\nchildren: [\r\n  {\r\n    path: 'leaderSpeek',\r\n    component: () = > import('@/views/sys/leaderSpeek'),\r\n  name\r\n:\r\n'leaderSpeek',\r\n  meta\r\n:\r\n{\r\n  title: '领导讲话' , roles\r\n:\r\n  ['admin', '超级管理员']\r\n}\r\n},\r\n{\r\n  path: 'cleanNews',\r\n    component\r\n:\r\n  () =\r\n>\r\n  import('@/views/sys/cleanNews'),\r\n    name\r\n:\r\n  'cleanNews',\r\n    meta\r\n:\r\n  {\r\n    title: '廉政要闻' , roles\r\n  :\r\n    ['admin', '超级管理员']\r\n  }\r\n}\r\n,\r\n{\r\n  path: 'documentSystem',\r\n    component\r\n:\r\n  () =\r\n>\r\n  import('@/views/sys/documentSystem'),\r\n    name\r\n:\r\n  'documentSystem',\r\n    meta\r\n:\r\n  {\r\n    title: '文件制度' , roles\r\n  :\r\n    ['admin', '超级管理员']\r\n  }\r\n}\r\n,\r\n{\r\n  path: 'policeClock',\r\n    component\r\n:\r\n  () =\r\n>\r\n  import('@/views/sys/policeClock'),\r\n    name\r\n:\r\n  'policeClock',\r\n    meta\r\n:\r\n  {\r\n    title: '警钟长鸣', roles\r\n  :\r\n    ['admin', '超级管理员']\r\n  }\r\n,\r\n}\r\n]\r\n},*///   componentsRouter,\r\n  chartsRouter,\r\n  //   nestedRouter,\r\n  tableRouter,\r\n  {\r\n    path: '/record',\r\n    component:\r\n  Layout,\r\n    redirect:\r\n  '/record',\r\n    alwaysShow:\r\n  true, // 总是显示根菜单\r\n    name:\r\n  'record',\r\n    meta:\r\n  {\r\n    title: '基础档案设置',\r\n    icon:\r\n    'example',\r\n    roles:\r\n    ['editor', 'admin', '超级管理员'] // you can set roles in root nav\r\n  },\r\n    children: [\r\n      {\r\n        path: 'recordset',\r\n        component: () => import('../views/table/complex-table'),\r\n        name:\r\n  '基础档案设置',\r\n        meta:\r\n  {\r\n    title: '基础档案设置', roles:\r\n    ['admin', 'editor', '超级管理员']\r\n  }\r\n      },\r\n      {\r\n        path: 'pick',\r\n        component:\r\n    () =>\r\n    import('../views/table/complex-table'),\r\n        name:\r\n    'pick',\r\n        meta:\r\n    {\r\n      title: '收派标准', roles:\r\n      ['editor', '超级管理员']\r\n    }\r\n      },\r\n      {\r\n        path: 'regular',\r\n        component:\r\n    () =>\r\n    import('../views/table/complex-table'),\r\n        name:\r\n    '班车线路',\r\n        meta:\r\n    {\r\n      title: '班车线路', roles:\r\n      ['editor', '超级管理员']\r\n    }\r\n      }\r\n    ]\r\n  },\r\n  // 404 页面必须放在最后 !!!\r\n  {\r\n    path: '*', redirect:\r\n  '/404', hidden:\r\n  true\r\n  }\r\n]\r\n\r\nconst createRouter = () =>\r\n  new Router({\r\n  // mode: 'history', // require service support\r\n    scrollBehavior: () => ({ y: 0 }),\r\n    routes:\r\nconstantRoutes\r\n  })\r\n\r\nconst router = createRouter()\r\n\r\n// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465\r\nexport function resetRouter() {\r\n  const newRouter = createRouter()\r\n  router.matcher = newRouter.matcher // reset router\r\n}\r\n\r\nexport default router\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vue-element-admin-i18n/src/router/index.js	(revision 7f55ed50a34729ab09ab84ba554e166286a2dbf1)
++++ vue-element-admin-i18n/src/router/index.js	(date 1592638542777)
+@@ -53,398 +53,124 @@
+   {
+     path: '/login',
+     component:
+-  () =>
+-  import('@/views/login/index'),
++      () =>
++        import('@/views/login/index'),
+     hidden:
+-  true
++      true
+   },
+   {
+     path: '/auth-redirect',
+     component:
+-  () =>
+-  import('@/views/login/auth-redirect'),
++      () =>
++        import('@/views/login/auth-redirect'),
+     hidden:
+-  true
++      true
+   },
+   {
+     path: '/404',
+     component:
+-  () =>
+-  import('@/views/error-page/404'),
++      () =>
++        import('@/views/error-page/404'),
+     hidden:
+-  true
++      true
+   },
+   {
+     path: '/401',
+     component:
+-  () =>
+-  import('@/views/error-page/401'),
++      () =>
++        import('@/views/error-page/401'),
+     hidden:
+-  true
++      true
+   },
+   {
+     path: '/',
+     component:
+-  Layout,
++      Layout,
+     redirect:
+-  '/dashboard',
++      '/dashboard',
+     children:
+-  [
+-    {
+-      path: 'dashboard',
+-      component: () => import('@/views/dashboard/index'),
+-      name:
+-  'Dashboard',
+-      meta:
+-  {
+-    title: 'dashboard', icon:
+-    'dashboard', affix:
+-    true
+-  }
+-    }
+-  ]
++      [
++        {
++          path: 'dashboard',
++          component: () => import('@/views/dashboard/index'),
++          name:
++            'Dashboard',
++          meta:
++          {
++            title: 'dashboard', icon:
++              'dashboard', affix:
++              true
++          }
++        }
++      ]
+   },
+   {
+     path: '/documentation',
+     component:
+-  Layout,
++      Layout,
+     children:
+-  [
+-    {
+-      path: 'index',
+-      component: () => import('@/views/documentation/index'),
+-      name:
+-  'Documentation',
+-      meta:
+-  {
+-    title: 'documentation', icon:
+-    'documentation', affix:
+-    true
+-  }
+-    }
+-  ]
++      [
++        {
++          path: 'index',
++          component: () => import('@/views/documentation/index'),
++          name:
++            'Documentation',
++          meta:
++          {
++            title: 'documentation', icon:
++              'documentation', affix:
++              true
++          }
++        }
++      ]
+   },
+   {
+     path: '/guide',
+     component:
+-  Layout,
++      Layout,
+     redirect:
+-  '/guide/index',
++      '/guide/index',
+     children:
+-  [
+-    {
+-      path: 'index',
+-      component: () => import('@/views/guide/index'),
+-      name:
+-  'Guide',
+-      meta:
+-  {
+-    title: 'guide', icon:
+-    'guide', noCache:
+-    true
+-  }
+-    }
+-  ]
++      [
++        {
++          path: 'index',
++          component: () => import('@/views/guide/index'),
++          name:
++            'Guide',
++          meta:
++          {
++            title: 'guide', icon:
++              'guide', noCache:
++              true
++          }
++        }
++      ]
+   },
+   {
+     path: '/profile',
+     component:
+-  Layout,
++      Layout,
+     redirect:
+-  '/profile/index',
++      '/profile/index',
+     hidden:
+-  true,
++      true,
+     children:
+-  [
+-    {
+-      path: 'index',
+-      component: () => import('@/views/profile/index'),
+-      name:
+-  'Profile',
+-      meta:
+-  {
+-    title: 'profile', icon:
+-    'user', noCache:
+-    true
+-  }
+-    }
+-  ]
++      [
++        {
++          path: 'index',
++          component: () => import('@/views/profile/index'),
++          name:
++            'Profile',
++          meta:
++          {
++            title: 'profile', icon:
++              'user', noCache:
++              true
++          }
++        }
++      ]
+   }
+ ]
+-
+-/**
+- * asyncRoutes
+- * the routes that need to be dynamically loaded based on user roles
+- */
+-// export const asyncRoutes = [
+-//   {
+-//     path: '/permission',
+-//     component: Layout,
+-//     redirect: '/permission/page',
+-//     alwaysShow: true, // will always show the root menu
+-//     name: 'Permission',
+-//     meta: {
+-//       title: 'permission',
+-//       icon: 'lock',
+-//       roles: ['admin', 'editor' ,'Bos'] // you can set roles in root nav
+-//     },
+-//     children: [
+-//       {
+-//         path: 'user',
+-//         component: () => import('@/views/sys/user'),
+-//         name: 'PagePermission',
+-//         meta: {
+-//           title: 'pagePermission',
+-//           roles: ['admin','Bos'] // or you can only set roles in sub nav
+-//         }
+-//       },
+-//       {
+-//         path: 'directive',
+-//         component: () => import('@/views/permission/directive'),
+-//         name: 'DirectivePermission',
+-//         meta: {
+-//           title: 'directivePermission',
+-//           // if do not set roles, means: this page does not require permission
+-//           roles: ['admin','Bos']
+-//         }
+-//       },
+-//       {
+-//         path: 'role',
+-//         component: () => import('@/views/permission/role'),
+-//         name: 'RolePermission',
+-//         meta: {
+-//           title: 'rolePermission',
+-//           roles: ['admin','Bos']
+-//         }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: '/icon',
+-//     component: Layout,
+-//     children: [
+-//       {
+-//         path: 'index',
+-//         component: () => import('@/views/icons/index'),
+-//         name: 'Icons',
+-//         meta: { title: 'icons', icon: 'icon', noCache: true }
+-//       }
+-//     ]
+-//   },
+-
+-//   /** when your routing map is too long, you can split it into small modules **/
+-
+-//   {
+-//     path: '/example',
+-//     component: Layout,
+-//     redirect: '/example/list',
+-//     name: 'Example',
+-//     meta: {
+-//       title: 'example',
+-//       icon: 'example'
+-//     },
+-//     children: [
+-//       {
+-//         path: 'create',
+-//         component: () => import('@/views/example/create'),
+-//         name: 'CreateArticle',
+-//         meta: { title: 'createArticle', icon: 'edit' }
+-//       },
+-//       {
+-//         path: 'edit/:id(\\d+)',
+-//         component: () => import('@/views/example/edit'),
+-//         name: 'EditArticle',
+-//         meta: { title: 'editArticle', noCache: true, activeMenu: '/example/list' },
+-//         hidden: true
+-//       },
+-//       {
+-//         path: 'list',
+-//         component: () => import('@/views/example/list'),
+-//         name: 'ArticleList',
+-//         meta: { title: 'articleList', icon: 'list' }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: '/tab',
+-//     component: Layout,
+-//     children: [
+-//       {
+-//         path: 'index',
+-//         component: () => import('@/views/tab/index'),
+-//         name: 'Tab',
+-//         meta: { title: 'tab', icon: 'tab' }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: '/error',
+-//     component: Layout,
+-//     redirect: 'noRedirect',
+-//     name: 'ErrorPages',
+-//     meta: {
+-//       title: 'errorPages',
+-//       icon: '404'
+-//     },
+-//     children: [
+-//       {
+-//         path: '401',
+-//         component: () => import('@/views/error-page/401'),
+-//         name: 'Page401',
+-//         meta: { title: 'page401', noCache: true }
+-//       },
+-//       {
+-//         path: '404',
+-//         component: () => import('@/views/error-page/404'),
+-//         name: 'Page404',
+-//         meta: { title: 'page404', noCache: true }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: '/error-log',
+-//     component: Layout,
+-//     children: [
+-//       {
+-//         path: 'log',
+-//         component: () => import('@/views/error-log/index'),
+-//         name: 'ErrorLog',
+-//         meta: { title: 'errorLog', icon: 'bug' }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: '/excel',
+-//     component: Layout,
+-//     redirect: '/excel/export-excel',
+-//     name: 'Excel',
+-//     meta: {
+-//       title: 'excel',
+-//       icon: 'excel'
+-//     },
+-//     children: [
+-//       {
+-//         path: 'export-excel',
+-//         component: () => import('@/views/excel/export-excel'),
+-//         name: 'ExportExcel',
+-//         meta: { title: 'exportExcel' }
+-//       },
+-//       {
+-//         path: 'export-selected-excel',
+-//         component: () => import('@/views/excel/select-excel'),
+-//         name: 'SelectExcel',
+-//         meta: { title: 'selectExcel' }
+-//       },
+-//       {
+-//         path: 'export-merge-header',
+-//         component: () => import('@/views/excel/merge-header'),
+-//         name: 'MergeHeader',
+-//         meta: { title: 'mergeHeader' }
+-//       },
+-//       {
+-//         path: 'upload-excel',
+-//         component: () => import('@/views/excel/upload-excel'),
+-//         name: 'UploadExcel',
+-//         meta: { title: 'uploadExcel' }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: '/zip',
+-//     component: Layout,
+-//     redirect: '/zip/download',
+-//     alwaysShow: true,
+-//     name: 'Zip',
+-//     meta: { title: 'zip', icon: 'zip' },
+-//     children: [
+-//       {
+-//         path: 'download',
+-//         component: () => import('@/views/zip/index'),
+-//         name: 'ExportZip',
+-//         meta: { title: 'exportZip' }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: '/pdf',
+-//     component: Layout,
+-//     redirect: '/pdf/index',
+-//     children: [
+-//       {
+-//         path: 'index',
+-//         component: () => import('@/views/pdf/index'),
+-//         name: 'PDF',
+-//         meta: { title: 'pdf', icon: 'pdf' }
+-//       }
+-//     ]
+-//   },
+-//   {
+-//     path: '/pdf/download',
+-//     component: () => import('@/views/pdf/download'),
+-//     hidden: true
+-//   },
+-
+-//   {
+-//     path: '/theme',
+-//     component: Layout,
+-//     children: [
+-//       {
+-//         path: 'index',
+-//         component: () => import('@/views/theme/index'),
+-//         name: 'Theme',
+-//         meta: { title: 'theme', icon: 'theme' }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: '/clipboard',
+-//     component: Layout,
+-//     children: [
+-//       {
+-//         path: 'index',
+-//         component: () => import('@/views/clipboard/index'),
+-//         name: 'ClipboardDemo',
+-//         meta: { title: 'clipboardDemo', icon: 'clipboard' }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: '/i18n',
+-//     component: Layout,
+-//     children: [
+-//       {
+-//         path: 'index',
+-//         component: () => import('@/views/i18n-demo/index'),
+-//         name: 'I18n',
+-//         meta: { title: 'i18n', icon: 'international' }
+-//       }
+-//     ]
+-//   },
+-
+-//   {
+-//     path: 'external-link',
+-//     component: Layout,
+-//     children: [
+-//       {
+-//         path: 'https://github.com/PanJiaChen/vue-element-admin',
+-//         meta: { title: 'externalLink', icon: 'link' }
+-//       }
+-//     ]
+-//   },
+-
+-//   // 404 page must be placed at the end !!!
+-//   { path: '*', redirect: '/404', hidden: true }
+-// ]
+-
+ export const asyncRoutes = [
+   {
+     path: '/sys',
+@@ -462,229 +188,103 @@
+         path: 'user',
+         component: () => import('@/views/sys/user'),
+         name:
+-'user',
++          'user',
+         meta:
+-{
+-  title: '用户管理', roles:
+-  ['admin', '超级管理员']
+-}
++        {
++          title: '用户管理', roles:
++            ['admin', '超级管理员']
++        }
+       },
+       {
+         path: 'role',
+         component:
+-  () =>
+-  import('@/views/sys/role'),
++          () =>
++            import('@/views/sys/role'),
+         name:
+-  'role',
++          'role',
+         meta:
+-  {
+-    title: '角色管理', roles:
+-    ['admin', '超级管理员']
+-  }
++        {
++          title: '角色管理', roles:
++            ['admin', '超级管理员']
++        }
+       },
+       {
+         path: 'menu',
+         component:
+-  () =>
+-  import('@/views/sys/menu'),
++          () =>
++            import('@/views/sys/menu'),
+         name:
+-  'menu',
++          'menu',
+         meta:
+-  {
+-    title: '菜单管理', roles:
+-    ['admin', '超级管理员']
+-  }
++        {
++          title: '菜单管理', roles:
++            ['admin', '超级管理员']
++        }
+       },
+       {
+         path: 'dept',
+         component:
+-  () =>
+-  import('@/views/sys/dept'),
++          () =>
++            import('@/views/sys/dept'),
+         name:
+-  'dept',
++          'dept',
+         meta:
+-  {
+-    title: '部门管理', roles:
+-    ['admin', '超级管理员']
+-  }
+-
+-      }
+-    ]
+-  }, /*
+-path: '/sys',
+-  component
+-:
+-Layout,
+-  redirect
+-:
+-'/education/user',
+-  alwaysShow
+-:
+-true, // 总是显示根菜单
+-  name
+-:
+-'education',
+-  meta
+-:
+-{
+-  title: '廉政教育',
+-    icon
+-:
+-  'example',
+-    roles
+-:
+-  ['admin', 'editor', '超级管理员'] // 您可以在根导航中设置角色
+-}
+-,
+-children: [
+-  {
+-    path: 'leaderSpeek',
+-    component: () = > import('@/views/sys/leaderSpeek'),
+-  name
+-:
+-'leaderSpeek',
+-  meta
+-:
+-{
+-  title: '领导讲话' , roles
+-:
+-  ['admin', '超级管理员']
+-}
+-},
+-{
+-  path: 'cleanNews',
+-    component
+-:
+-  () =
+->
+-  import('@/views/sys/cleanNews'),
+-    name
+-:
+-  'cleanNews',
+-    meta
+-:
+-  {
+-    title: '廉政要闻' , roles
+-  :
+-    ['admin', '超级管理员']
+-  }
+-}
+-,
+-{
+-  path: 'documentSystem',
+-    component
+-:
+-  () =
+->
+-  import('@/views/sys/documentSystem'),
+-    name
+-:
+-  'documentSystem',
+-    meta
+-:
+-  {
+-    title: '文件制度' , roles
+-  :
+-    ['admin', '超级管理员']
+-  }
+-}
+-,
+-{
+-  path: 'policeClock',
+-    component
+-:
+-  () =
+->
+-  import('@/views/sys/policeClock'),
+-    name
+-:
+-  'policeClock',
+-    meta
+-:
+-  {
+-    title: '警钟长鸣', roles
+-  :
+-    ['admin', '超级管理员']
+-  }
+-,
+-}
+-]
+-},*///   componentsRouter,
++        {
++          title: '部门管理', roles:
++            ['admin', '超级管理员']
++        }
++
++      }
++    ]
++  },
+   chartsRouter,
+   //   nestedRouter,
+   tableRouter,
+   {
+-    path: '/record',
+-    component:
+-  Layout,
+-    redirect:
+-  '/record',
+-    alwaysShow:
+-  true, // 总是显示根菜单
+-    name:
+-  'record',
++    path: '/risk',
++    component: Layout,
++    redirect: '/sys/JobsRisk',
++    alwaysShow: true, // 总是显示根菜单
++    name: 'risk',
+     meta:
+-  {
+-    title: '基础档案设置',
+-    icon:
+-    'example',
+-    roles:
+-    ['editor', 'admin', '超级管理员'] // you can set roles in root nav
+-  },
++    {
++      title: '风险防控',
++      icon: 'example',
++    },
+     children: [
+       {
+-        path: 'recordset',
+-        component: () => import('../views/table/complex-table'),
+-        name:
+-  '基础档案设置',
+-        meta:
+-  {
+-    title: '基础档案设置', roles:
+-    ['admin', 'editor', '超级管理员']
+-  }
+-      },
+-      {
+-        path: 'pick',
+-        component:
+-    () =>
+-    import('../views/table/complex-table'),
+-        name:
+-    'pick',
+-        meta:
+-    {
+-      title: '收派标准', roles:
+-      ['editor', '超级管理员']
+-    }
+-      },
+-      {
+-        path: 'regular',
+-        component:
+-    () =>
+-    import('../views/table/complex-table'),
+-        name:
+-    '班车线路',
+-        meta:
+-    {
+-      title: '班车线路', roles:
+-      ['editor', '超级管理员']
+-    }
+-      }
++        path: 'JobsRisk',
++        component: () => import('@/views/sys/JobsRisk'),
++        name: '岗位风险梳理',
++        meta: { title: '岗位风险梳理' ,roles:
++        ['admin', '超级管理员'] }
++      // }, {
++      //   path: 'JobsRisk',
++      //   component: () => import('@/views/sys/JobsRisk'),
++      //   name: '流程风险梳理',
++      //   meta: { title: '流程风险梳理' }
++      // }, {
++      //   path: 'JobsRisk',
++      //   component: () => import('@/views/sys/JobsRisk'),
++      //   name: '风险点评定',
++      //   meta: { title: '风险点评定' }
++       },
+     ]
+   },
+   // 404 页面必须放在最后 !!!
+   {
+     path: '*', redirect:
+-  '/404', hidden:
+-  true
++      '/404', hidden:
++      true
+   }
+ ]
+ 
+ const createRouter = () =>
+   new Router({
+-  // mode: 'history', // require service support
++    // mode: 'history', // require service support
+     scrollBehavior: () => ({ y: 0 }),
+     routes:
+-constantRoutes
++      constantRoutes
+   })
+ 
+ const router = createRouter()
+Index: vue-element-admin-i18n/src/views/sys/JobsRisk.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vue-element-admin-i18n/src/views/sys/JobsRisk.vue	(date 1592653811048)
++++ vue-element-admin-i18n/src/views/sys/JobsRisk.vue	(date 1592653811048)
+@@ -0,0 +1,433 @@
++<template>
++  <div class="app-container">
++    <div class="filter-container">
++      <el-input v-model="listQuery.username" placeholder="用户名" style="width: 200px;" class="filter-item"/>
++      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getList">
++        查询
++      </el-button>
++      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
++        添加
++      </el-button>
++    </div>
++    <!--  数据表格-->
++    <el-table
++      :key="tableKey"
++      v-loading="listLoading"
++      :data="list"
++      border
++      fit
++      highlight-current-row
++      style="width: 100%;"
++    >
++      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
++        <template slot-scope="scope">
++          <span>{{ scope.row.id }}</span>
++        </template>
++      </el-table-column>
++      <el-table-column label="编号ID" min-width="150px">
++        <template slot-scope="{row}">
++          <span class="link-type">{{ row.id }}</span>
++        </template>
++      </el-table-column>
++
++
++       <el-table-column label="岗位编号" min-width="150px">
++        <template slot-scope="{row}">
++          <span class="link-type">{{ row.riskId }}</span>
++        </template>
++      </el-table-column>
++
++
++       <el-table-column label="岗位" min-width="150px">
++        <template slot-scope="{row}">
++          <span class="link-type">{{ row.mName }}</span>
++        </template>
++      </el-table-column>
++
++
++       <el-table-column label="部门信息" min-width="150px">
++        <template slot-scope="{row}">
++          <span class="link-type">{{ row.dName }}</span>
++        </template>
++      </el-table-column>
++
++       <el-table-column label="执行年份" min-width="150px">
++        <template slot-scope="{row}">
++          <span class="link-type">{{ row.year }}</span>
++        </template>
++      </el-table-column>
++
++       <el-table-column label="风险项目名称" min-width="150px">
++        <template slot-scope="{row}">
++          <span class="link-type">{{ row.project}}</span>
++        </template>
++      </el-table-column>
++
++      <el-table-column label="风险等级" min-width="150px">
++        <template slot-scope="{row}">
++          <span class="link-type">{{ row.riskGrade }}</span>
++        </template>
++      </el-table-column>
++
++      <!--     自定义列-->
++      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
++        <template slot-scope="{row}">
++          <el-button type="primary" size="mini" @click="handleUpdate(row)">
++            修改
++          </el-button>
++          <el-button size="mini" type="danger" @click="handleDelete(row)">
++            删除
++          </el-button>
++        </template>
++      </el-table-column>
++    </el-table>
++    <!-- 分页工具条  page当前页 total总记录数 limit每页显示多少条 pagination触发自定义事件，查询数据-->
++    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
++
++    <!--  绑定了title，是一个数组里取的，表示是修改的标题还是添加的标题
++      visible.sync 对话框是否显示
++    -->
++    <el-dialog :title="title" :visible.sync="dialogFormVisible" style="width: 120%">
++      <!--
++          rules:校验规则
++          model:数据绑定
++      -->
++      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
++        <!--        数据校验要求prop值和temp.属性名一致-->
++
++        <el-form-item label="岗位编号" prop="riskId">
++          <el-input placeholder="请输入岗位编号" v-model="temp.riskId" />
++        </el-form-item>
++        <el-form-item label="年份" prop="year">
++          <el-input placeholder="请输入年份" v-model="temp.year" show-password></el-input>
++        </el-form-item>
++        <el-form-item label="部门" prop="dId">
++          <el-select v-model="temp.dId" placeholder="请选择">
++            <el-option-group
++              v-for="group in deptList"
++              :key="group.id"
++              :label="group.name">
++              <el-option-group
++                v-for="items in group.items"
++                :key="items.id"
++                :label="items.name">
++              <el-option
++                v-for="item in items.items"
++                :key="item.id"
++                :label="item.name"
++                :value="item.id">
++              </el-option>
++              </el-option-group>
++            </el-option-group>
++          </el-select>
++        </el-form-item>
++        <el-form-item label="岗位" prop="Pid">
++          <el-select v-model="temp.Pid" placeholder="请选择">
++            <el-option-group
++              v-for="group in deptList"
++              :key="group.id"
++              :label="group.name">
++              <el-option-group
++                v-for="items in group.items"
++                :key="items.id"
++                :label="items.name">
++              <el-option
++                v-for="item in items.items"
++                :key="item.id"
++                :label="item.name"
++                :value="item.id">
++              </el-option>
++              </el-option-group>
++            </el-option-group>
++          </el-select>
++        </el-form-item>
++        <el-form-item label="风险项目名" prop="project">
++          <el-input placeholder="请输入名称" v-model="temp.project" />
++        </el-form-item>
++        <el-form-item label="廉政风险点描述">
++          <el-input
++            type="textarea"
++            :rows="4"
++            placeholder="请输入廉政风险点描述"
++            v-model="temp.riskDescribe">
++          </el-input>
++        </el-form-item>
++        <el-form-item label="风险发生的可能性" prop="L">
++          <el-select v-model="temp.riskL" placeholder="请选择">
++            <el-option-group
++              v-for="group in deptList"
++              :key="group.id"
++              :label="group.name">
++              <el-option-group
++                v-for="items in group.items"
++                :key="items.id"
++                :label="items.name">
++              <el-option
++                v-for="item in items.items"
++                :key="item.id"
++                :label="item.name"
++                :value="item.id">
++              </el-option>
++              </el-option-group>
++            </el-option-group>
++          </el-select>
++        </el-form-item>
++        <el-form-item label="风险产生的危险性" prop="C">
++          <el-select v-model="temp.riskC" placeholder="请选择">
++            <el-option-group
++              v-for="group in deptList"
++              :key="group.id"
++              :label="group.name">
++              <el-option-group
++                v-for="items in group.items"
++                :key="items.id"
++                :label="items.name">
++              <el-option
++                v-for="item in items.items"
++                :key="item.id"
++                :label="item.name"
++                :value="item.id">
++              </el-option>
++              </el-option-group>
++            </el-option-group>
++          </el-select>
++        </el-form-item>
++        <el-form-item label="廉政风险值" prop="D">
++          <el-input v-model="temp.riskD" />
++        </el-form-item>
++        <el-form-item label="风险等级" prop="Lv">
++          <el-input v-model="temp.riskGrade" />
++        </el-form-item>
++        <el-form-item label="预防和控制措施">
++          <el-input
++            type="textarea"
++            :rows="4"
++            placeholder="请输入预防和控制措施"
++            v-model="temp.riskGuard">
++          </el-input>
++        </el-form-item>
++        <el-form-item label="创建人" prop="createBy">
++          <el-input v-model="temp.createBy" />
++        </el-form-item>
++        <el-form-item label="创建时间" prop="createTime">
++          <el-input v-model="temp.createTime" />
++        </el-form-item>
++      </el-form>
++      <div slot="footer" class="dialog-footer">
++        <el-button @click="dialogFormVisible = false">
++          取消
++        </el-button>
++        <!--
++          dialogStatus==='create'?createData():updateData()
++          dialogStatus需要我们根据情况去改变
++        -->
++        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
++          确认
++        </el-button>
++      </div>
++    </el-dialog>
++  </div>
++</template>
++
++<script>
++  //
++  import { add, deleteRisk, list} from '@/api/sys/risk'
++  import {groupDept} from "@/api/sys/dept";
++  import waves from '@/directive/waves' // waves directive
++  import { parseTime } from '@/utils'
++  import Pagination from '@/components/Pagination' // 分页组件
++  export default {
++    name: 'userTable',
++    components: { Pagination },
++    directives: { waves },
++    data() {
++      return {
++        tableKey: 0,
++        list: null, // 后台返回，给数据表格展示的数据
++        total: 0, // 总记录数
++        listLoading: true, // 是否使用动画
++        listQuery: {
++          page: 1, // 分页需要的当前页
++          limit: 10, // 分页需要的每页显示多少条
++          sex: 1,
++          username: ''
++        },
++        deptList: [], // 后台查询出来，分好组的部门信息
++        temp: { // 添加、修改时绑定的表单数据
++          id: undefined,
++          riskId: '',
++          year: '',
++          dId: '',
++          Pid: '',
++          project: '',
++          riskDescribe: '',
++          riskL: '',
++          riskC: '',
++          riskD: '',
++          riskGrade: '',
++          createTime: '',
++          createBy: '',
++          dName: '',
++          mName: '',
++        },
++        title: '添加', // 对话框显示的提示 根据dialogStatus create
++        dialogFormVisible: false, // 是否显示对话框
++        dialogStatus: '', // 表示表单是添加还是修改的
++        rules: {
++          // 校验规则
++          username: [{ required: true, message: '用户名必填', trigger: 'blur' }]
++        }
++      }
++    },
++    // 创建实例时的钩子函数
++    created() {
++      this.getList()
++      // 在创建时初始化获得部门信息
++      this.getGroupDept()
++    },
++    methods: {
++      // 获得分好组的部门信息
++      getGroupDept(){
++        groupDept().then((response) => {
++          this.deptList = response.data.deptList
++        })
++      },
++      // 去后台取数据的
++      getList() {
++        // 开始转圈圈
++        this.listLoading = true
++        // debugger // 调试
++        list().then(response => {
++          console.log(response)
++          this.list = response.data.items
++          // 转圈圈结束
++          this.listLoading = false
++        })
++      },
++      // 重置表单数据
++      resetTemp() {
++        this.temp = {
++          id: undefined,
++          riskId: '',
++          year: '',
++          dId: '',
++          Pid: '',
++          project: '',
++          riskDescribe: '',
++          riskL: '',
++          riskC: '',
++          riskD: '',
++          riskGrade: '',
++          createTime: '',
++          createBy: '',
++          dName: '',
++          mName: '',
++        }
++      },
++      // 显示添加的对话框
++      handleCreate () {
++        // 重置表单数据
++        this.resetTemp()
++        // 点击确定时，是执行添加操作
++        this.dialogStatus = 'create'
++        this.title="添加用户"
++        // 显示对话框
++        this.dialogFormVisible = true
++        this.$nextTick(() => {
++          // 表单清除验证
++          this.$refs['dataForm'].clearValidate()
++        })
++      },
++      // 添加对话框里，点击确定，执行添加操作
++      createData() {
++        // 表单校验
++        this.$refs['dataForm'].validate((valid) => {
++          // 所有的校验都通过
++          if (valid) {
++            // 调用api里的sys里的user.js的ajax方法
++            add(this.temp).then((response) => {
++
++              // 关闭对话框
++              this.dialogFormVisible = false
++              // 刷新数据表格里的数据
++              this.getList()
++              // 显示一个通知
++              this.$notify({
++                title: '成功',
++                message: response.data.message,
++                type: 'success',
++                duration: 2000
++              })
++            })
++          }
++        })
++      },
++      /*// 显示修改对话框
++      handleUpdate(row) {
++        // 将row里面与temp里属性相同的值，进行copy
++        this.temp = Object.assign({}, row) // copy obj
++        // 将对话框里的确定点击时，改为执行修改操作
++        this.dialogStatus = 'update'
++        // 修改标题
++        this.title = '修改用户'
++        // 显示修改对话框
++        this.dialogFormVisible = true
++        this.$nextTick(() => {
++          // 清除校验
++          this.$refs['dataForm'].clearValidate()
++        })
++      },
++      // 执行修改操作
++      updateData() {
++        this.$refs['dataForm'].validate((valid) => {
++          // 表单校验通过
++          if (valid) {
++            // 将temp拷贝到tempData
++            const tempData = Object.assign({}, this.temp)
++            // 进行ajax提交
++            update(tempData).then((response) => {
++              // 提交完毕，关闭对话框
++              this.dialogFormVisible = false
++              // 刷新数据表格
++              this.getList()
++              // 显示通知
++              this.$notify({
++                title: '成功',
++                message: response.data.message,
++                type: 'success',
++                duration: 2000
++              })
++            })
++          }
++        })
++      },*/
++      handleDelete(row) {
++        // 先弹确认取消框
++        this.$confirm('确认删除【'+row.username+'】的信息吗?', '提示', {
++          confirmButtonText: '确定',
++          cancelButtonText: '取消',
++          type: 'warning'
++        }).then(() => {
++          // 调用ajax去后台删除
++          deleteUser(row.id).then((response) => {
++            // 刷新数据表格
++            this.getList()
++            // ajax去后台删除
++            this.$notify({
++              title: '成功',
++              message: response.data.message,
++              type: 'success',
++              duration: 2000
++            })
++          })
++        }).catch(() => {
++          this.$message({
++            type: 'info',
++            message: '已取消删除'
++          });
++        });
++
++      }
++    }
++  }
++</script>
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <annotationProcessing>\r\n      <profile default=\"true\" name=\"Default\" enabled=\"true\" />\r\n      <profile name=\"Maven default annotation processors profile\" enabled=\"true\">\r\n        <sourceOutputDir name=\"target/generated-sources/annotations\" />\r\n        <sourceTestOutputDir name=\"target/generated-test-sources/test-annotations\" />\r\n        <outputRelativeToContentRoot value=\"true\" />\r\n        <module name=\"tobacco\" />\r\n        <module name=\"base\" />\r\n      </profile>\r\n    </annotationProcessing>\r\n  </component>\r\n  <component name=\"JavacSettings\">\r\n    <option name=\"ADDITIONAL_OPTIONS_OVERRIDE\">\r\n      <module name=\"base\" options=\"\" />\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/compiler.xml	(revision 7f55ed50a34729ab09ab84ba554e166286a2dbf1)
++++ .idea/compiler.xml	(date 1592751043851)
+@@ -7,8 +7,8 @@
+         <sourceOutputDir name="target/generated-sources/annotations" />
+         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+         <outputRelativeToContentRoot value="true" />
+-        <module name="tobacco" />
+         <module name="base" />
++        <module name="tobacco" />
+       </profile>
+     </annotationProcessing>
+   </component>
+Index: base/src/main/java/com/xr/base/entity/TRiskGuard.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- base/src/main/java/com/xr/base/entity/TRiskGuard.java	(date 1592653615576)
++++ base/src/main/java/com/xr/base/entity/TRiskGuard.java	(date 1592653615576)
+@@ -0,0 +1,30 @@
++package com.xr.base.entity;
++
++import lombok.Data;
++
++import java.util.Date;
++import java.util.List;
++
++@Data
++public class TRiskGuard {
++    private Integer id;//编号id
++    private Integer riskId;//岗位风险编号岗位id
++    private Date year;//年份
++    private Integer dId;//部门信息id
++    private Integer pId;//岗位信息id
++    private String project;//项目
++    private String riskDescribe;//廉政风险点描述
++    private String riskL;//风险发生可能性 L值
++    private String riskC;//风险产生后果的严重性 C值
++    private String riskD;//廉政风险值 D值
++    private String riskGrade;//风险等级
++    private String riskGuard;//预防和控制措施
++    private Date createTime;//创建时间
++    private String createBy;//创建者
++    private String createName;//创建者姓名
++    private Integer state;//状态
++    private String mName;
++    private String dName;
++    private List<SysDept> sysDeptName;//部门集合
++    private List<SysMenu> sysMenusName;//岗位集合
++}

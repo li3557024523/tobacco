@@ -7,6 +7,13 @@ export function login(data) {
     data
   })
 }
+export function del(id) {
+  return request({
+    url:'education/del',
+    method:'get',
+    params:{ id }
+  })
+}
 
 export function getInfo(token) {
   return request({

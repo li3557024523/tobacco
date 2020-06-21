@@ -26,6 +26,12 @@ public class E_serviceImpl implements E_service {
 
     @Override
     public int E_Ins(Education e) {
+        java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
+        e.setAddTime(currentDate);
+        //取得当前登录的用户名
+        String loginAccount = SecurityUtils.getSubject().getPrincipal().toString();
+        e.setCreator(loginAccount);
+        e.setId(null);
         return e_mapper.E_Ins(e);
     }
 
@@ -40,7 +46,7 @@ public class E_serviceImpl implements E_service {
     }
 
     @Override
-    public int E_Del(int id) {
+    public int E_Del(Integer id) {
         return e_mapper.E_Del(id);
     }
 

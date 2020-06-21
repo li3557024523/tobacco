@@ -40,7 +40,7 @@ export function fetchPv(pv) {
 
 export function createArticle(data) {
   return request({
-    url: '/vue-element-admin/article/create',
+    url: 'education/ins',
     method: 'post',
     data
   })
@@ -48,7 +48,7 @@ export function createArticle(data) {
 
 export function updateArticle(data) {
   return request({
-    url: '/vue-element-admin/article/update',
+    url: 'education/upd',
     method: 'post',
     data
   })

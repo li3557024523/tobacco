@@ -116,8 +116,8 @@
           <div class="block">
             <el-cascader
               :placeholder="placeholder"
-              v-model="emp.parentId"
-              label="temtp.deptName"
+              v-model="temp.parentId"
+              label="temp.deptName"
               :props="props"
               @change="Change"
               :show-all-levels="false"

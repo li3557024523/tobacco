@@ -54,6 +54,7 @@ public class MyShiroRealm extends AuthorizingRealm{
 
         for (SysRole role : roles) {
             simpleAuthorizationInfo.addRole(role.getName());
+            System.out.println("登入人权限");
             System.out.println("roleName:"+role.getName());
             // 根据身份信息获取权限信息
             for (SysMenu m : menu) {
@@ -84,11 +85,9 @@ public class MyShiroRealm extends AuthorizingRealm{
             if (sysUser == null) {
                 return null;
             }
-            System.out.println();
 //        if (sysUser.getStatus() == 0) { //账户冻结
 //            throw new LockedAccountException();
 //        }
-            System.out.println(new SimpleByteSource(sysUser.getSalt()));
             SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                     username, //用户名
                     sysUser.getPassword(), //密码

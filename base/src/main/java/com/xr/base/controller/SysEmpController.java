@@ -91,6 +91,7 @@ public class SysEmpController {
     }
 
     @RequestMapping("list")
+    @RequiresPermissions("emp:list")
     public ResponseResult list(String username, Integer page, Integer limit){
         System.out.println(username);
         System.out.println(page+""+limit);

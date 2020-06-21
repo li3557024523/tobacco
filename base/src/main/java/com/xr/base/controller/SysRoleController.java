@@ -25,6 +25,7 @@ public class SysRoleController {
     private SysRoleService sysRoleService;
 
     @PostMapping("list")
+    @RequiresPermissions("role:list")
     public ResponseResult findRole(String name , Integer page , Integer limit){
         System.out.println(name+""+page+""+limit);
         List<SysRole> list = sysRoleService.findrole(name,(page-1)*limit, limit);

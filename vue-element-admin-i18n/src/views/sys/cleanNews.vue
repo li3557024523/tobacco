@@ -51,8 +51,10 @@
 
       <el-table-column label="资讯内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.context }}</span>
+          <div v-html="row.context"  class="asd"></div>
+
         </template>
+
       </el-table-column>
 
       <el-table-column label="资讯发布时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
@@ -264,9 +266,11 @@
     methods: {
       getList() {
         this.listLoading = true
+
         fetchListEdu(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
+
 
           // Just to simulate the time of the request
           setTimeout(() => {
@@ -276,8 +280,8 @@
       },
       handleFilter() {
         this.listQuery.page = 1
-
         this.getList()
+
       },
       handleModifyStatus(row, status) {
         this.$message({
@@ -426,3 +430,22 @@
     }
   }
 </script>
+<style lang="scss" type="text/css">
+  .context >>> img{
+    max-width: 100%
+  }
+  .asd >>> p {
+    text-indent: 32px;
+  }
+  .asd >>> p+img {
+    max-width: 100px;
+    height: 100px;
+  }
+  .asd >>> img{
+    max-width: 100px;
+    height: 100px;
+  }
+  img{
+    max-width:100%;height:auto;
+  }
+</style>

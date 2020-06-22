@@ -51,7 +51,8 @@
 
       <el-table-column label="资讯内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.context }}</span>
+          <div v-html="row.context"  class="asd"></div>
+
         </template>
       </el-table-column>
 
@@ -452,3 +453,9 @@
     }
   }
 </script>
+<style>
+
+  img{
+    max-width:100%;height:auto;
+  }
+</style>

@@ -157,7 +157,7 @@
 </template>
 
 <script>
-  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
+  import { fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -265,7 +265,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        fetchListDau(this.listQuery).then(response => {
+        fetchListEdu(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
 
@@ -329,7 +329,7 @@
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+            this.temp.id = null // mock a id
             this.temp.author = 'vue-element-admin'
             createArticle(this.temp).then(() => {
               this.list.unshift(this.temp)

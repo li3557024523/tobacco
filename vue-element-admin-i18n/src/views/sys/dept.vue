@@ -221,7 +221,7 @@ export default {
       props: {
         children: "deptCharlen",
         label: "deptName",
-        value: "did",
+        value: "id",
         checkStrictly: true,
         emitPath:false
       }

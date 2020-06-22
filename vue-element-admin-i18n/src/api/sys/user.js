@@ -9,6 +9,7 @@ export function add(data) {
       age: data.age,
       education: data.education,
       roleId: data.roleId,
+      deptId:data.parentId,
       name: data.name,
       password: data.password,
       phone: data.phone,
@@ -34,7 +35,20 @@ export function update(data) {
   return request({
     url: '/emp/update',
     method: 'post',
-    data
+    params: {
+      id : data.id,
+      age: data.age,
+      education: data.education,
+      roleId: data.roleId,
+      deptId:data.parentId,
+      name: data.name,
+      password: data.password,
+      phone: data.phone,
+      sex: data.sex,
+      state: data.state,
+      username: data.username,
+      politics:data.politics
+    }
   })
 }
 

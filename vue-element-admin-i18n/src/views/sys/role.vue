@@ -166,7 +166,7 @@
          props: {
         children: "deptCharlen",
         label: "deptName",
-        value: "did",
+        value: "id",
         checkStrictly: true,
         emitPath:false
       },
@@ -177,7 +177,6 @@
           email: '',
           mobile: '',
           deptId: '',
-          did: undefined,
           introduction: '',
         },
         title: '添加', // 对话框显示的提示 根据dialogStatus create

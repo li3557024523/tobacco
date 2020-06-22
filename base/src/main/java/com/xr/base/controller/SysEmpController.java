@@ -3,6 +3,7 @@ package com.xr.base.controller;
 import com.xr.base.entity.SysEmp;
 import com.xr.base.entity.SysRole;
 import com.xr.base.service.SysEmpService;
+import com.xr.base.service.SysRoleService;
 import com.xr.base.util.ResponseResult;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -26,6 +27,10 @@ import java.util.List;
 public class SysEmpController {
     @Autowired
     private SysEmpService sysEmpService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
+
 
     @RequestMapping("login")
     public ResponseResult login(@RequestBody SysEmp sysEmp) {
@@ -121,21 +126,38 @@ public class SysEmpController {
 
     @RequestMapping("add")
     @RequiresPermissions("emp:add")
-    public ResponseResult add(SysEmp sysEmp,Integer roleId){
+    public ResponseResult add(SysEmp sysEmp,Integer roleId,Integer deptId){
+        Session session = SecurityUtils.getSubject().getSession();
+        SysEmp sss = (SysEmp)session.getAttribute("USER_SESSION");
         //生成盐（部分，需要存入数据库中）
         String salt=new SecureRandomNumberGenerator().nextBytes().toHex();
         //将原始密码加盐（上面生成的盐），并且用md5算法加密两次，将最后结果存入数据库中
         String password = new Md5Hash(sysEmp.getPassword(),salt,2).toString();
         sysEmp.setSalt(salt);
         sysEmp.setPassword(password);
+        sysEmp.setRoleId(roleId);
+        sysEmp.setDeptId(deptId);
+        sysEmp.setCreateId(sss.getId());
+        sysEmp.setCreateName(sss.getUsername());
         sysEmpService.add(sysEmp);
-        System.out.println("新增返回的用户ID"+sysEmp.getId());
+        System.out.println("角色ID"+roleId +"部门id"+deptId);
         sysEmpService.addrole(sysEmp.getId(),roleId);
+        sysRoleService.adddept(roleId,deptId);
         ResponseResult result = new ResponseResult();
         result.getData().put("message","添加成功");
         return result;
     }
 
 
+    @RequestMapping("update")
+    @RequiresPermissions("emp:update")
+    public ResponseResult update(SysEmp sysEmp,Integer roleId,Integer deptId){
+        sysEmpService.update(sysEmp);
+        sysEmpService.updaterole(sysEmp.getId(),roleId);
+        sysRoleService.updeptname(roleId,deptId);
+        ResponseResult result = new ResponseResult();
+        result.getData().put("message","修改成功");
+        return result;
+    }
 
 }

@@ -32,7 +32,7 @@ public interface SysDeptMapper {
     @Select("select count(*) from sys_dept")
     int deptsize();
 
-    @Insert("INSERT into sys_dept VALUES(NULL,#{e.deptName},NULL,#{e.parentId},#{e.principalName},NULL,#{e.leadership},NULL, NULL , NULL , #{e.state})")
+    @Insert("INSERT into sys_dept VALUES(NULL,#{e.deptName},null,#{e.parentId},#{e.principalName},NULL,#{e.leadership},NOW(), #{e.createId} , #{e.createName} , #{e.state})")
     void add(@Param("e") SysDept sysDept);
 
     @Update("" +

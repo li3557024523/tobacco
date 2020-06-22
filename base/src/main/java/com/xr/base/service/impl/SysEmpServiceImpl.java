@@ -78,6 +78,11 @@ public class SysEmpServiceImpl implements SysEmpService {
     }
 
     @Override
+    public void updaterole(Integer empId, Integer roleId) {
+        sysEmpMapper.updaterole(empId, roleId);
+    }
+
+    @Override
     public SysEmp findOne(int id) {
         return sysEmpMapper.findOne(id);
     }

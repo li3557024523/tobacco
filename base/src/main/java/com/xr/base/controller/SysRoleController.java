@@ -3,6 +3,7 @@ package com.xr.base.controller;
 import com.xr.base.entity.SysDept;
 import com.xr.base.entity.SysEmp;
 import com.xr.base.entity.SysRole;
+import com.xr.base.service.SysMenuService;
 import com.xr.base.service.SysRoleService;
 import com.xr.base.util.ResponseResult;
 import org.apache.shiro.SecurityUtils;
@@ -27,6 +28,9 @@ public class SysRoleController {
     @Autowired
     private SysRoleService sysRoleService;
 
+    @Autowired
+    private SysMenuService sysMenuService;
+
     @PostMapping("list")
     @RequiresPermissions("role:list")
     public ResponseResult findRole(String name , Integer page , Integer limit){
@@ -50,7 +54,7 @@ public class SysRoleController {
 
     @RequestMapping("add")
     @RequiresPermissions("role:add")
-    public ResponseResult add( SysRole sysRole ,int did){
+    public ResponseResult add( SysRole sysRole ,int did ,String menuId){
 //        //获取系统当前时间
 //        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        Date time=null;
@@ -66,6 +70,10 @@ public class SysRoleController {
         sysRole.setCreateName(sss.getCreateName());
         sysRoleService.add(sysRole);
         sysRoleService.adddept(sysRole.getId() , did);
+        String[] arr = menuId.split(",");
+        for (int i = 0 ; i <= arr.length-1 ; i++){
+            sysMenuService.add(sysRole.getId() , Integer.parseInt(arr[i]));
+        }
         ResponseResult result = new ResponseResult();
         result.getData().put("message","添加成功");
         return result;

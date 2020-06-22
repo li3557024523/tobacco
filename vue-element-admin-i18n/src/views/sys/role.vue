@@ -99,6 +99,18 @@
           </div>
         </el-form-item>
 
+
+        <el-tree
+          :data="mlists"
+          show-checkbox
+          ref="tree"
+          node-key="id"
+          :props="defaultProps"
+          @check-change="handleCheckChange"
+        ></el-tree>
+
+
+
         <el-form-item label="部门状态" prop="state">
           <el-select v-model="temp.state" placeholder="请选择">
             <el-option
@@ -130,6 +142,7 @@
 <script>
   //
   import { add, update, list, deleteRole } from '@/api/role'
+  import { mlist } from "@/api/sys/menu";
   import { groupDept } from "@/api/sys/dept"
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
@@ -151,7 +164,11 @@
           username: ''
         },
         options: [], // 后台查询出来，分好组的部门信息
-        
+        mlists:[],
+        defaultProps: {
+          children: 'listM',
+          label: 'name',
+        },
         placeholder : '请选择',
         sta: [
         {
@@ -178,6 +195,7 @@
           mobile: '',
           deptId: '',
           introduction: '',
+          s:''
         },
         title: '添加', // 对话框显示的提示 根据dialogStatus create
         dialogFormVisible: false, // 是否显示对话框
@@ -192,10 +210,18 @@
     created() {
       this.getList()
       this.getGroupDept()
-     
+     this.Mlist()
     },
     
     methods: {
+      handleCheckChange () {
+      let res = this.$refs.tree.getCheckedNodes()
+      let arr = []
+      res.forEach((item) => {
+        arr.push(item.id)
+      })
+       this.temp.s = arr.toString()
+    },
       //获得分管领导
      getGroupDept(val = 0) {
       groupDept().then(response => {
@@ -223,6 +249,15 @@
           this.listLoading = false
         })
       },
+       Mlist(val = 0) {
+      mlist().then(response => {
+        console.log("mlists", response);
+        this.mlists = [];
+        response.data.items.filter(item => {
+          this.mlists.push(item);
+        });
+      });
+    },
       // 重置表单数据
       resetTemp() {
         this.temp = {

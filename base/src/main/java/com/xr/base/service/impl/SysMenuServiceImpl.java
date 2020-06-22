@@ -1,5 +1,7 @@
 package com.xr.base.service.impl;
 
+import com.xr.base.entity.SysDept;
+import com.xr.base.entity.SysMenu;
 import com.xr.base.entity.SysRole;
 import com.xr.base.mapper.SysMenuMapper;
 import com.xr.base.service.SysMenuService;
@@ -18,4 +20,38 @@ public class SysMenuServiceImpl implements SysMenuService {
     public List<SysRole> roleList( String name,  Integer page,Integer limit) {
         return sysMenuMapper.roleList(name, page, limit);
     }
+    @Override
+    public List<SysMenu> findMtow(int parentId) {
+        return sysMenuMapper.findMtow(parentId);
+    }
+
+    @Override
+    public void add(Integer roleId, Integer menuId) {
+        sysMenuMapper.add(roleId, menuId);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        sysMenuMapper.delete(id);
+    }
+
+
+
+
+    @Override
+    public List<SysMenu> findMone() {
+        List<SysMenu> mone = sysMenuMapper.findMtow(0);
+        findMenuList(mone);
+        return mone;
+    }
+
+    private void findMenuList(List<SysMenu> sysMenuList){
+        for (SysMenu sysMenu : sysMenuList){
+            List<SysMenu> sysMenus = sysMenuMapper.findMtow(sysMenu.getId());
+            findMenuList(sysMenus);
+            sysMenu.setListM(sysMenus);
+        }
+
+    }
+
 }

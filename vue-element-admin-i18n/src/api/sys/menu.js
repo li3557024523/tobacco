@@ -6,7 +6,10 @@ export function add(data) {
   return request({
     url: '/menu/add',
     method: 'post',
-    data
+    params:{
+      roleId:data.roleId,
+      menuId:data.s
+    }
   })
 }
 
@@ -22,7 +25,10 @@ export function update(data) {
   return request({
     url: "menu/update",
     method: "post",
-    data
+    params:{
+      roleId:data.roleId,
+      menuId:data.s
+    }
   })
 }
 
@@ -35,5 +41,13 @@ export function list(data) {
       page: data.page,
       limit: data.limit
     } 
+  })
+}
+
+export function mlist(data) {
+  return request({
+    url: '/menu/mlist',
+    method: 'post',
+    data
   })
 }

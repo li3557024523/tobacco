@@ -10,7 +10,8 @@ export function add(data) {
       name: data.name,
       remark: data.remark,
       state: data.state,
-      did : data.did
+      did : data.did,
+      menuId:data.s
     }
   })
 }

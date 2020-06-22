@@ -2,6 +2,8 @@ package com.xr.base.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SysMenu {
 
@@ -11,7 +13,7 @@ public class SysMenu {
   private String url;
   private String perms;
   private Integer type;
-
+  private List<SysMenu> listM;
 
   public Integer getId() {
     return id;

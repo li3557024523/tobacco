@@ -39,9 +39,10 @@
         </template>
       </el-table-column>
       <el-table-column label="内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <div v-html="row.context">
+        <template slot-scope="{row}">
+          <div v-html="row.context"  class="asd"></div>
 
-        </div>
+        </template>
       </el-table-column>
       <el-table-column label="资讯类型" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
@@ -50,30 +51,25 @@
       </el-table-column>
       <el-table-column label="创建时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.creatDate }}</span>
+          <span>{{ row.createDate }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="创建者" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.creatId }}</span>
+          <span>{{ row.createId }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="创建者姓名" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.creatName }}</span>
+          <span>{{ row.creator }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="状态" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.state }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="地址" prop="fileAddress" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.fileAddress }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
@@ -99,20 +95,12 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.type"  class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.display_name" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="origin" prop="origin">
-          <el-input v-model="temp.origin" />
-        </el-form-item>
         <h1>这里是修改-----------------------</h1>
-        <el-form-item label="pubdate" prop="pubdate">
-          <el-date-picker v-model="temp.pubdate" type="datetime" placeholder="Please pick a date" />
-        </el-form-item>
         <el-form-item label="Title" prop="title">
           <el-input v-model="temp.title" />
+        </el-form-item>
+        <el-form-item label="contributor" prop="contributor">
+          <el-input v-model="temp.contributor" />
         </el-form-item>
 
         <el-form-item label="Status">
@@ -149,7 +137,7 @@
 </template>
 
 <script>
-  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
+  import { fetchListLit,fetchListUser, fetchListEdu, fetchPv, createArticle,L_createArticle, updateArticle,L_updateArticle} from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -211,7 +199,7 @@
         importanceOptions: [1, 2, 3],
         calendarTypeOptions,
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-        statusOptions: [{label:'开启',key:1},{label:'关闭',key:2}],
+        statusOptions: [{label:'创建',key:1},{label:'待审',key:2},{label:'已审核',key:3}],
 
         showReviewer: false,
         temp: {
@@ -220,15 +208,13 @@
           remark: '',
           timestamp: new Date(),
           title: '',
-          type: '',
           InformationTypes:'',
           state: '',
-          origin:'',
           context:'',
-          pubdate:'',
-          addTime:'',
+          createDate:new Date(),
           createId:'',
           creator:'',
+          contributor:''
         },
         dialogFormVisible: false,
         dialogStatus: '',
@@ -252,7 +238,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        fetchListDau(this.listQuery).then(response => {
+        fetchListLit(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
 
@@ -318,7 +304,7 @@
           if (valid) {
             this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
             this.temp.author = 'vue-element-admin'
-            createArticle(this.temp).then(() => {
+            L_createArticle(this.temp).then(() => {
               this.list.unshift(this.temp)
               this.dialogFormVisible = false
               this.$notify({
@@ -345,7 +331,7 @@
           if (valid) {
             const tempData = Object.assign({}, this.temp)
             tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-            updateArticle(tempData).then(() => {
+            L_updateArticle(tempData).then(() => {
               const index = this.list.findIndex(v => v.id === this.temp.id)
               this.list.splice(index, 1, this.temp)
               this.dialogFormVisible = false

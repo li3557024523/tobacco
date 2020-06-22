@@ -1,7 +1,20 @@
+
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.username" placeholder="用户名" style="width: 200px;" class="filter-item"/>
+
+          所属部门<div style="width: 200px;" class="filter-item">
+            <el-cascader
+              :placeholder="placeholder"
+              v-model="temp.parentId"
+              label="temp.deptName"
+              :props="props"
+              @change="Change"
+              :show-all-levels="false"
+              :options="options"
+            ></el-cascader>
+          </div>
+      岗位<el-input v-model="listQuery.username" placeholder="用户名" style="width: 200px;" class="filter-item"/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getList">
         查询
       </el-button>
@@ -9,47 +22,58 @@
         添加
       </el-button>
     </div>
-    <!--  数据表格-->
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
+
       <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色名" min-width="150px">
+
+<el-table-column label="序号" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.name }}</span>
+          <span class="link-type">{{ row.id }}</span>
         </template>
       </el-table-column>
-       <el-table-column label="部门名称" min-width="150px">
+
+
+      <el-table-column label="风险流程编号" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.deptName }}</span>
+          <span class="link-type">{{ row.riskId }}</span>
         </template>
       </el-table-column>
-       <el-table-column label="岗位描述" min-width="150px">
+
+
+      <el-table-column label="风险流程名称" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.remark }}</span>
+          <span class="link-type">{{ row.flowName }}</span>
         </template>
       </el-table-column>
-       <el-table-column label="创建时间" min-width="150px">
+
+
+      <el-table-column label="风险流程年份" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.createDate }}</span>
+          <span class="link-type">{{ row.flowYear }}</span>
         </template>
       </el-table-column>
-        <el-table-column label="状态" min-width="150px">
+
+      <el-table-column label="附件" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.state }}</span>
+          <span class="link-type">{{ row.accessory }}</span>
         </template>
       </el-table-column>
-      </el-table>
+
+      <el-table-column label="创建人" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.createBy}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="创建时间" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.createTime }}</span>
+        </template>
+      </el-table-column>
+
       <!--     自定义列-->
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
@@ -68,29 +92,30 @@
     <!--  绑定了title，是一个数组里取的，表示是修改的标题还是添加的标题
       visible.sync 对话框是否显示
     -->
-    <el-dialog :title="title" :visible.sync="dialogFormVisible" style="width: 80%">
+    <el-dialog :title="title" :visible.sync="dialogFormVisible" style="width: 120%">
       <!--
           rules:校验规则
           model:数据绑定
       -->
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 80%; margin-left:px;">
         <!--        数据校验要求prop值和temp.属性名一致-->
 
-        <el-form-item label="角色" prop="name">
-          <el-input placeholder="请输入角色名" v-model="temp.name" />
+        <el-form-item label="岗位编号" prop="riskId">
+          <el-input placeholder="请输入岗位编号" v-model="temp.riskId" />
         </el-form-item>
 
 
-        <el-form-item label="remark" prop="remark">
-          <el-input placeholder="请输入备注信息" v-model="temp.remark"></el-input>
+        <el-form-item label="选择年份" prop="year">
+          <el-date-picker v-model="temp.year" align="right" type="date" placeholder="选择日期" size="small" />
         </el-form-item>
 
-         <el-form-item label="所属部门" prop="deptName">
+
+      <el-form-item label="所属部门" prop="deptName">
           <div class="block">
             <el-cascader
               :placeholder="placeholder"
-              v-model="temp.did"
-              label="temp.deptName"
+              v-model="temp.parentId"
+              label="temp.dId"
               :props="props"
               @change="Change"
               :show-all-levels="false"
@@ -99,16 +124,113 @@
           </div>
         </el-form-item>
 
-        <el-form-item label="部门状态" prop="state">
-          <el-select v-model="temp.state" placeholder="请选择">
-            <el-option
-              v-for="item in sta"
-              :key="item.state"
-              :label="item.label"
-              :value="item.state"
-            ></el-option>
+
+
+      <el-form-item label="岗位" prop="pName">
+          <div class="block">
+            <el-cascader
+              :placeholder="placeholder"
+              v-model="temp.pName"
+              label="temp.pId"
+              :props="props"
+              @change="Change"
+              :show-all-levels="false"
+              :options="RoleList"
+            ></el-cascader>
+          </div>
+        </el-form-item>
+
+
+        <el-form-item label="风险项目名" prop="project">
+          <el-input placeholder="请输入名称" v-model="temp.project" />
+        </el-form-item>
+
+
+
+        <el-form-item label="廉政风险点描述">
+          <el-input
+            type="textarea"
+            :rows="4"
+            placeholder="请输入廉政风险点描述"
+            v-model="temp.riskDescribe">
+          </el-input>
+        </el-form-item>
+
+
+
+        <el-form-item label="风险发生的可能性" prop="L">
+          <el-select v-model="temp.riskL" placeholder="请选择">
+            <el-option-group
+              v-for="group in deptList"
+              :key="group.id"
+              :label="group.name">
+              <el-option-group
+                v-for="items in group.items"
+                :key="items.id"
+                :label="items.name">
+                <el-option
+                  v-for="item in items.items"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-option-group>
+            </el-option-group>
           </el-select>
         </el-form-item>
+
+
+        <el-form-item label="风险产生的危险性" prop="C">
+          <el-select v-model="temp.riskC" placeholder="请选择">
+            <el-option-group
+              v-for="group in deptList"
+              :key="group.id"
+              :label="group.name">
+              <el-option-group
+                v-for="items in group.items"
+                :key="items.id"
+                :label="items.name">
+                <el-option
+                  v-for="item in items.items"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-option-group>
+            </el-option-group>
+          </el-select>
+        </el-form-item>
+
+
+        <el-form-item label="廉政风险值" prop="D">
+          <el-input v-model="temp.riskD" />
+        </el-form-item>
+
+
+        <el-form-item label="风险等级" prop="Lv">
+          <el-input v-model="temp.riskGrade" />
+        </el-form-item>
+
+
+        <el-form-item label="预防和控制措施">
+          <el-input
+            type="textarea"
+            :rows="4"
+            placeholder="请输入预防和控制措施"
+            v-model="temp.riskGuard">
+          </el-input>
+        </el-form-item>
+
+
+        <el-form-item label="创建人" prop="createBy">
+          <el-input v-model="temp.createBy" />
+        </el-form-item>
+
+
+        <el-form-item label="创建时间" prop="createTime">
+          <el-input v-model="temp.createTime" />
+        </el-form-item>
+
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -129,7 +251,7 @@
 
 <script>
   //
-  import { add, update, list, deleteRole } from '@/api/role'
+  import { list} from '@/api/sys/Flow'
   import { groupDept } from "@/api/sys/dept"
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
@@ -140,6 +262,7 @@
     directives: { waves },
     data() {
       return {
+
         tableKey: 0,
         list: null, // 后台返回，给数据表格展示的数据
         total: 0, // 总记录数
@@ -150,34 +273,22 @@
           sex: 1,
           username: ''
         },
-        options: [], // 后台查询出来，分好组的部门信息
-
-        placeholder : '请选择',
-        sta: [
-        {
-          state: "启动",
-          label: "启动"
-        },
-        {
-          state: "关闭",
-          label: "关闭"
-        }
-      ],
-         props: {
-        children: "deptCharlen",
-        label: "deptName",
-        value: "id",
-        checkStrictly: true,
-        emitPath:false
-      },
+        deptList: [], // 后台查询出来，分好组的部门信息
+        RoleList: [],
         temp: { // 添加、修改时绑定的表单数据
           id: undefined,
-          username: '',
-          password: '',
-          email: '',
-          mobile: '',
-          deptId: '',
-          introduction: '',
+          riskId: '',
+          year: '',
+          dId: '',
+          Pid: '',
+          project: '',
+          riskDescribe: '',
+          riskL: '',
+          riskC: '',
+          riskD: '',
+          riskGrade: '',
+          createTime: '',
+          createBy: '',
         },
         title: '添加', // 对话框显示的提示 根据dialogStatus create
         dialogFormVisible: false, // 是否显示对话框
@@ -185,19 +296,31 @@
         rules: {
           // 校验规则
           username: [{ required: true, message: '用户名必填', trigger: 'blur' }]
-        }
+        },
+        options:[],
+        placeholder: "请选择",
+         props: {
+        children: "deptCharlen",
+        label: "deptName",
+        value: "id",
+        checkStrictly: true,
+        emitPath:false
+      }
       }
     },
     // 创建实例时的钩子函数
     created() {
       this.getList()
+      // 在创建时初始化获得部门信息
       this.getGroupDept()
 
+      //this.getQueryRole()
     },
 
-    methods: {
-      //获得分管领导
-     getGroupDept(val = 0) {
+  methods: {
+
+      // 获得分好组的部门信息
+    getGroupDept(val = 0) {
       groupDept().then(response => {
         console.log("deptlist", response);
         this.options = [];
@@ -207,32 +330,62 @@
         console.log(this.options);
       });
     },
-    Change(a){
+       Change(a){
       console.log(a)
     },
+    /*
+    getQueryRole(val = 0) {
+      queryRole().then(response => {
+        console.log("RoleList", response);
+        this.Rolelist = [];
+        response.data.name.filter(item => {
+          this.Rolelist.push(item);
+        });
+        console.log(this.Rolelist);
+      });
+    },
+       Change(a){
+      console.log(a)
+    },
+    */
       // 去后台取数据的
       getList() {
         // 开始转圈圈
         this.listLoading = true
         // debugger // 调试
-        list(this.listQuery).then(response => {
+        list().then(response => {
           console.log(response)
           this.list = response.data.items
-          this.total = response.data.total
           // 转圈圈结束
           this.listLoading = false
         })
       },
+      // 调用岗位查询
+      /*selectGet(vId){
+      let obj = {};
+      obj = this.selectList.find((item)=>{//这里的selectList就是上面遍历的数据源
+          return item.id === vId;//筛选出匹配数据
+      });
+        console.log(obj.name);//我这边的name就是对应label的
+        console.log(obj.id);
+      },
+      */
       // 重置表单数据
       resetTemp() {
         this.temp = {
           id: undefined,
-          username: '',
-          password: '',
-          email: '',
-          mobile: '',
-          deptId: '',
-          introduction: '',
+          riskId: '',
+          year: '',
+          dId: '',
+          Pid: '',
+          project: '',
+          riskDescribe: '',
+          riskL: '',
+          riskC: '',
+          riskD: '',
+          riskGrade: '',
+          createTime: '',
+          createBy: '',
         }
       },
       // 显示添加的对话框
@@ -250,15 +403,14 @@
         })
       },
       // 添加对话框里，点击确定，执行添加操作
-
       createData() {
-         console.log(this.temp),
         // 表单校验
         this.$refs['dataForm'].validate((valid) => {
           // 所有的校验都通过
           if (valid) {
             // 调用api里的sys里的user.js的ajax方法
             add(this.temp).then((response) => {
+
               // 关闭对话框
               this.dialogFormVisible = false
               // 刷新数据表格里的数据
@@ -274,7 +426,7 @@
           }
         })
       },
-      // 显示修改对话框
+      /*// 显示修改对话框
       handleUpdate(row) {
         // 将row里面与temp里属性相同的值，进行copy
         this.temp = Object.assign({}, row) // copy obj
@@ -312,16 +464,16 @@
             })
           }
         })
-      },
+      },*/
       handleDelete(row) {
         // 先弹确认取消框
-        this.$confirm('确认删除【'+row.name+'】的信息吗?', '提示', {
+        this.$confirm('确认删除【'+row.project+'】的信息吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           // 调用ajax去后台删除
-          deleteRole(row.id).then((response) => {
+          deleteRisk(row.id).then((response) => {
             // 刷新数据表格
             this.getList()
             // ajax去后台删除

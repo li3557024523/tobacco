@@ -1,6 +1,7 @@
 package com.xr.base.controller;
 
 
+import com.xr.base.entity.SysRole;
 import com.xr.base.entity.TRiskGuard;
 import com.xr.base.service.TRiskGuardService;
 import com.xr.base.util.ResponseResult;
@@ -25,7 +26,7 @@ public class TRiskGuardController {
     @RequestMapping("delete")
     @RequiresPermissions("risk:delete")
     public ResponseResult delete(Integer id){
-        tRiskGuardService.dele(id);
+        tRiskGuardService.delete(id);
         ResponseResult result = new ResponseResult();
         result.getData().put("message","删除成功");
         return result;
@@ -56,5 +57,16 @@ public class TRiskGuardController {
         result.getData().put("items",list);
         return result;
     }
+
+    @PostMapping("queryRole")
+    public ResponseResult queryRole(){
+        List<SysRole> list = tRiskGuardService.queryRole();
+        ResponseResult result = new ResponseResult();
+        result.getData().put("queryRole",list);
+        return result;
+    }
+
+
+
 
 }

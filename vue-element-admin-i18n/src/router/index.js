@@ -531,10 +531,21 @@ export const asyncRoutes = [
           'JobsRisk',
         meta:
           {
-            title: '风险管理', roles:
+            title: '岗位风险梳理', roles:
               ['admin', '超级管理员']
           }
-      },
+      },{
+        path: 'FlowRisk',
+        component: () => import('@/views/sys/FlowRisk'),
+        name:
+          'FlowRisk',
+        meta:
+          {
+            title: '流程风险梳理', roles:
+              ['admin', '超级管理员']
+          }
+      }
+
 
     ]
   },/*

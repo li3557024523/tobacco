@@ -1,6 +1,7 @@
 package com.xr.base.mapper;
 
 import com.xr.base.entity.SysEmp;
+import com.xr.base.entity.SysRole;
 import com.xr.base.entity.TRiskGuard;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -16,17 +17,17 @@ public interface TRiskGuardMapper {
     /**
      * 增加
      */
-    @Insert("INSERT INTO t_rick_guard VALUES(NULL,#{riskId},#{year},#{dId},#{Pid},#{project},#{riskDescribe},#{riskL},#{riskC},#{riskD},#{riskGrade},#{riskGuard},#{createTime},#{createBy},#{createName},#{state})")
+    @Insert("INSERT INTO t_risk_guard VALUES(NULL,#{riskId},#{year},#{dId},#{Pid},#{project},#{riskDescribe},#{riskL},#{riskC},#{riskD},#{riskGrade},#{riskGuard},#{createTime},#{createBy},#{createName},#{state})")
     void add(TRiskGuard tRickGuard);
     /**
      * 删除
      */
-    @Delete("delete from t_rick_guard where id = #{id}")
-    void dele(int id);
+    @Delete("delete from t_risk_guard where id = #{id}")
+    void delete(int id);
     /**
      * 查询单个
      */
-    @Select("select * from t_rick_guard where id = #{id}")
+    @Select("select * from t_risk_guard where id = #{id}")
     SysEmp findOne(int id);
 
     /**
@@ -82,5 +83,9 @@ public interface TRiskGuardMapper {
             @Result(column = "dName", property = "dName"),
     })
     List<TRiskGuard> RickAll();
+
+
+    @Select("select * from sys_role where state = '启用'")
+    List<SysRole> queryRole();
 
 }

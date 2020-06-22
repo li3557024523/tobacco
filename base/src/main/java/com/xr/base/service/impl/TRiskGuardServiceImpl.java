@@ -1,5 +1,6 @@
 package com.xr.base.service.impl;
 
+import com.xr.base.entity.SysRole;
 import com.xr.base.entity.TRiskGuard;
 import com.xr.base.mapper.TRiskGuardMapper;
 import com.xr.base.service.TRiskGuardService;
@@ -16,8 +17,8 @@ public class TRiskGuardServiceImpl implements TRiskGuardService {
 
 
     @Override
-    public void dele(int id) {
-        tRiskGuardMapper.dele(id);
+    public void delete(int id) {
+        tRiskGuardMapper.delete(id);
     }
 
     @Override
@@ -29,6 +30,16 @@ public class TRiskGuardServiceImpl implements TRiskGuardService {
     public List<TRiskGuard> queryRisk() {
         System.out.println(tRiskGuardMapper.RickAll());
         return tRiskGuardMapper.RickAll();
+    }
+
+    @Override
+    public List<TRiskGuard> queryJobs() {
+        return null;
+    }
+
+    @Override
+    public List<SysRole> queryRole() {
+        return tRiskGuardMapper.queryRole();
     }
 
 

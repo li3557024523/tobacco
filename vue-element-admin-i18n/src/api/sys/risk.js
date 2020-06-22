@@ -27,3 +27,22 @@ export function list(data) {
     data
   })
 }
+
+// 根据岗位和部门查询用户
+export function jobsList(data) {
+  return request({
+    url: 'risk/jobsList',
+    method: 'post',
+    data
+  })
+}
+
+// 根据岗位和部门查询用户
+export function queryRole(data) {
+  return request({
+    url: 'risk/queryRole',
+    method: 'post',
+    data
+  })
+}
+

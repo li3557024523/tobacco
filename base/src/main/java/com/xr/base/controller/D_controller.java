@@ -14,10 +14,11 @@ import java.util.List;
 public class D_controller {
     @Autowired
     private D_service d_service;
+    @RequestMapping(value = "/listType")
     public ResponseResult list(Integer page,Integer limit){
-        List<Datum> list= d_service.D_list(page,limit);
+        List<Datum> list= d_service.D_list((page-1)*limit,limit);
         ResponseResult result=new ResponseResult();
-        result.getData().put("item", list);
+        result.getData().put("items", list);
         result.getData().put("total", list.size());
         return result;
     }

@@ -157,7 +157,7 @@
 </template>
 
 <script>
-  import { fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
+  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -265,7 +265,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        fetchListEdu(this.listQuery).then(response => {
+        fetchListDau(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
 

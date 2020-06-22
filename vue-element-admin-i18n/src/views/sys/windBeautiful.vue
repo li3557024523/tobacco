@@ -20,7 +20,7 @@
 
     <el-table
       :key="tableKey"
-      v-loading="listLoading"
+      v-loading=""
       :data="list"
       border
       fit
@@ -38,51 +38,42 @@
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="来源" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.origin }}</span>
-        </template>
+      <el-table-column label="内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+        <div v-html="row.context">
+
+        </div>
       </el-table-column>
       <el-table-column label="资讯类型" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.informationTypes }}</span>
+          <span>{{ row.contributor }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column label="资讯内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <div v-html="row.context"  class="asd"></div>
-
-        </template>
-      </el-table-column>
-
-      <el-table-column label="资讯发布时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.pubdate }}</span>
-        </template>
-      </el-table-column>
-
       <el-table-column label="创建时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.addTime }}</span>
+          <span>{{ row.creatDate }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="创建者" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.createId }}</span>
+          <span>{{ row.creatId }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="创建者姓名" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.creator }}</span>
+          <span>{{ row.creatName }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="状态" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.state }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="地址" prop="fileAddress" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+        <template slot-scope="{row}">
+          <span>{{ row.fileAddress }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
@@ -123,6 +114,7 @@
         <el-form-item label="Title" prop="title">
           <el-input v-model="temp.title" />
         </el-form-item>
+
         <el-form-item label="Status">
           <el-select v-model="temp.state" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -157,7 +149,7 @@
 </template>
 
 <script>
-  import { fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
+  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -214,7 +206,6 @@
           limit: 10,
           importance: undefined,
           title: '',
-          listType: 2,
           sort: '+id'
         },
         importanceOptions: [1, 2, 3],
@@ -238,10 +229,6 @@
           addTime:'',
           createId:'',
           creator:'',
-
-
-
-
         },
         dialogFormVisible: false,
         dialogStatus: '',
@@ -265,7 +252,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        fetchListEdu(this.listQuery).then(response => {
+        fetchListDau(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
 

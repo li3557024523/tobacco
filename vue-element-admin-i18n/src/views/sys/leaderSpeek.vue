@@ -108,14 +108,9 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="type">
-          <el-select v-model="temp.informationTypes" placeholder="请选择">
-            <el-option
-              v-for="item in dd"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
+        <el-form-item label="Type" prop="type">
+          <el-select v-model="temp.type"  class="filter-item" placeholder="Please select">
+            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.display_name" />
           </el-select>
         </el-form-item>
         <el-form-item label="origin" prop="origin">
@@ -162,19 +157,17 @@
 </template>
 
 <script>
-  import { fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
+  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
   const calendarTypeOptions = [
-    { key: 1, display_name: '领导讲话' },
-    { key: 2, display_name: '廉政要闻' },
-    { key: 3, display_name: '文件制度' },
-    { key: 4, display_name: '警钟长鸣' }
-
+    { key: '1', display_name: '领导讲话' },
+    { key: '2', display_name: '廉政要闻' },
+    { key: '3', display_name: '文件制度' },
+    { key: '4', display_name: '警钟长鸣' }
   ]
-
 
 
   // arr to obj, such as { CN : "China", US : "USA" }
@@ -209,20 +202,6 @@
     },
     data() {
       return {
-        dd:[{
-          value: 1,
-          label: '黄金糕'
-        }, {
-          value: 2,
-          label: '双皮奶'
-        }, {
-          value: 3,
-          label: '蚵仔煎'
-        }, {
-          value: 4,
-          label: '龙须面'
-        }
-        ],
         content: null,
         editorOption: {},
         tableKey: 0,
@@ -238,15 +217,11 @@
           listType: 1,
           sort: '+id'
         },
-       // importanceOptions: [1, 2, 3],
+        importanceOptions: [1, 2, 3],
         calendarTypeOptions,
-       // sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+        sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
         statusOptions: [{label:'开启',key:1},{label:'关闭',key:2}],
-        calendarTypeOptions: [{label:'开启',key:1},{label:'关闭',key:2}],
-        clocktype: [{ clock:'领导讲话',key:1  },
-          {  clock: '廉政要闻',key:2 },
-          {  clock: '文件制度',key:3 },
-          {  clock: '警钟长鸣',key:4 }],
+
         showReviewer: false,
         temp: {
           id: undefined,
@@ -254,14 +229,15 @@
           remark: '',
           timestamp: new Date(),
           title: '',
-          informationTypes: undefined ,
+          type: '',
+          InformationTypes:'',
           state: '',
-          origin: '',
-          context: '',
-          pubdate: new Date(),
-          addTime: '',
-          createId: '',
-          creator: '',
+          origin:'',
+          context:'',
+          pubdate:'',
+          addTime:'',
+          createId:'',
+          creator:'',
 
 
 
@@ -276,9 +252,7 @@
         dialogPvVisible: false,
         pvData: [],
         rules: {
-
-          InformationTypes: [{ required: true, message: 'InformationTypes is required', trigger: 'change' }],
-
+          type: [{ required: true, message: 'type is required', trigger: 'change' }],
           timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
           title: [{ required: true, message: 'title is required', trigger: 'blur' }]
         },

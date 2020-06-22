@@ -22,6 +22,13 @@ export function fetchListEdu(query) {
     params: query
   })
 }
+export function fetchListDau(query) {
+  return request({
+    url: 'datum/listType',
+    method: 'get',
+    params: query
+  })
+}
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',

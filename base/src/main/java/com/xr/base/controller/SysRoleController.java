@@ -1,10 +1,13 @@
 package com.xr.base.controller;
 
 import com.xr.base.entity.SysDept;
+import com.xr.base.entity.SysEmp;
 import com.xr.base.entity.SysRole;
 import com.xr.base.service.SysRoleService;
 import com.xr.base.util.ResponseResult;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,6 +60,10 @@ public class SysRoleController {
 //            e.printStackTrace();
 //        }
 //        sysRole.setCreateDate((Time) time);
+        Session session = SecurityUtils.getSubject().getSession();
+        SysEmp sss = (SysEmp)session.getAttribute("USER_SESSION");
+        sysRole.setCreateId(sss.getCreateId());
+        sysRole.setCreateName(sss.getCreateName());
         sysRoleService.add(sysRole);
         sysRoleService.adddept(sysRole.getId() , did);
         ResponseResult result = new ResponseResult();

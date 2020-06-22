@@ -22,6 +22,30 @@ export function fetchListEdu(query) {
     params: query
   })
 }
+
+
+export function L_updateArticle(data) {
+  return request({
+    url: 'literature/upd',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchListLit(query) {
+  return request({
+    url: 'literature/listType',
+    method: 'get',
+    params: query
+  })
+}
+export function fetchListDau(query) {
+  return request({
+    url: 'datum/listType',
+    method: 'get',
+    params: query
+  })
+}
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',
@@ -41,6 +65,13 @@ export function fetchPv(pv) {
 export function createArticle(data) {
   return request({
     url: 'education/ins',
+    method: 'post',
+    data
+  })
+}
+export function L_createArticle(data) {
+  return request({
+    url: 'literature/ins',
     method: 'post',
     data
   })

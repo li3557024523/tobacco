@@ -4,9 +4,11 @@ import com.xr.base.entity.SysDept;
 import com.xr.base.entity.SysEmp;
 import com.xr.base.service.SysDeptService;
 import com.xr.base.util.ResponseResult;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,16 +68,10 @@ public class SysDeptController {
     @RequestMapping("add")
     @RequiresPermissions("dept:add")
     public ResponseResult add( SysDept sysDept){
-        //获取系统当前时间
-        System.out.println(sysDept);
-        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date time=null;
-        try {
-            time=sdf.parse(sdf.format(new Date()));
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-        sysDept.setDate(time);
+        Session session = SecurityUtils.getSubject().getSession();
+        SysEmp sss = (SysEmp)session.getAttribute("USER_SESSION");
+        sysDept.setCreateId(sss.getCreateId());
+        sysDept.setCreateName(sss.getCreateName());
       sysDeptService.add(sysDept);
         ResponseResult result = new ResponseResult();
         result.getData().put("message","添加成功");

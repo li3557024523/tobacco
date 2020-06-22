@@ -9,6 +9,8 @@ import './styles/element-variables.scss'
 
 import '@/styles/index.scss' // global css
 
+
+
 import App from './App'
 import store from './store'
 import router from './router'
@@ -20,6 +22,8 @@ import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
 
+/**var ElTreeGrid = require('element-tree-grid');
+Vue.component(ElTreeGrid.name,ElTreeGrid);*/
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

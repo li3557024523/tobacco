@@ -31,6 +31,8 @@ public interface SysEmpMapper {
      */
     @Select("select r.name from sys_emp e,sys_role r ,sys_emp_role er where e.id = er.emp_id and r.id = er.role_id and e.username = #{username}")
     public List<String> findUserRoles(String username);
+    @Select("select * from sys_role")
+    public List<SysRole> findUserRolesList();
 
     /**
      * 查询所有员工
@@ -61,8 +63,15 @@ public interface SysEmpMapper {
     /**
      * 增加
      */
-    @Insert("INSERT INTO sys_emp VALUES(NULL,#{name},#{sex},#{age},#{education},#{politics},#{phone},#{dept_id},#{username},#{password},#{role_id},#{date},#{create_id},#{create_name},#{state})")
-    void add(SysEmp sysEmp);
+    @Insert("insert  into sys_emp(id, `name`, sex, age, education, politics, phone, dept_id, username, `password`, salt, role_id, date, create_id, create_name, state)\n" +
+            "values (null, #{e.name}, #{e.sex}, #{e.age}, #{e.education}, #{e.politics}, #{e.phone}, #{e.deptId}, #{e.username}, #{e.password}, null, #{e.roleId}, NOW(), #{e.createId}, #{e.createName}, #{e.state})")
+    @Options(useGeneratedKeys=true,keyProperty="id")
+    void add(@Param("e") SysEmp sysEmp);
+
+    @Insert("insert into sys_emp_role values (null,#{empId} , #{roleId})")
+    void addrole(@Param("empId")Integer empId ,@Param("roleId") Integer roleId);
+
+
     /**
      * 删除
      */
@@ -76,7 +85,22 @@ public interface SysEmpMapper {
     /**
      * 修改
      */
-    void update(SysEmp sysEmp);
+    @Update("update sys_emp set name = #{e.name},\n" +
+            "sex = #{e.sex},\n" +
+            "age =#{e.age},\n" +
+            "education=#{e.education},\n" +
+            "politics=#{e.politics},\n" +
+            "phone=#{e.phone},\n" +
+            "dept_id=#{e.deptId},\n" +
+            "username=#{e.username},\n" +
+            "password=#{e.password},\n" +
+            "role_id=#{e.roleId},\n" +
+            "state=#{e.state} " +
+            "where id = #{e.id}")
+    void update(@Param("e") SysEmp sysEmp);
+    @Update("update sys_emp_role set role_id = #{roleId} where  emp_id = #{empId}")
+    void updaterole(@Param("empId")Integer empId ,@Param("roleId") Integer roleId);
+
 
     //查询用户所有角色
     @Select("SELECT * FROM sys_role r , sys_emp e , sys_emp_role er where e.id = er.emp_id and r.id = er.role_id and e.`name` = #{name}")
@@ -84,5 +108,6 @@ public interface SysEmpMapper {
     //查询用户所有权限
     @Select("SELECT * FROM sys_menu m , sys_role r, sys_role_menu rm ,sys_emp e ,sys_emp_role er where e.id = er.emp_id and r.id = er.role_id and r.id = rm.role_id and m.id = rm.menu_id and e.`name` = #{name}")
     List<SysMenu> findMenu(String name);
+
 
 }

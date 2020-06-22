@@ -32,7 +32,7 @@ public interface SysRoleMapper {
      */
     @Insert("insert into sys_role (id, name, remark, create_date, create_id, create_name, state)\n" +
             " values\n" +
-            "        (null, #{r.name}, #{r.remark}, NOW(), null,null, #{r.state})")
+            "        (null, #{r.name}, #{r.remark}, NOW(), #{r.createId},#{r.createName}, #{r.state})")
     @Options(useGeneratedKeys=true,keyProperty="id")
     void add(@Param("r") SysRole sysRole);
     @Insert("insert into sys_role_dept values (null,#{roleId} , #{deptId})")

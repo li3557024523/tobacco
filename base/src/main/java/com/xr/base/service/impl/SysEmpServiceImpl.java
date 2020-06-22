@@ -33,6 +33,11 @@ public class SysEmpServiceImpl implements SysEmpService {
     }
 
     @Override
+    public List<SysRole> findUserRolesList() {
+        return sysEmpMapper.findUserRolesList();
+    }
+
+    @Override
     public List<SysEmp> list(String name,Integer page,Integer count) {
         return sysEmpMapper.list(name,page,count);
     }
@@ -63,8 +68,18 @@ public class SysEmpServiceImpl implements SysEmpService {
     }
 
     @Override
+    public void addrole(Integer empId, Integer roleId) {
+        sysEmpMapper.addrole(empId,roleId);
+    }
+
+    @Override
     public void update(SysEmp sysEmp) {
         sysEmpMapper.update(sysEmp);
+    }
+
+    @Override
+    public void updaterole(Integer empId, Integer roleId) {
+        sysEmpMapper.updaterole(empId, roleId);
     }
 
     @Override

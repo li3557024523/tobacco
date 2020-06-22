@@ -20,7 +20,7 @@
 
     <el-table
       :key="tableKey"
-      v-loading="listLoading"
+      v-loading=""
       :data="list"
       border
       fit
@@ -38,34 +38,20 @@
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="来源" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.origin }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="资讯类型" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.informationTypes }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="资讯内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <div v-html="row.context"  class="asd"></div>
 
         </template>
-
       </el-table-column>
-
-      <el-table-column label="资讯发布时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="资讯类型" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.pubdate }}</span>
+          <span>{{ row.contributor }}</span>
         </template>
       </el-table-column>
-
       <el-table-column label="创建时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.addTime }}</span>
+          <span>{{ row.createDate }}</span>
         </template>
       </el-table-column>
 
@@ -109,21 +95,14 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.type"  class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.display_name" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="origin" prop="origin">
-          <el-input v-model="temp.origin" />
-        </el-form-item>
         <h1>这里是修改-----------------------</h1>
-        <el-form-item label="pubdate" prop="pubdate">
-          <el-date-picker v-model="temp.pubdate" type="datetime" placeholder="Please pick a date" />
-        </el-form-item>
         <el-form-item label="Title" prop="title">
           <el-input v-model="temp.title" />
         </el-form-item>
+        <el-form-item label="contributor" prop="contributor">
+          <el-input v-model="temp.contributor" />
+        </el-form-item>
+
         <el-form-item label="Status">
           <el-select v-model="temp.state" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -158,7 +137,7 @@
 </template>
 
 <script>
-  import { fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
+  import { fetchListLit,fetchListUser, fetchListEdu, fetchPv, createArticle,L_createArticle, updateArticle,L_updateArticle} from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -215,13 +194,12 @@
           limit: 10,
           importance: undefined,
           title: '',
-          listType: 2,
           sort: '+id'
         },
         importanceOptions: [1, 2, 3],
         calendarTypeOptions,
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-        statusOptions: [{label:'开启',key:1},{label:'关闭',key:2}],
+        statusOptions: [{label:'创建',key:1},{label:'待审',key:2},{label:'已审核',key:3}],
 
         showReviewer: false,
         temp: {
@@ -230,19 +208,13 @@
           remark: '',
           timestamp: new Date(),
           title: '',
-          type: '',
           InformationTypes:'',
           state: '',
-          origin:'',
           context:'',
-          pubdate:'',
-          addTime:'',
+          createDate:new Date(),
           createId:'',
           creator:'',
-
-
-
-
+          contributor:''
         },
         dialogFormVisible: false,
         dialogStatus: '',
@@ -266,11 +238,9 @@
     methods: {
       getList() {
         this.listLoading = true
-
-        fetchListEdu(this.listQuery).then(response => {
+        fetchListLit(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
-
 
           // Just to simulate the time of the request
           setTimeout(() => {
@@ -280,8 +250,8 @@
       },
       handleFilter() {
         this.listQuery.page = 1
-        this.getList()
 
+        this.getList()
       },
       handleModifyStatus(row, status) {
         this.$message({
@@ -334,7 +304,7 @@
           if (valid) {
             this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
             this.temp.author = 'vue-element-admin'
-            createArticle(this.temp).then(() => {
+            L_createArticle(this.temp).then(() => {
               this.list.unshift(this.temp)
               this.dialogFormVisible = false
               this.$notify({
@@ -361,7 +331,7 @@
           if (valid) {
             const tempData = Object.assign({}, this.temp)
             tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-            updateArticle(tempData).then(() => {
+            L_updateArticle(tempData).then(() => {
               const index = this.list.findIndex(v => v.id === this.temp.id)
               this.list.splice(index, 1, this.temp)
               this.dialogFormVisible = false
@@ -430,21 +400,8 @@
     }
   }
 </script>
-<style lang="scss" type="text/css">
-  .context >>> img{
-    max-width: 100%
-  }
-  .asd >>> p {
-    text-indent: 32px;
-  }
-  .asd >>> p+img {
-    max-width: 100px;
-    height: 100px;
-  }
-  .asd >>> img{
-    max-width: 100px;
-    height: 100px;
-  }
+<style>
+
   img{
     max-width:100%;height:auto;
   }

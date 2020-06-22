@@ -51,7 +51,8 @@
 
       <el-table-column label="资讯内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.context }}</span>
+          <div v-html="row.context"  class="asd"></div>
+
         </template>
       </el-table-column>
 
@@ -156,7 +157,7 @@
 </template>
 
 <script>
-  import { fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
+  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -264,7 +265,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        fetchListEdu(this.listQuery).then(response => {
+        fetchListDau(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
 
@@ -426,3 +427,9 @@
     }
   }
 </script>
+<style>
+
+  img{
+    max-width:100%;height:auto;
+  }
+</style>

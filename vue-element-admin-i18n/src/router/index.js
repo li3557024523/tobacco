@@ -10,6 +10,7 @@ import Layout from '@/layout'
 import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
+import cultureRouter from './modules/culture'
 import nestedRouter from './modules/nested'
 
 /**
@@ -613,6 +614,8 @@ children: [
   chartsRouter,
   //   nestedRouter,
   tableRouter,
+  cultureRouter,
+
   {
     path: '/record',
     component:

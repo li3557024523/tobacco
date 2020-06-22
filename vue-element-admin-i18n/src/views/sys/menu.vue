@@ -1,4 +1,5 @@
-<template>
+<template slot="your key" slot-scope="{scope}">
+
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.name" placeholder="用户名" style="width: 200px;" class="filter-item"/>
@@ -59,7 +60,29 @@
           <el-input placeholder="请输入角色名" v-model="temp.name" />
         </el-form-item>
 
-      
+        <!-- tree table -->
+       <el-table
+      :data="tableData"
+      style="width: 100%;margin-bottom: 20px;"
+      row-key="id"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+    >
+        <el-table-column
+          v-for="(item,index) in tableList"
+          :key="index"
+          :label="item.label"
+          :prop="item.prop"
+        ></el-table-column>
+      <el-table-column label="操作" width="200">
+        <template>
+                <el-checkbox>123</el-checkbox>
+                <el-checkbox>123</el-checkbox>
+        </template>
+      </el-table-column>
+    </el-table>
+
+
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -75,20 +98,91 @@
       </div>
     </el-dialog>
   </div>
+  
 </template>
 
 <script>
   //
+  
   import { add, update, list, deleteMenu } from '@/api/sys/menu'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // 分页组件
+
+
   export default {
     name: 'userTable',
-    components: { Pagination },
+    components: { Pagination},
     directives: { waves },
+    
     data() {
+
       return {
+        
+         tableList: [
+        {
+          label: "级别",
+          prop: "date"
+        },
+        {
+          label: "名称",
+          prop: "name"
+        },
+        {
+          label: "别名",
+          prop: "alias"
+        },
+        {
+          label: "操作员",
+          prop: "operator"
+        },
+        {
+          label: "状态",
+          prop: "state"
+        }
+      ],
+      tableData: [
+        {
+          id: 1,
+          date: "个人",
+          children: [
+            {
+              id: 11,
+              name: "第二根半价套餐"
+            },
+             {
+              id: 22,
+              name: "第3根半价套餐"
+            }
+          ]
+        },
+        {
+          id: 2,
+          date: "科室",
+          children: []
+        },
+
+        {
+          id: 3,
+          date: "全院",
+          children: [
+            {
+              id: 31,
+              name: "第二根半价套餐",
+              alias: "是兄弟就来割",
+              operator: "铁手无情",
+              state: "无痛"
+            },
+            {
+              id: 41,
+              name: "第二根半价套餐",
+              alias: "是兄弟就来割",
+              operator: "铁手无情",
+              state: "无痛"
+            }
+          ]
+        }
+      ],
         tableKey: 0,
         list: null, // 后台返回，给数据表格展示的数据
         total: 0, // 总记录数
@@ -99,7 +193,6 @@
           sex: 1,
           username: ''
         },
-        
         temp: { // 添加、修改时绑定的表单数据
           id: undefined,
           username: '',
@@ -110,6 +203,7 @@
           did: undefined,
           introduction: '',
         },
+
         title: '添加', // 对话框显示的提示 根据dialogStatus create
         dialogFormVisible: false, // 是否显示对话框
         dialogStatus: '', // 表示表单是添加还是修改的
@@ -122,7 +216,7 @@
     // 创建实例时的钩子函数
     created() {
       this.getList()
-     
+    
     },
     
     methods: {

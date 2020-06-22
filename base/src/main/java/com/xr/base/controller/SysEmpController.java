@@ -1,6 +1,7 @@
 package com.xr.base.controller;
 
 import com.xr.base.entity.SysEmp;
+import com.xr.base.entity.SysRole;
 import com.xr.base.service.SysEmpService;
 import com.xr.base.util.ResponseResult;
 import org.apache.shiro.SecurityUtils;
@@ -102,6 +103,12 @@ public class SysEmpController {
         result.getData().put("total",empsize);
         return result;
     }
+    @RequestMapping("findroleList")
+    public ResponseResult findroleList(){
+        ResponseResult result = new ResponseResult();
+        result.getData().put("findroleList",sysEmpService.findUserRolesList());
+        return result;
+    }
 
     @RequestMapping("delete")
     @RequiresPermissions("emp:delete")
@@ -114,17 +121,7 @@ public class SysEmpController {
 
     @RequestMapping("add")
     @RequiresPermissions("emp:add")
-    public ResponseResult add(SysEmp sysEmp){
-        //获取系统当前时间
-        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date time=null;
-        try {
-            time=sdf.parse(sdf.format(new Date()));
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-        sysEmp.setDate((Time) time);
-
+    public ResponseResult add(SysEmp sysEmp,Integer roleId){
         //生成盐（部分，需要存入数据库中）
         String salt=new SecureRandomNumberGenerator().nextBytes().toHex();
         //将原始密码加盐（上面生成的盐），并且用md5算法加密两次，将最后结果存入数据库中
@@ -132,6 +129,8 @@ public class SysEmpController {
         sysEmp.setSalt(salt);
         sysEmp.setPassword(password);
         sysEmpService.add(sysEmp);
+        System.out.println("新增返回的用户ID"+sysEmp.getId());
+        sysEmpService.addrole(sysEmp.getId(),roleId);
         ResponseResult result = new ResponseResult();
         result.getData().put("message","添加成功");
         return result;

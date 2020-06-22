@@ -22,9 +22,9 @@ public class SysMenuController {
     private SysRoleService sysRoleService;
 
     @RequestMapping("list")
-    @RequiresPermissions("menu:list")
+    //@RequiresPermissions("menu:list")
     public ResponseResult findRole(String name , Integer page , Integer limit){
-        System.out.println(name+""+page+""+limit);
+        System.out.println("菜单之"+name+""+page+""+limit);
         List<SysRole> list = sysMenuService.roleList(name,(page-1)*limit, limit);
         int rolesize = sysRoleService.rolesize();
         ResponseResult result = new ResponseResult();

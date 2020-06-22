@@ -94,46 +94,75 @@
       -->
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
         <!--        数据校验要求prop值和temp.属性名一致-->
-        <el-form-item label="部门" prop="sex">  
-          <el-select v-model="temp.deptId" placeholder="请选择">
-            <el-option-group
-              v-for="group in deptList"
-              :key="group.id"
-              :label="group.name">
-              <el-option-group
-                v-for="items in group.items"
-                :key="items.id"
-                :label="items.name">
-              <el-option
-                v-for="item in items.items"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-              </el-option-group>
-            </el-option-group>
-          </el-select>
+        
+        <el-form-item label="姓名" prop="name">
+          <el-input placeholder="请输入用户名" v-model="temp.name" />
         </el-form-item>
-        <el-form-item label="姓名" prop="username">
-          <el-input placeholder="请输入用户名" v-model="temp.username" />
+        <el-form-item label="登入账号" prop="username">
+          <el-input placeholder="请输入登入账号" v-model="temp.username" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input placeholder="请输入密码" v-model="temp.password" show-password></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="temp.email" />
+        <el-form-item label="年龄" prop="age">
+          <el-input placeholder="请输入年龄" v-model="temp.age" />
         </el-form-item>
-        <el-form-item label="手机" prop="mobile">
-          <el-input v-model="temp.mobile" />
+         <el-form-item label="性别" prop="sex">
+          <el-select v-model="temp.sex" placeholder="请选择">
+            <el-option
+              v-for="item in se"
+              :key="item.sex"
+              :label="item.sex"
+              :value="item.sex"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="自我简介">
-          <el-input
-            type="textarea"
-            :rows="4"
-            placeholder="请输入自我简介"
-            v-model="temp.introduction">
-          </el-input>
+      
+        <el-form-item label="手机" prop="phone">
+          <el-input v-model="temp.phone" />
         </el-form-item>
+        
+        <el-form-item label="员工角色" prop="findroleList">
+          <el-select v-model="temp.id" placeholder="请选择">
+            <el-option
+              v-for="l in findroleLists"
+              :key="l.id"
+              :label="l.name"
+              :value="l.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="部门状态" prop="state">
+          <el-select v-model="temp.state" placeholder="请选择">
+            <el-option
+              v-for="item in sta"
+              :key="item.state"
+              :label="item.label"
+              :value="item.state"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="学历" prop="education">
+          <el-select v-model="temp.education" placeholder="请选择">
+            <el-option
+              v-for="item in educations"
+              :key="item.education"
+              :label="item.label"
+              :value="item.education"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="政治面貌" prop="politics">
+          <el-select v-model="temp.politics" placeholder="请选择">
+            <el-option
+              v-for="item in politicss"
+              :key="item.politics"
+              :label="item.label"
+              :value="item.politics"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -153,8 +182,7 @@
 
 <script>
   //
-  import { add, update, list, deleteUser } from '@/api/sys/user'
-  import {groupDept} from "@/api/sys/dept";
+  import { add, update, list, deleteUser,findroleList } from '@/api/sys/user' 
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // 分页组件
@@ -174,7 +202,7 @@
           sex: 1,
           username: ''
         },
-        deptList: [], // 后台查询出来，分好组的部门信息
+      findroleLists:[],
         temp: { // 添加、修改时绑定的表单数据
           id: undefined,
           username: '',
@@ -184,6 +212,57 @@
           deptId: '',
           introduction: '',
         },
+      educations: [
+        {
+          education: "小学",
+          label: "小学"
+        },
+        {
+          education: "中专",
+          label: "中专"
+        },  
+        {
+          education: "大专",
+          label: "大专"
+        }
+      ],
+        placeholder: "请选择",
+      options: [],
+      politicss: [
+        {
+          politics: "党员",
+          label: "党员"
+        },
+        {
+          politics: "团员",
+          label: "团员"
+        },  
+        {
+          politics: "无",
+          label: "无"
+        }
+      ],
+      sta: [
+        {
+          state: "在职",
+          label: "在职"
+        },
+        {
+          state: "停职",
+          label: "停职"
+        }
+      ],
+      se: [
+        {
+          sex: "男",
+          label: "男"
+        },
+        {
+          sex: "女",
+          label: "女"
+        }
+      ],
+
         title: '添加', // 对话框显示的提示 根据dialogStatus create
         dialogFormVisible: false, // 是否显示对话框
         dialogStatus: '', // 表示表单是添加还是修改的
@@ -197,15 +276,20 @@
     created() {
       this.getList()
       // 在创建时初始化获得部门信息
-      this.getGroupDept()
+      this.findroleList()
     },
     methods: {
-      // 获得分好组的部门信息
-      getGroupDept(){
-        groupDept().then((response) => {
-          this.deptList = response.data.deptList
-        })
-      },
+      //获得角色
+    findroleList() {
+      findroleList().then(response => {
+        this.findroleLists = [];
+        console.log(response)
+        response.data.findroleList.filter(item => {
+          this.findroleLists.push(item);
+        });
+        console.log(this.leadership)
+      });
+    },
       // 去后台取数据的
       getList() {
         // 开始转圈圈
@@ -248,6 +332,7 @@
       // 添加对话框里，点击确定，执行添加操作
       createData() {
         // 表单校验
+        console.log(this.temp)
         this.$refs['dataForm'].validate((valid) => {
           // 所有的校验都通过
           if (valid) {

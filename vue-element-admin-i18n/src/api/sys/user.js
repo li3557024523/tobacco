@@ -5,7 +5,18 @@ export function add(data) {
   return request({
     url: '/emp/add',
     method: 'post',
-    data
+    params: {
+      age: data.age,
+      education: data.education,
+      roleId: data.roleId,
+      name: data.name,
+      password: data.password,
+      phone: data.phone,
+      sex: data.sex,
+      state: data.state,
+      username: data.username,
+      politics:data.politics
+    }
   })
 }
 
@@ -32,10 +43,19 @@ export function list(data) {
   return request({
     url: '/emp/list',
     method: 'post',
-    params:{
-      username:data.username,
+    params: {
+      username: data.username,
       page: data.page,
       limit: data.limit
     }
+  })
+}
+
+// 根据用户对象进行查询用户
+export function findroleList(data) {
+  return request({
+    url: '/emp/findroleList',
+    method: 'post',
+    data
   })
 }

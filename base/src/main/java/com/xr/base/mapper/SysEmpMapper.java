@@ -31,6 +31,8 @@ public interface SysEmpMapper {
      */
     @Select("select r.name from sys_emp e,sys_role r ,sys_emp_role er where e.id = er.emp_id and r.id = er.role_id and e.username = #{username}")
     public List<String> findUserRoles(String username);
+    @Select("select * from sys_role")
+    public List<SysRole> findUserRolesList();
 
     /**
      * 查询所有员工
@@ -61,8 +63,14 @@ public interface SysEmpMapper {
     /**
      * 增加
      */
-    @Insert("INSERT INTO sys_emp VALUES(NULL,#{name},#{sex},#{age},#{education},#{politics},#{phone},#{dept_id},#{username},#{password},#{role_id},#{date},#{create_id},#{create_name},#{state})")
-    void add(SysEmp sysEmp);
+    @Insert("insert  into sys_emp(id, `name`, sex, age, education, politics, phone, dept_id, username, `password`, salt, role_id, date, create_id, create_name, state)\n" +
+            "values (null, #{e.name}, #{e.sex}, #{e.age}, #{e.education}, #{e.politics}, #{e.phone}, null, #{e.username}, #{e.password}, null, null, NOW(), null, null, #{e.state})")
+    @Options(useGeneratedKeys=true,keyProperty="id")
+    void add(@Param("e") SysEmp sysEmp);
+
+    @Insert("insert into sys_emp_role values (null,#{empId} , #{roleId})")
+    void addrole(@Param("empId")Integer empId ,@Param("roleId") Integer roleId);
+
     /**
      * 删除
      */

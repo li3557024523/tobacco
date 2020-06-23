@@ -72,6 +72,7 @@
         </template>
       </el-table-column>
 
+
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -115,11 +116,9 @@
             <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key" />
           </el-select>
         </el-form-item>
-
-        <el-card style="height: 610px;">
-          <quill-editor v-model="temp.context" ref="myQuillEditor" style="height: 500px;" :options="editorOption">
-          </quill-editor>
-        </el-card>
+        <el-upload :action="uploadfile">
+          <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -142,13 +141,14 @@
     </el-dialog>
   </div>
 </template>
-
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+<script type="text/css" src="../../utils/webuploader/webuploader.css"></script>
+<script type="text/javascript" src="../../utils/webuploader/webuploader.min.js"></script>
 <script>
-  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
+  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle,uploadfile } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
   const calendarTypeOptions = [
     { key: '1', display_name: '领导讲话' },
     { key: '2', display_name: '廉政要闻' },
@@ -172,7 +172,7 @@
   import 'quill/dist/quill.bubble.css'
   export default {
     name: 'ComplexTable',
-    components: { Pagination,quillEditor},
+    components: { Pagination,quillEditor,},
     directives: { waves },
     filters: {
       statusFilter(status) {
@@ -189,6 +189,7 @@
     },
     data() {
       return {
+
         content: null,
         editorOption: {},
         tableKey: 0,
@@ -224,6 +225,7 @@
           addTime:'',
           createId:'',
           creator:'',
+          fileAddress:'',
         },
         dialogFormVisible: false,
         dialogStatus: '',
@@ -245,6 +247,14 @@
       this.getList()
     },
     methods: {
+      uploadsuc(response,file,fileList){
+        this.temp.fileAddress=response;
+
+      },
+      asd :function(){
+
+      },
+
       getList() {
         this.listLoading = true
         fetchListDau(this.listQuery).then(response => {
@@ -405,6 +415,10 @@
       getSortClass: function(key) {
         const sort = this.listQuery.sort
         return sort === `+${key}` ? 'ascending' : 'descending'
+      },
+      onFileSuccess: function (rootFile, file, response, chunk) {
+        //这里可以根据response（接口）返回的数据处理自己的实际问题（如：从response拿到后台返回的想要的数据进行组装并显示）
+        //注，这里从文件夹每上传成功一个文件会调用一次这个方法
       }
     }
   }
@@ -414,4 +428,25 @@
   img{
     max-width:100%;height:auto;
   }
+
+
+   .uploader-example {
+     width: 90%;
+     padding: 15px;
+     margin: 40px auto 0;
+     font-size: 12px;
+     box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+   }
+
+  .uploader-example .uploader-btn {
+    margin-right: 4px;
+  }
+
+  .uploader-example .uploader-list {
+    max-height: 440px;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
 </style>

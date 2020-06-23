@@ -69,6 +69,13 @@ export function createArticle(data) {
     data
   })
 }
+export function uploadfile(data) {
+  return request({
+    url: 'datum/uploadCategory',
+    method: 'post',
+    data
+  })
+}
 export function L_createArticle(data) {
   return request({
     url: 'literature/ins',

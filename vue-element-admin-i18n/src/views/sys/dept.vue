@@ -221,7 +221,7 @@ export default {
       props: {
         children: "deptCharlen",
         label: "deptName",
-        value: "id",
+        value: "did",
         checkStrictly: true,
         emitPath:false
       }
@@ -299,6 +299,7 @@ export default {
       });
     },
     // 添加对话框里，点击确定，执行添加操作
+    /*
     createData() {
       // 表单校验
       this.$refs["dataForm"].validate(valid => {
@@ -322,6 +323,7 @@ export default {
         }
       });
     },
+    */
     // 显示修改对话框
     handleUpdate(row) {
       // 将row里面与temp里属性相同的值，进行copy

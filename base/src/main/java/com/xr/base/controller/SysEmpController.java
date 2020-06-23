@@ -5,6 +5,7 @@ import com.xr.base.entity.SysRole;
 import com.xr.base.service.SysEmpService;
 import com.xr.base.service.SysRoleService;
 import com.xr.base.util.ResponseResult;
+import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@Api(tags = {"SysEmprController"}, description = "用户Controller")
 @RestController
 @RequestMapping("emp")
 @CrossOrigin

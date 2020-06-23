@@ -81,10 +81,14 @@ public class SysRoleController {
 
     @RequestMapping("update")
     @RequiresPermissions("role:update")
-    public ResponseResult update(SysRole sysRole , Integer did){
+    public ResponseResult update(SysRole sysRole , Integer did,String menuId){
         sysRoleService.update(sysRole);
-        System.out.println(sysRole.getId()+"aa"+did);
         sysRoleService.updeptname(sysRole.getId(),did);
+        sysMenuService.delete(sysRole.getId());
+        String[] arr = menuId.split(",");
+        for (int i = 0 ; i <= arr.length-1 ; i++){
+            sysMenuService.add(sysRole.getId(), Integer.parseInt(arr[i]));
+        }
         ResponseResult result =new ResponseResult();
         result.getData().put("message","修改成功");
         return result;

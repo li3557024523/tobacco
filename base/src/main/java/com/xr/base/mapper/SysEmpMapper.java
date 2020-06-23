@@ -38,7 +38,7 @@ public interface SysEmpMapper {
      * 查询所有员工
      */
     @Select({"<script>"
-            ,"SELECT e.id,e.`name`,e.phone,e.username,e.state ,\n" +
+            ,"SELECT e.id,e.`name`,e.phone,e.username,e.state,e.password,e.sex,e.age,e.politics,e.education ,\n" +
             "(SELECT name from sys_role r where e.role_id = r.id)AS rname,\n" +
             "(SELECT dept_name from sys_dept d where e.dept_id = d.id) AS dname\n" +
             " FROM sys_emp e where 1=1" ,

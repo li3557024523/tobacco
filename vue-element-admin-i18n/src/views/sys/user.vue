@@ -99,7 +99,7 @@
     <!--  绑定了title，是一个数组里取的，表示是修改的标题还是添加的标题
       visible.sync 对话框是否显示
     -->
-    <el-dialog :title="title" :visible.sync="dialogFormVisible" style="width: 80%">
+    <el-dialog :fullscreen="true" :title="title" :visible.sync="dialogFormVisible" style="width: 100%">
       <!--
           rules:校验规则
           model:数据绑定
@@ -128,7 +128,7 @@
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-select v-model="temp.sex" placeholder="请选择">
-            <el-option v-for="item in se" :key="item.sex" :label="item.sex" :value="item.sex"></el-option>
+            <el-option v-for="item in se" :key="item.sex" :label="item.label" :value="item.sex"></el-option>
           </el-select>
         </el-form-item>
 
@@ -136,7 +136,7 @@
           <el-input v-model="temp.phone" />
         </el-form-item>
 
-        <el-form-item label="员工角色" prop="findroleList">
+        <el-form-item label="员工角色" prop="findroleLists">
           <el-select v-model="temp.roleId" placeholder="请选择">
             <el-option v-for="l in findroleLists" :key="l.id" :label="l.name" :value="l.id"></el-option>
           </el-select>
@@ -239,6 +239,7 @@ export default {
         email: "",
         mobile: "",
         deptId: "",
+        deptName:"",
         introduction: "",
         age: '',
         education: "",
@@ -247,9 +248,10 @@ export default {
         phone: "",
         sex: "",
         state: "",
-        
-        politics: ""
+        politics: "",
+        s:''
       },
+      Change:'',
       educations: [
         {
           education: "小学",
@@ -320,27 +322,20 @@ export default {
   methods: {
     getGroupDept(val = 0) {
       groupDept().then(response => {
-        console.log("deptlist", response);
+        console.log(response)
         this.options = [];
         response.data.dept.filter(item => {
           this.options.push(item);
         });
-        console.log(this.options);
       });
-    },
-    Change(a) {
-      console.log(a);
     },
     //获得角色
     findroleList() {
       findroleList().then(response => {
-        console.log(response)
         this.findroleLists = [];
-        console.log(response);
         response.data.findroleList.filter(item => {
           this.findroleLists.push(item);
         });
-        console.log(this.leadership);
       });
     },
     // 去后台取数据的
@@ -349,7 +344,6 @@ export default {
       this.listLoading = true;
       // debugger // 调试
       list(this.listQuery).then(response => {
-        console.log(response);
         this.list = response.data.items;
         this.total = response.data.total;
         // 转圈圈结束
@@ -365,7 +359,17 @@ export default {
         email: "",
         mobile: "",
         deptId: "",
-        introduction: ""
+        introduction: "",
+        deptName:"",
+        age: '',
+        education: "",
+        roleId: "",
+        name: "",
+        phone: "",
+        sex: "",
+        state: "",
+        politics: "",
+        s:''
       };
     },
     // 显示添加的对话框
@@ -385,7 +389,6 @@ export default {
     // 添加对话框里，点击确定，执行添加操作
     createData() {
       // 表单校验
-      console.log(this.temp);
       this.$refs["dataForm"].validate(valid => {
         // 所有的校验都通过
         if (valid) {
@@ -408,6 +411,7 @@ export default {
     },
     // 显示修改对话框
     handleUpdate(row) {
+      
       // 将row里面与temp里属性相同的值，进行copy
       this.temp = Object.assign({}, row); // copy obj
       // 将对话框里的确定点击时，改为执行修改操作
@@ -429,6 +433,7 @@ export default {
           // 将temp拷贝到tempData
           const tempData = Object.assign({}, this.temp);
           // 进行ajax提交
+          console.log(tempData)
           update(tempData).then(response => {
             // 提交完毕，关闭对话框
             this.dialogFormVisible = false;

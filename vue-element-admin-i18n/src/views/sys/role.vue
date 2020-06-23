@@ -167,7 +167,7 @@
         mlists:[],
         defaultProps: {
           children: 'listM',
-          label: 'name',
+          label: 'name'
         },
         placeholder : '请选择',
         sta: [

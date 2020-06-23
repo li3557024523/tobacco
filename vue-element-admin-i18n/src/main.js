@@ -21,7 +21,6 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
-````````
 /**var ElTreeGrid = require('element-tree-grid');
 Vue.component(ElTreeGrid.name,ElTreeGrid);*/
 /**

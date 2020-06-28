@@ -13,11 +13,13 @@ public interface SysDeptMapper {
     @Select("select * from sys_dept")
     List<SysDept> DeptList();
 
+    @Select("select * from sys_dept where parent_id = #{parent_id}")
+    List<SysDept> groupByFidList(int fid);
+
     @Select("SELECT leadership from sys_dept GROUP BY leadership")
         List<SysDept> leadership();
 
-    @Select("select * from sys_dept where parent_id = #{parent_id}")
-    List<SysDept> groupByFidList(int fid);
+
 
     @Select({"<script>"
             , "select parent_id,id,did,dept_name,principal_name,leadership,state" ,

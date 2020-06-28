@@ -128,7 +128,7 @@
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-select v-model="temp.sex" placeholder="请选择">
-            <el-option v-for="item in se" :key="item.sex" :label="item.label" :value="item.sex"></el-option>
+            <el-option v-for="item in se" :key="item.sex" :label="item.sex" :value="item.sex"></el-option>
           </el-select>
         </el-form-item>
 
@@ -136,7 +136,7 @@
           <el-input v-model="temp.phone" />
         </el-form-item>
 
-        <el-form-item label="员工角色" prop="findroleLists">
+        <el-form-item label="员工角色" prop="findroleList">
           <el-select v-model="temp.roleId" placeholder="请选择">
             <el-option v-for="l in findroleLists" :key="l.id" :label="l.name" :value="l.id"></el-option>
           </el-select>
@@ -251,7 +251,6 @@ export default {
         politics: "",
         s:''
       },
-      Change:'',
       educations: [
         {
           education: "小学",
@@ -320,9 +319,11 @@ export default {
     this.getGroupDept();
   },
   methods: {
+      Change(a){
+        console.log(a)
+      },
     getGroupDept(val = 0) {
       groupDept().then(response => {
-        console.log(response)
         this.options = [];
         response.data.dept.filter(item => {
           this.options.push(item);
@@ -411,7 +412,6 @@ export default {
     },
     // 显示修改对话框
     handleUpdate(row) {
-      
       // 将row里面与temp里属性相同的值，进行copy
       this.temp = Object.assign({}, row); // copy obj
       // 将对话框里的确定点击时，改为执行修改操作

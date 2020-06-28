@@ -67,6 +67,8 @@ public class SysDeptServiceImpl implements SysDeptService {
         //查询所有1级部门
         List<SysDept> sysDeptParentAll = sysDeptMapper.groupByFidList(0);
         findSysDeptAllChrlen(sysDeptParentAll);
+
+
         sysDeptParentAll.forEach(System.out::print);
         return sysDeptParentAll;
     }

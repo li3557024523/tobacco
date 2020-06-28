@@ -70,8 +70,8 @@ public class SysDeptController {
     public ResponseResult add( SysDept sysDept){
         Session session = SecurityUtils.getSubject().getSession();
         SysEmp sss = (SysEmp)session.getAttribute("USER_SESSION");
-        sysDept.setCreateId(sss.getCreateId());
-        sysDept.setCreateName(sss.getCreateName());
+        sysDept.setCreateId(sss.getId());
+        sysDept.setCreateName(sss.getName());
       sysDeptService.add(sysDept);
         ResponseResult result = new ResponseResult();
         result.getData().put("message","添加成功");

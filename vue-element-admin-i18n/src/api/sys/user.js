@@ -60,7 +60,8 @@ export function list(data) {
     params: {
       username: data.username,
       page: data.page,
-      limit: data.limit
+      limit: data.limit,
+      
     }
   })
 }

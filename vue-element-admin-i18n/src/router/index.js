@@ -534,7 +534,7 @@ export const asyncRoutes = [
     name: 'JobsRisk',
     meta: {
       title: '风险防控',
-      icon: 'example',
+      icon: 'tree-table',
       //roles: ['admin', 'editor', '超级管理员'] // 您可以在根导航中设置角色
     },
     children: [
@@ -545,8 +545,7 @@ export const asyncRoutes = [
           'JobsRisk',
         meta:
           {
-            title: '岗位风险梳理', roles:
-              ['admin', '超级管理员']
+            title: '岗位风险梳理'
           }
       },{
         path: 'FlowRisk',
@@ -555,8 +554,16 @@ export const asyncRoutes = [
           'FlowRisk',
         meta:
           {
-            title: '流程风险梳理', roles:
-              ['admin', '超级管理员']
+            title: '流程风险梳理'
+          }
+      },{
+        path: 'RiskPoint',
+        component: () => import('@/views/sys/RiskPoint'),
+        name:
+          'RiskPoint',
+        meta:
+          {
+            title: '风险点评定'
           }
       }
 

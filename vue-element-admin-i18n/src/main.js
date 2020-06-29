@@ -10,6 +10,9 @@ import './styles/element-variables.scss'
 import '@/styles/index.scss' // global css
 
 
+//import uploader from 'vue-simple-uploader'
+//Vue.use(uploader)
+
 
 import App from './App'
 import store from './store'

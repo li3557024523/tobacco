@@ -19,7 +19,7 @@ public interface TRiskGuardService {
      * 查询所有风险
      * @return
      */
-    List<TRiskGuard> queryRisk();
+    List<TRiskGuard> queryRisk(Integer pid,Integer did);
 
     /**
      * 条件查询
@@ -32,5 +32,7 @@ public interface TRiskGuardService {
      * 查询角色
      * @return
      */
-    List<SysRole> queryRole();
+    List<TRiskGuard> listWhere(int pid);
+
+
 }

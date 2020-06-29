@@ -17,52 +17,47 @@ public interface TRiskGuardMapper {
     /**
      * 增加
      */
-    @Insert("INSERT INTO t_risk_guard VALUES(NULL,#{riskId},#{year},#{dId},#{Pid},#{project},#{riskDescribe},#{riskL},#{riskC},#{riskD},#{riskGrade},#{riskGuard},#{createTime},#{createBy},#{createName},#{state})")
-    void add(TRiskGuard tRickGuard);
+    @Insert("INSERT INTO t_risk_guard VALUES(\n" +
+            "NULL,\n" +
+            "#{t.riskId} \n" +
+            ",NOW()\n" +
+            ",#{t.dId}\n" +
+            ",#{t.pId}\n" +
+            ",#{t.project}\n" +
+            ",#{t.riskDescribe}\n" +
+            ",#{t.riskL}\n" +
+            ",#{t.riskC}\n" +
+            ",#{t.riskD}\n" +
+            ",#{t.riskGrade}\n" +
+            ",#{t.riskGuard}\n" +
+            ",NOW()\n" +
+            ",#{t.createBy}\n" +
+            ",#{t.createName}\n" +
+            ",1)")
+    void add(@Param("t") TRiskGuard tRickGuard);
     /**
      * 删除
      */
     @Delete("delete from t_risk_guard where id = #{id}")
     void delete(int id);
-    /**
-     * 查询单个
-     */
-    @Select("select * from t_risk_guard where id = #{id}")
-    SysEmp findOne(int id);
 
     /**
      * 查询所以风险
      */
-    @Select("Select \n" +
-            "tr.id\n" +
-            ",tr.risk_id\n" +
-            ",tr.`year`\n" +
-            ",tr.d_id\n" +
-            ",tr.p_id\n" +
-            ",tr.project\n" +
-            ",tr.risk_describe\n" +
-            ",tr.riskL\n" +
-            ",tr.riskC\n" +
-            ",tr.riskD\n" +
-            ",tr.risk_grade\n" +
-            ",tr.risk_guard\n" +
-            ",tr.create_time\n" +
-            ",tr.create_by\n" +
-            ",tr.create_name\n" +
-            ",tr.state \n" +
-            ",d.dept_name as dName\n" +
-            ",r.`name` as mName\n" +
-            "from \n" +
-            "t_risk_guard tr\n" +
-            ",sys_dept d\n" +
-            ",sys_role r\n" +
-            ",t_risk_guard_dept trd\n" +
-            ",t_risk_guard_menu trm\n" +
-            " where \n" +
-            " tr.d_id = trd.dept_id \n" +
-            " and d.id = trd.d_id\n" +
-            " and tr.p_id = trm.menu_id\n" +
-            " and r.id = trm.p_id")
+    @Select({"<script> ",
+            "Select tr.id,tr.risk_id,tr.`year`,tr.d_id,tr.p_id,tr.project,tr.risk_describe,tr.riskL,tr.riskC,tr.riskD,tr.risk_grade,tr.risk_guard,tr.create_time,tr.create_by,tr.create_name,tr.state,d.dept_name as dName,r.`name` as mName from t_risk_guard tr,sys_dept d,sys_role r,t_risk_guard_dept trd,t_risk_guard_menu trm",
+            " where ",
+            " tr.d_id = trd.dept_id ",
+            " and d.id = trd.d_id",
+            " and tr.p_id = trm.menu_id",
+            " and r.id = trm.p_id ",
+            "<when test = 'p!=null'>",
+            " and tr.p_id = '${p}'",
+            "</when>",
+            "<when test = 'd!=null'>",
+            " and  tr.d_id = '${d}'",
+            "</when>",
+            "</script>" })
     @Results({
             @Result(column ="id",property = "id"),
             @Result(column = "risk_id", property = "riskId"),
@@ -82,10 +77,18 @@ public interface TRiskGuardMapper {
             @Result(column = "mName", property = "mName"),
             @Result(column = "dName", property = "dName"),
     })
-    List<TRiskGuard> RickAll();
+    List<TRiskGuard> RickAll(@Param("p") Integer pid,@Param("d") Integer did);
 
 
-    @Select("select * from sys_role where state = '启用'")
-    List<SysRole> queryRole();
+    /**
+     * 条件查询
+     */
+    @Select("Select * from t_risk_guard where dId = #{dId} ")
+    List<TRiskGuard> listWhere(int did);
+
+
+
+
+
 
 }

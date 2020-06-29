@@ -4,9 +4,18 @@ import { date } from 'jszip/lib/defaults'
 // 添加用户
 export function add(data) {
   return request({
-    url: 'risk/add',
+    url: '/risk/add',
     method: 'post',
-    data
+    params:{ 
+      riskId: data.riskId,
+      dId: data.dId,
+      pId: data.pId,
+      project: data.project,
+      riskDescribe: data.riskDescribe,
+      riskL: data.riskL,
+      riskC: data.riskC,
+      riskGuard: data.riskGuard
+    }
   })
 }
 
@@ -24,25 +33,9 @@ export function list(data) {
   return request({
     url: 'risk/list',
     method: 'post',
-    data
+    params:{
+      poid: data.poid,
+      doid: data.doid
+    }
   })
 }
-
-// 根据岗位和部门查询用户
-export function jobsList(data) {
-  return request({
-    url: 'risk/jobsList',
-    method: 'post',
-    data
-  })
-}
-
-// 根据岗位和部门查询用户
-export function queryRole(data) {
-  return request({
-    url: 'risk/queryRole',
-    method: 'post',
-    data
-  })
-}
-

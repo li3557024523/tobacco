@@ -11,7 +11,7 @@ public interface TRiskFlowService {
     /**
      * 查询所以
      */
-    List<TRiskFlow> list();
+    List<TRiskFlow> list(String pgname,String qyear);
 
     /**
      * 删除

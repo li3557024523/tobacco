@@ -2,20 +2,17 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-
-          所属部门<div style="width: 200px;" class="filter-item">
-            <el-cascader
-              :placeholder="placeholder"
-              v-model="temp.parentId"
-              label="temp.deptName"
-              :props="props"
-              @change="Change"
-              :show-all-levels="false"
-              :options="options"
-            ></el-cascader>
+          <div style="width: 200px;" class="filter-item">
+             <el-input v-model="listQuery.pgname" placeholder="输入流程风险项目名称" />
           </div>
-      岗位<el-input v-model="listQuery.username" placeholder="用户名" style="width: 200px;" class="filter-item"/>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getList">
+          <div style="width: 220px;" class="filter-item">
+                  <el-date-picker
+                    v-model="listQuery.qyearq"
+                    type="year"
+                    placeholder="选择年">
+              </el-date-picker>
+          </div>
+      <el-button  v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getList">
         查询
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
@@ -111,40 +108,6 @@
         </el-form-item>
 
 
-        <el-form-item label="选择年份" prop="year">
-          <el-date-picker v-model="temp.year" align="right" type="date" placeholder="选择日期" size="small" />
-        </el-form-item>
-
-
-      <el-form-item label="所属部门" prop="deptName">
-          <div class="block">
-            <el-cascader
-              :placeholder="placeholder"
-              v-model="temp.parentId"
-              label="temp.dId"
-              :props="props"
-              @change="Change"
-              :show-all-levels="false"
-              :options="options"
-            ></el-cascader>
-          </div>
-        </el-form-item>
-
-
-
-      <el-form-item label="岗位" prop="pName">
-          <div class="block">
-            <el-cascader
-              :placeholder="placeholder"
-              v-model="temp.pName"
-              label="temp.pId"
-              :props="props"
-              @change="Change"
-              :show-all-levels="false"
-              :options="RoleList"
-            ></el-cascader>
-          </div>
-        </el-form-item>
 
 
         <el-form-item label="风险项目名" prop="project">
@@ -160,51 +123,6 @@
             placeholder="请输入廉政风险点描述"
             v-model="temp.riskDescribe">
           </el-input>
-        </el-form-item>
-
-
-
-        <el-form-item label="风险发生的可能性" prop="L">
-          <el-select v-model="temp.riskL" placeholder="请选择">
-            <el-option-group
-              v-for="group in deptList"
-              :key="group.id"
-              :label="group.name">
-              <el-option-group
-                v-for="items in group.items"
-                :key="items.id"
-                :label="items.name">
-                <el-option
-                  v-for="item in items.items"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
-                </el-option>
-              </el-option-group>
-            </el-option-group>
-          </el-select>
-        </el-form-item>
-
-
-        <el-form-item label="风险产生的危险性" prop="C">
-          <el-select v-model="temp.riskC" placeholder="请选择">
-            <el-option-group
-              v-for="group in deptList"
-              :key="group.id"
-              :label="group.name">
-              <el-option-group
-                v-for="items in group.items"
-                :key="items.id"
-                :label="items.name">
-                <el-option
-                  v-for="item in items.items"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
-                </el-option>
-              </el-option-group>
-            </el-option-group>
-          </el-select>
         </el-form-item>
 
 
@@ -258,7 +176,6 @@
 <script>
   //
   import { add, list ,deleteFlow} from '@/api/sys/Flow'
-  import { groupDept } from "@/api/sys/dept"
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // 分页组件
@@ -268,29 +185,27 @@
     directives: { waves },
     data() {
       return {
-
         tableKey: 0,
         list: null, // 后台返回，给数据表格展示的数据
         total: 0, // 总记录数
         listLoading: true, // 是否使用动画
-        listQuery: {
-          page: 1, // 分页需要的当前页
-          limit: 10, // 分页需要的每页显示多少条
-          sex: 1,
-          username: ''
+
+        listQuery: {  //获取查询的条件
+          pgname: '',
+          qyear: '',
+          qyearq: '',
         },
-        deptList: [], // 后台查询出来，分好组的部门信息
-        RoleList: [],
+
         temp: { // 添加、修改时绑定的表单数据
           id: undefined,
           riskId: '',
-          flowname: '',
-          flowyear: '',
-          flowmassge: '',
+          flowName: '',
+          flowYear: '',
+          flowMassGe: '',
           accessory: '',
-          create_time: '',
-          create_by: '',
-          create_name: '',
+          createTime: '',
+          createBy: '',
+          createName: '',
           state: '',
         },
         title: '添加', // 对话框显示的提示 根据dialogStatus create
@@ -298,7 +213,7 @@
         dialogStatus: '', // 表示表单是添加还是修改的
         rules: {
           // 校验规则
-          username: [{ required: true, message: '用户名必填', trigger: 'blur' }]
+          //username: [{ required: true, message: '用户名必填', trigger: 'blur' }]
         },
         options:[],
         placeholder: "请选择",
@@ -313,78 +228,46 @@
     },
     // 创建实例时的钩子函数
     created() {
-      this.getList()
-      // 在创建时初始化获得部门信息
-      this.getGroupDept()
+      this.getList() //调用查询
 
-      //this.getQueryRole()
     },
 
   methods: {
 
-      // 获得分好组的部门信息
-    getGroupDept(val = 0) {
-      groupDept().then(response => {
-        console.log("deptlist", response);
-        this.options = [];
-        response.data.dept.filter(item => {
-          this.options.push(item);
-        });
-        console.log(this.options);
-      });
-    },
-       Change(a){
-      console.log(a)
-    },
-    /*
-    getQueryRole(val = 0) {
-      queryRole().then(response => {
-        console.log("RoleList", response);
-        this.Rolelist = [];
-        response.data.name.filter(item => {
-          this.Rolelist.push(item);
-        });
-        console.log(this.Rolelist);
-      });
-    },
-       Change(a){
-      console.log(a)
-    },
-    */
       // 去后台取数据的
       getList() {
         // 开始转圈圈
         this.listLoading = true
-        // debugger // 调试
-        list().then(response => {
+
+        console.log(123456789)
+
+        console.log(this.listQuery)
+
+        list(this.listQuery).then(response => {
+
+          console.log(987654321)
+          
           console.log(response)
+
           this.list = response.data.items
           // 转圈圈结束
+          console.log(response)
+
           this.listLoading = false
         })
       },
-      // 调用岗位查询
-      /*selectGet(vId){
-      let obj = {};
-      obj = this.selectList.find((item)=>{//这里的selectList就是上面遍历的数据源
-          return item.id === vId;//筛选出匹配数据
-      });
-        console.log(obj.name);//我这边的name就是对应label的
-        console.log(obj.id);
-      },
-      */
-      // 重置表单数据
+
       resetTemp() {
         this.temp = {
           id: undefined,
           riskId: '',
-          flowname: '',
-          flowyear: '',
-          flowmassge: '',
+          flowName: '',
+          flowYear: '',
+          flowMassGe: '',
           accessory: '',
-          create_time: '',
-          create_by: '',
-          create_name: '',
+          createTime: '',
+          createBy: '',
+          createName: '',
           state: '',
         }
       },
@@ -426,45 +309,7 @@
           }
         })
       },
-      /*// 显示修改对话框
-      handleUpdate(row) {
-        // 将row里面与temp里属性相同的值，进行copy
-        this.temp = Object.assign({}, row) // copy obj
-        // 将对话框里的确定点击时，改为执行修改操作
-        this.dialogStatus = 'update'
-        // 修改标题
-        this.title = '修改用户'
-        // 显示修改对话框
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          // 清除校验
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      // 执行修改操作
-      updateData() {
-        this.$refs['dataForm'].validate((valid) => {
-          // 表单校验通过
-          if (valid) {
-            // 将temp拷贝到tempData
-            const tempData = Object.assign({}, this.temp)
-            // 进行ajax提交
-            update(tempData).then((response) => {
-              // 提交完毕，关闭对话框
-              this.dialogFormVisible = false
-              // 刷新数据表格
-              this.getList()
-              // 显示通知
-              this.$notify({
-                title: '成功',
-                message: response.data.message,
-                type: 'success',
-                duration: 2000
-              })
-            })
-          }
-        })
-      },*/
+      
       handleDelete(row) {
         // 先弹确认取消框
         this.$confirm('确认删除【'+row.project+'】的信息吗?', '提示', {

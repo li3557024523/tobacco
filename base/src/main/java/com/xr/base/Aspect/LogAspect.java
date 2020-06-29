@@ -83,7 +83,7 @@ public class LogAspect {
             }
         }
         System.out.println("用户信息"+argList.toString());
-        sysLog.setUsername( argList.toString());
+        sysLog.setName( argList.toString());
         LiteDeviceResolver deviceResolver = new LiteDeviceResolver();
         Device device = deviceResolver.resolveDevice(request);
         if (device.isMobile()) {

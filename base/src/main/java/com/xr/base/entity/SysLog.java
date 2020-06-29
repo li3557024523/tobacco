@@ -10,7 +10,6 @@ public class SysLog {
 
   private Integer id;
   private String name;
-  private String username;
   private String url;
   private String operation;
   private String ip;

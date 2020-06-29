@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface SysLogMapper {
-    @Insert("insert into sys_log values (null,#{name},#{username},#{url},#{operation},#{ip},#{serverip},#{operationData},#{client},#{browser},NOW())")
+    @Insert("insert into sys_log values (null,#{name},#{url},#{operation},#{ip},#{serverip},#{operationData},#{client},#{browser},NOW())")
     void add(SysLog sysLog);
 
     @Select({"<script>"

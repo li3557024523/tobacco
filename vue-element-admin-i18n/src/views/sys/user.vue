@@ -146,9 +146,9 @@
           <div class="block">
             <el-cascader
               :placeholder="placeholder"
-              v-model="temp.parentId"
-              label="deptName"
               :clearable=true
+              v-model="temp.parentId"
+              label="temp.deptName"
               :props="props"
               @change="Change"
               :show-all-levels="false"
@@ -230,7 +230,7 @@ export default {
         label: "deptName",
         value: "id",
         checkStrictly: true,
-        emitPath: false
+        emitPath:false
       },
       temp: {
         // 添加、修改时绑定的表单数据
@@ -240,16 +240,18 @@ export default {
         email: "",
         mobile: "",
         deptId: "",
-        deptName:"",
+        dname:"",
         introduction: "",
         age: '',
         education: "",
         roleId: "",
-        name: "",
+        rname: "",
         phone: "",
         sex: "",
         state: "",
         politics: "",
+        deptName:"",
+        name:"",
         s:''
       },
       educations: [
@@ -325,6 +327,7 @@ export default {
       },
     getGroupDept(val = 0) {
       groupDept().then(response => {
+        console.log(response)
         this.options = [];
         response.data.dept.filter(item => {
           this.options.push(item);

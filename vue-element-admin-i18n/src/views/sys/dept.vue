@@ -10,9 +10,9 @@
 
 
      
-          <div class="block">
             <el-cascader
               :placeholder="placeholder"
+              :clearable=true
               v-model="listQuery.parentId"
               label="temp.deptName"
               :props="props"
@@ -20,7 +20,6 @@
               :show-all-levels="false"
               :options="options"
             ></el-cascader>
-          </div>
 
 
       <el-button

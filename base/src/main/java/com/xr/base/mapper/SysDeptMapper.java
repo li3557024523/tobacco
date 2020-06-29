@@ -27,9 +27,12 @@ public interface SysDeptMapper {
             "<when test = 'name!=null'>" ,
             "and dept_name like '%${name}%'",
             "</when>",
+            "<when test = 'id!=null'>" ,
+            "and id = '${id}'",
+            "</when>",
             " LIMIT #{page},#{limit} ",
             "</script>"})
-    List<SysDept> groupDept(@Param("name")String name, @Param("page") Integer page,@Param("limit") Integer limit);
+    List<SysDept> groupDept(@Param("id")Integer id ,@Param("name")String name, @Param("page") Integer page,@Param("limit") Integer limit);
 
     @Select("select count(*) from sys_dept")
     int deptsize();

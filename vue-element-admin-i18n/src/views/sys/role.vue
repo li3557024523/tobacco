@@ -89,6 +89,7 @@
           <div class="block">
             <el-cascader
               :placeholder="placeholder"
+              :clearable=true
               v-model="temp.did"
               label="temp.deptName"
               :props="props"
@@ -194,6 +195,7 @@
           email: '',
           mobile: '',
           deptId: '',
+          name:'',
           introduction: '',
           s:''
         },
@@ -242,7 +244,6 @@
         this.listLoading = true
         // debugger // 调试
         list(this.listQuery).then(response => {
-          console.log(response)
           this.list = response.data.items
           this.total = response.data.total
           // 转圈圈结束

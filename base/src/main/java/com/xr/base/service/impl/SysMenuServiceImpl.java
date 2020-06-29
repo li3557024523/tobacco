@@ -47,8 +47,11 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     private void findMenuList(List<SysMenu> sysMenuList){
         for (SysMenu sysMenu : sysMenuList){
+            //查询子节点
             List<SysMenu> sysMenus = sysMenuMapper.findMtow(sysMenu.getId());
+            //回调自己，继续查询字节点
             findMenuList(sysMenus);
+            //把查询出的传入集合
             sysMenu.setListM(sysMenus);
         }
 

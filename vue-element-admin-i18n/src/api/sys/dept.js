@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import data from '@/views/pdf/content'
 
 
 //
@@ -13,7 +14,8 @@ export function leadership() {
 export function groupDept() {
   return request({
     url: '/dept/deptlist',
-    method: 'get'
+    method: 'get',
+    data
   })
 }
 
@@ -62,7 +64,8 @@ export function list(data) {
     params:{
       name:data.name,
       page: data.page,
-      limit: data.limit
+      limit: data.limit,
+      id: data.parentId
     } 
   })
 }

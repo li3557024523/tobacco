@@ -17,8 +17,8 @@ public class SysDeptServiceImpl implements SysDeptService {
 
 
     @Override
-    public List<SysDept> groupDept(String name , Integer page , Integer limit) {
-        List<SysDept> sysDepts = sysDeptMapper.groupDept(name, page, limit);
+    public List<SysDept> groupDept(Integer id ,String name , Integer page , Integer limit) {
+        List<SysDept> sysDepts = sysDeptMapper.groupDept(id,name, page, limit);
         sysDepts.forEach(System.out::print);
         return sysDepts;
     }

@@ -147,7 +147,8 @@
             <el-cascader
               :placeholder="placeholder"
               v-model="temp.parentId"
-              label="temp.deptName"
+              label="deptName"
+              :clearable=true
               :props="props"
               @change="Change"
               :show-all-levels="false"

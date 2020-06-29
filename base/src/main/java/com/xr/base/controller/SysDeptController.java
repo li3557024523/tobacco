@@ -47,8 +47,8 @@ public class SysDeptController {
 
     @RequestMapping("list")
     @RequiresPermissions("dept:list")
-    public ResponseResult list(String name, Integer page, Integer limit){
-        List<SysDept> list = sysDeptService.groupDept(name,(page-1)*limit, limit);
+    public ResponseResult list(Integer id ,String name, Integer page, Integer limit){
+        List<SysDept> list = sysDeptService.groupDept(id,name,(page-1)*limit, limit);
         int empsize = sysDeptService.deptsize();
         ResponseResult result = new ResponseResult();
         result.getData().put("items",list);

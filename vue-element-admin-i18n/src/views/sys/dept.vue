@@ -7,6 +7,22 @@
         style="width: 200px;"
         class="filter-item"
       />
+
+
+     
+          <div class="block">
+            <el-cascader
+              :placeholder="placeholder"
+              v-model="listQuery.parentId"
+              label="temp.deptName"
+              :props="props"
+              @change="Change"
+              :show-all-levels="false"
+              :options="options"
+            ></el-cascader>
+          </div>
+
+
       <el-button
         v-waves
         class="filter-item"
@@ -116,6 +132,7 @@
           <div class="block">
             <el-cascader
               :placeholder="placeholder"
+              :clearable=true
               v-model="temp.parentId"
               label="temp.deptName"
               :props="props"
@@ -183,7 +200,8 @@ export default {
         page: 1, // 分页需要的当前页
         limit: 10, // 分页需要的每页显示多少条
         sex: 1,
-        name: ""
+        name: "",
+        id: undefined
       },
       deptList: [], // 后台查询出来，分好组的部门信息
       temp: {
@@ -194,7 +212,8 @@ export default {
         email: "",
         mobile: "",
         deptId: "",
-        introduction: ""
+        introduction: "",
+        deptName:""
       },
       title: "添加", // 对话框显示的提示 根据dialogStatus create
       dialogFormVisible: false, // 是否显示对话框
@@ -221,7 +240,7 @@ export default {
       props: {
         children: "deptCharlen",
         label: "deptName",
-        value: "did",
+        value: "id",
         checkStrictly: true,
         emitPath:false
       }
@@ -266,6 +285,7 @@ export default {
       this.listLoading = true;
       // debugger // 调试
       list(this.listQuery).then(response => {
+        
         this.list = response.data.items;
         this.total = response.data.total;
         // 转圈圈结束

@@ -64,7 +64,7 @@ public interface SysEmpMapper {
      * 增加
      */
     @Insert("insert  into sys_emp(id, `name`, sex, age, education, politics, phone, dept_id, username, `password`, salt, role_id, date, create_id, create_name, state)\n" +
-            "values (null, #{e.name}, #{e.sex}, #{e.age}, #{e.education}, #{e.politics}, #{e.phone}, #{e.deptId}, #{e.username}, #{e.password}, null, #{e.roleId}, NOW(), #{e.createId}, #{e.createName}, #{e.state})")
+            "values (null, #{e.name}, #{e.sex}, #{e.age}, #{e.education}, #{e.politics}, #{e.phone}, #{e.deptId}, #{e.username}, #{e.password}, #{e.salt}, #{e.roleId}, NOW(), #{e.createId}, #{e.createName}, #{e.state})")
     @Options(useGeneratedKeys=true,keyProperty="id")
     void add(@Param("e") SysEmp sysEmp);
 

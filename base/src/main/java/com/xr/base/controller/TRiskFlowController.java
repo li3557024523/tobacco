@@ -8,9 +8,11 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("flow")
@@ -20,8 +22,13 @@ public class TRiskFlowController {
     private TRiskFlowService tRiskFlowService;
 
     @PostMapping("list")
-    public ResponseResult list(){
-        List<TRiskFlow> list = tRiskFlowService.list();
+    public ResponseResult list(@RequestParam(value = "qyear") String qyear,String pgname){
+
+        System.out.println(pgname+"-------------------"+qyear);
+
+        System.out.println(tRiskFlowService.list(pgname,qyear));
+
+        List<TRiskFlow> list = tRiskFlowService.list(pgname,qyear);
         ResponseResult result = new ResponseResult();
         result.getData().put("items",list);
         return result;

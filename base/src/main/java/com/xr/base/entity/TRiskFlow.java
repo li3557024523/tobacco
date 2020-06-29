@@ -10,7 +10,7 @@ public class TRiskFlow {
   private String flowYear;
   private String flowMassGe;
   private String accessory;
-  private Data createTime;
+  private String createTime;
   private String createBy;
   private String createName;
   private String state;

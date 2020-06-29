@@ -15,8 +15,11 @@ public class TRiskFlowServiceImpl implements TRiskFlowService {
     TRiskFlowMapper tRiskFlowMapper;
 
     @Override
-    public List<TRiskFlow> list() {
-        return tRiskFlowMapper.list();
+    public List<TRiskFlow> list(String pgname,String qyear) {
+
+        System.out.println("ServiveImpl的实现123123---"+tRiskFlowMapper.list(pgname,qyear));
+
+        return tRiskFlowMapper.list(pgname,qyear);
     }
 
     @Override

@@ -7,9 +7,13 @@ export function list(data) {
   return request({
     url: 'flow/list',
     method: 'post',
-    data
+    params:{
+      qyear: data.qyear,
+      pgname: data.pgname
+    }
   })
 }
+
 
  //添加
  export function add(data) {

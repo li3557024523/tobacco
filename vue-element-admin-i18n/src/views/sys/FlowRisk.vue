@@ -22,7 +22,16 @@
         添加
       </el-button>
     </div>
-
+    <!--  数据表格-->
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+    >
       <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -77,9 +86,6 @@
       <!--     自定义列-->
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            修改
-          </el-button>
           <el-button size="mini" type="danger" @click="handleDelete(row)">
             删除
           </el-button>
@@ -251,7 +257,7 @@
 
 <script>
   //
-  import { list} from '@/api/sys/Flow'
+  import { add, list ,deleteFlow} from '@/api/sys/Flow'
   import { groupDept } from "@/api/sys/dept"
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
@@ -278,17 +284,14 @@
         temp: { // 添加、修改时绑定的表单数据
           id: undefined,
           riskId: '',
-          year: '',
-          dId: '',
-          Pid: '',
-          project: '',
-          riskDescribe: '',
-          riskL: '',
-          riskC: '',
-          riskD: '',
-          riskGrade: '',
-          createTime: '',
-          createBy: '',
+          flowname: '',
+          flowyear: '',
+          flowmassge: '',
+          accessory: '',
+          create_time: '',
+          create_by: '',
+          create_name: '',
+          state: '',
         },
         title: '添加', // 对话框显示的提示 根据dialogStatus create
         dialogFormVisible: false, // 是否显示对话框
@@ -375,17 +378,14 @@
         this.temp = {
           id: undefined,
           riskId: '',
-          year: '',
-          dId: '',
-          Pid: '',
-          project: '',
-          riskDescribe: '',
-          riskL: '',
-          riskC: '',
-          riskD: '',
-          riskGrade: '',
-          createTime: '',
-          createBy: '',
+          flowname: '',
+          flowyear: '',
+          flowmassge: '',
+          accessory: '',
+          create_time: '',
+          create_by: '',
+          create_name: '',
+          state: '',
         }
       },
       // 显示添加的对话框
@@ -394,7 +394,7 @@
         this.resetTemp()
         // 点击确定时，是执行添加操作
         this.dialogStatus = 'create'
-        this.title="添加用户"
+        this.title="添加岗位风险"
         // 显示对话框
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -473,7 +473,7 @@
           type: 'warning'
         }).then(() => {
           // 调用ajax去后台删除
-          deleteRisk(row.id).then((response) => {
+          deleteFlow( row.id ).then((response) => {
             // 刷新数据表格
             this.getList()
             // ajax去后台删除

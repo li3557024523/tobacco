@@ -18,4 +18,9 @@ public class TRiskFlowServiceImpl implements TRiskFlowService {
     public List<TRiskFlow> list() {
         return tRiskFlowMapper.list();
     }
+
+    @Override
+    public void delete(int id) {
+        tRiskFlowMapper.delete(id);
+    }
 }

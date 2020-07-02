@@ -28,7 +28,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column  label="编号id" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column v-if="show" label="编号id" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
@@ -38,41 +38,60 @@
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+        <template slot-scope="{row}">
+          <div v-html="row.context"  class="asd"></div>
+
+        </template>
+      </el-table-column>
       <el-table-column label="资讯类型" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.fileName }}</span>
+          <span>{{ row.contributor }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.creatDate }}</span>
+          <span>{{ row.createDate }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="创建者" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.creatId }}</span>
+          <span>{{ row.createId }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="创建者姓名" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.creatName }}</span>
+          <span>{{ row.creator }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="状态" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="状态" min-width="80px">
         <template slot-scope="{row}">
-          <span>{{ row.state }}</span>
+          <el-tag v-if="row.state===1" effect="dark" type="warning">通知</el-tag>
+          <el-tag v-if="row.state===2" effect="dark" type="" >自查</el-tag>
+          <el-tag v-if="row.state===3" type="info">整改通知</el-tag>
+          <el-tag v-if="row.state===4" effect="dark" type="info" >整改报告</el-tag>
+          <el-tag v-if="row.state===5" effect="dark" type="success">通报</el-tag>
+          <el-tag v-if="row.state===0" effect="dark" type="danger">结束</el-tag>
+
         </template>
       </el-table-column>
-      <el-table-column label="地址" prop="fileAddress" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <span>{{ row.fileAddress }}</span>
+
+          <el-button v-if="row.state===2" type="primary" size="mini" @click="ZG(row)">
+            整改通知
+          </el-button>
+          <el-button v-if="row.state===4"  type="primary" size="mini" @click="ZG(row)">
+            通报
+          </el-button>
+          <el-button size="mini" type="danger" @click="JS(row)">
+            结束
+          </el-button>
         </template>
       </el-table-column>
-
-
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -87,7 +106,6 @@
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
             Delete
           </el-button>
-          <a href=""></a>
         </template>
       </el-table-column>
 
@@ -96,29 +114,27 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" enctype="multipart/form-data" style="width: 400px; margin-left:50px;">
-        <el-form-item label="标题" prop="title">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+        <h1>这里是修改-----------------------</h1>
+        <el-form-item label="Title" prop="title">
           <el-input v-model="temp.title" />
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="contributor" prop="contributor">
+          <el-input v-model="temp.contributor" />
+        </el-form-item>
+
+        <el-form-item label="Status">
           <el-select v-model="temp.state" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key" />
           </el-select>
         </el-form-item>
-        <el-form-item label="文件上传">
-        <el-upload
-          class="upload-demo"
-          v-model="temp.fileAddress"
-          ref="upload"
-          action="http://localhost:8001/datum/uploada"
-          :limit="1"
-          :before-upload="beforeUpload">
-          <el-button  size="small" type="primary">选取文件</el-button>
-          <!--<el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload()">上传到服务器</el-button>-->
-          <div slot="tip" class="el-upload__tip">上传模板只能是 .zip,.rar,.doc,.xls,.xlsx,.ppt,.pptx,.docx,.txt,.pdf,.mkv,.mp4,.avi,.rm,.rmvb格式, 且不超过1G!</div>
-        </el-upload>
-        </el-form-item>
+
+        <el-card style="height: 610px;">
+          <quill-editor v-model="temp.context" ref="myQuillEditor" style="height: 500px;" :options="editorOption">
+          </quill-editor>
+        </el-card>
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           Cancel
@@ -140,14 +156,13 @@
     </el-dialog>
   </div>
 </template>
-<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
-<script type="text/css" src="../../utils/webuploader/webuploader.css"></script>
-<script type="text/javascript" src="../../utils/webuploader/webuploader.min.js"></script>
+
 <script>
-  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle,createArticleDau, updateArticle,uploadfile } from '@/api/article'
+  import { fetchListLit,fetchListUser, fetchListEdu, fetchPv, createArticle,L_createArticle, updateArticle,L_updateArticle} from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
   const calendarTypeOptions = [
     { key: '1', display_name: '领导讲话' },
     { key: '2', display_name: '廉政要闻' },
@@ -171,7 +186,7 @@
   import 'quill/dist/quill.bubble.css'
   export default {
     name: 'ComplexTable',
-    components: { Pagination,quillEditor,},
+    components: { Pagination,quillEditor},
     directives: { waves },
     filters: {
       statusFilter(status) {
@@ -192,7 +207,6 @@
         editorOption: {},
         tableKey: 0,
         list: null,
-        file:'',
         total: 0,
         type: 0,
         listLoading: true,
@@ -215,13 +229,13 @@
           remark: '',
           timestamp: new Date(),
           title: '',
-          fileName:'',
+          InformationTypes:'',
           state: '',
+          context:'',
           createDate:new Date(),
-          addTime:'',
           createId:'',
           creator:'',
-          fileAddress:'',
+          contributor:''
         },
         dialogFormVisible: false,
         dialogStatus: '',
@@ -245,7 +259,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        fetchListDau(this.listQuery).then(response => {
+        fetchListLit(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
 
@@ -265,7 +279,7 @@
           message: '操作Success',
           type: 'success'
         })
-        row.status = status
+        row.state = state
       },
       sortChange(data) {
         const { prop, order } = data
@@ -311,7 +325,7 @@
           if (valid) {
             this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
             this.temp.author = 'vue-element-admin'
-            createArticleDau(this.temp).then(() => {
+            L_createArticle(this.temp).then(() => {
               this.list.unshift(this.temp)
               this.dialogFormVisible = false
               this.$notify({
@@ -338,7 +352,7 @@
           if (valid) {
             const tempData = Object.assign({}, this.temp)
             tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-            updateArticle(tempData).then(() => {
+            L_updateArticle(tempData).then(() => {
               const index = this.list.findIndex(v => v.id === this.temp.id)
               this.list.splice(index, 1, this.temp)
               this.dialogFormVisible = false
@@ -377,88 +391,6 @@
           this.dialogPvVisible = true
         })
       },
-      beforeUpload(file){
-        console.log('FGHJ')
-        console.log(file,'文件');
-        this.files = file;
-        const extension = file.name.split('.')[1] === 'zip'
-        const extension2 = file.name.split('.')[1] === 'rar'
-        const extension3 = file.name.split('.')[1] === 'doc'
-        const extension4 = file.name.split('.')[1] === 'xls'
-        const extension5 = file.name.split('.')[1] === 'xlsx'
-        const extension6 = file.name.split('.')[1] === 'ppt'
-        const extension7 = file.name.split('.')[1] === 'pptx'
-        const extension8 = file.name.split('.')[1] === 'docx'
-        const extension9 = file.name.split('.')[1] === 'txt'
-        const extension10 = file.name.split('.')[1] === 'pdf'
-        const extension11 = file.name.split('.')[1] === 'mkv'
-        const extension12 = file.name.split('.')[1] === 'mp4'
-        const extension13 = file.name.split('.')[1] === 'avi'
-        const extension14 = file.name.split('.')[1] === 'rm'
-        const extension15 = file.name.split('.')[1] === 'rmvb'
-        const isLt2M = file.size / 1024 / 1024 < 1024
-        if (!extension && !extension2&&!extension3 && !extension4&&!extension5 && !extension6&&!extension7 && !extension8&&!extension9 && !extension10&&!extension11 && !extension12&& !extension13&&!extension14 && !extension15) {
-          this.$message.warning('上传模板只能是 .zip,.rar,.doc,.xls,.xlsx,.ppt,.pptx,.docx,.txt,.pdf,.mkv,.mp4,.avi,.rm,.rmvb格式, 且不超过1G!')
-          return
-        }
-        if (!isLt2M) {
-          this.$message.warning('上传模板大小不能超过 1GB!')
-          return
-        }
-        this.temp.fileName = file.name;
-        this.temp.fileAddress=file.uid;
-        console.log(this.fileName)
-        this.submitUpload(file);
-        return false // 返回false不会自动上传
-      },
-      submitUpload(file) {
-        console.log('上传'+this.files.name)
-        if(this.fileName == ""){
-          this.$message.warning('请选择要上传的文件！')
-          return false
-        }
-        console.log(this.files)
-        let fileFormData = new FormData();
-        fileFormData.append('file', this.files);//filename是键，file是值，就是要传的文件，test.zip是要传的文件名
-        //fileFormData.append('rid',this.temp.rid)
-        //var d = new Date(this.temp.created);
-        //var times=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-        //fileFormData.append('created',times)
-        fileFormData.append('temp',this.temp)
-
-        let requestConfig = {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-        }
-        this.$http.post('http://localhost:8001/datum/upload',fileFormData,requestConfig).then(rep =>{
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-            contentType: false,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
-            }
-          }).catch((e) => {}),
-          this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
-          this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length-1].path)
-        })
-        /*uploading(fileFormData,requestConfig).then(rep=>{
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
-            }
-          })
-        })*/
-        //this.$refs.upload.submit();
-      },
-
       handleDownload() {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
@@ -481,14 +413,56 @@
             return v[j]
           }
         }))
+      }, ZG(row){
+        this.state=4
+        this.$confirm('确认整改【'+row.id+'】吗','提示',{
+          confirmButtonText:'确认',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(()=>{
+          deleteZTR(row.id, this.state).then((response)=>{
+            this.getList()
+            this.$notify({
+              title:'成功',
+              message:response.data.message,
+              type:'success',
+              duration:2000
+            })
+            this.$router.push({ name:'styleOfwork', query: { supervise: row,state:4 }})
+          })
+        }).catch(()=>{
+          this.$message({
+            type:'info',
+            message:'已取消'
+          })
+        })
+      },
+      JS(row){
+        this.state=7
+        this.$confirm('确认结束【'+row.id+'】吗','提示',{
+          confirmButtonText:'确认',
+          cancelButtonText:'取消',
+          type:'warning',
+        }).then(()=>{
+          deleteZT(row.id, this.state).then((response)=>{
+            this.getList()
+            this.$notify({
+              title:'成功',
+              message:response.data.message,
+              type:'success',
+              duration:2000
+            })
+          })
+        }).catch(()=>{
+          this.$message({
+            type:'info',
+            message:'已取消'
+          })
+        })
       },
       getSortClass: function(key) {
         const sort = this.listQuery.sort
         return sort === `+${key}` ? 'ascending' : 'descending'
-      },
-      onFileSuccess: function (rootFile, file, response, chunk) {
-        //这里可以根据response（接口）返回的数据处理自己的实际问题（如：从response拿到后台返回的想要的数据进行组装并显示）
-        //注，这里从文件夹每上传成功一个文件会调用一次这个方法
       }
     }
   }
@@ -498,25 +472,4 @@
   img{
     max-width:100%;height:auto;
   }
-
-
-   .uploader-example {
-     width: 90%;
-     padding: 15px;
-     margin: 40px auto 0;
-     font-size: 12px;
-     box-shadow: 0 0 10px rgba(0, 0, 0, .4);
-   }
-
-  .uploader-example .uploader-btn {
-    margin-right: 4px;
-  }
-
-  .uploader-example .uploader-list {
-    max-height: 440px;
-    overflow: auto;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
 </style>

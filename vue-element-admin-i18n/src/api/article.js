@@ -71,7 +71,22 @@ export function createArticle(data) {
 }
 export function uploadfile(data) {
   return request({
-    url: 'datum/uploadCategory',
+    url: 'datum/upload',
+    method: 'post',
+    data
+  })
+}
+
+export function createArticleDau(data) {
+  return request({
+    url: 'datum/ins',
+    method: 'post',
+    data
+  })
+}
+export function createArticleSup(data) {
+  return request({
+    url: 'Supervision/add',
     method: 'post',
     data
   })

@@ -8,6 +8,13 @@ spring:
     password: Yc171013@
     url: jdbc:mysql://139.224.192.190:3306/tobacco?characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+      enabled: true
+      resolve-lazily: false
+
 #配置mybatis参数
 #mybatis:
 #  config-location: classpath:mybaits/mybatis-config.xml

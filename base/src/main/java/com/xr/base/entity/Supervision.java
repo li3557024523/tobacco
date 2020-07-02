@@ -1,6 +1,8 @@
 package com.xr.base.entity;
 
 
+import java.sql.Date;
+
 public class Supervision {
 
   private Integer id;
@@ -69,7 +71,7 @@ public class Supervision {
   }
 
 
-  public java.sql.Date getCreateTime() {
+  public java.sql.Date getCreateTime(Date currentDate) {
     return createTime;
   }
 

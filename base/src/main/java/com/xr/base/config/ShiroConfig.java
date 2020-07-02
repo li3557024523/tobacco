@@ -54,6 +54,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/emp/login/**", "anon"); // 获得用户可以访问的路由
         filterChainDefinitionMap.put("/emp/info/**", "anon");
+        filterChainDefinitionMap.put("/datum/upload", "anon");
         filterChainDefinitionMap.put("/**", "authc");
         //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
         shiroFilterFactoryBean.setLoginUrl("/emp/login");

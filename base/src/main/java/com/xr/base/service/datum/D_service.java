@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface D_service {
     public List<Datum> D_list(Integer page,Integer limit);
+    public int D_Ins(Datum d);
 }

@@ -11,6 +11,7 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import cultureRouter from './modules/culture'
+import examineRouter from './modules/examine'
 import nestedRouter from './modules/nested'
 
 /**
@@ -673,6 +674,7 @@ children: [
   //   nestedRouter,
   tableRouter,
   cultureRouter,
+  examineRouter,
 
   {
     path: '/record',

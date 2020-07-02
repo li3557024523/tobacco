@@ -6,6 +6,8 @@ export function list(query) {
     params: query
   })
 }
+
+
 export function deleteZTR() {
   return request({
     url: '/Supervision/del',

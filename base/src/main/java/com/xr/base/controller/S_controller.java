@@ -88,6 +88,17 @@ public class S_controller {
         return result;
     }
 
+    @RequestMapping("/size")
+    public ResponseResult listUp(){
+            List<Supervision> list=s_service.listUp(0,10);
+            int i=list.size();
+
+            ResponseResult result=new ResponseResult();
+            result.getData().put("size",i);
+            return  result;
+
+    }
+
     @RequestMapping("/update")
     public ResponseResult update(Supervision superviseReport){
         s_service.upd(superviseReport);

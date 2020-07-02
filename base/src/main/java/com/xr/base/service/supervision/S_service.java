@@ -12,4 +12,5 @@ public interface S_service {
     public int  upd(Supervision s);
     public int updZt(Supervision s);
     int deleteZT(Supervision superviseReport);
+    public List<Supervision> listUp(Integer page, Integer limit);
 }

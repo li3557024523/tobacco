@@ -12,8 +12,8 @@ public class L_serviceImpl implements L_service {
     @Autowired
     private L_mapper l_mapper;
     @Override
-    public List<Literature> list(Integer page,Integer limit) {
-        return l_mapper.list(page,limit);
+    public List<Literature> list(Integer page,Integer limit,String title) {
+        return l_mapper.list(page,limit,title);
     }
 
     @Override
@@ -28,5 +28,10 @@ public class L_serviceImpl implements L_service {
         String loginAccount = SecurityUtils.getSubject().getPrincipal().toString();
         l.setCreator(loginAccount);
         return l_mapper.ins(l);
+    }
+
+    @Override
+    public int Del(Integer id) {
+        return l_mapper.D_del(id);
     }
 }

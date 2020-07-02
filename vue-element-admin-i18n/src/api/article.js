@@ -41,7 +41,7 @@ export function fetchListLit(query) {
 }
 export function fetchListDau(query) {
   return request({
-    url: 'datum/listType',
+    url: 'datum/listTypeBy',
     method: 'get',
     params: query
   })
@@ -104,5 +104,33 @@ export function updateArticle(data) {
     url: 'education/upd',
     method: 'post',
     data
+  })
+}
+export function updateArticleD(data) {
+  return request({
+    url: 'datum/upd',
+    method: 'post',
+    data
+  })
+}
+export function deleteDatum(id) {
+  return request({
+    url: 'datum/del',
+    method: 'get',
+    params: { id }
+  })
+}
+export function deleteLit(id) {
+  return request({
+    url: 'literature/del',
+    method: 'get',
+    params: { id }
+  })
+}
+export function asd() {
+  return request({
+    url: 'Supervision/size',
+    method: 'post',
+
   })
 }

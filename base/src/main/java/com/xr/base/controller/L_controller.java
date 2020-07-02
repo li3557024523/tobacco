@@ -18,8 +18,8 @@ public class L_controller {
     @Autowired
     private L_service l_service;
     @RequestMapping(value = "/listType")
-    public ResponseResult list( Integer page, Integer limit){
-        List<Literature> list=l_service.list((page-1)*limit,limit);
+    public ResponseResult list( Integer page, Integer limit,String title){
+        List<Literature> list=l_service.list((page-1)*limit,limit,title);
         ResponseResult result=new ResponseResult();
         result.getData().put("items", list);
         result.getData().put("total", list.size());
@@ -58,6 +58,18 @@ public class L_controller {
             result.getData().put("message", "fail");
         }
 
+        return result;
+    }
+    @RequestMapping("/del")
+    public ResponseResult Del( Integer id){
+        int i=l_service.Del(id);
+        ResponseResult result = new ResponseResult();
+        if(i>0){
+            result.getData().put("message", "success");
+            System.out.println("成功删除");
+        }else{
+            result.getData().put("message", "fail");
+        }
         return result;
     }
 }

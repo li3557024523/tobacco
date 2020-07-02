@@ -35,6 +35,14 @@ public class D_controller {
         result.getData().put("total", list.size());
         return result;
     }
+    @RequestMapping(value = "/listTypeBy")
+    public ResponseResult listBy(Integer page,Integer limit,String title){
+        List<Datum> list= d_service.D_ListByType((page-1)*limit,limit,title);
+        ResponseResult result=new ResponseResult();
+        result.getData().put("items", list);
+        result.getData().put("total", list.size());
+        return result;
+    }
     @RequestMapping("/ins")
     //@RequiresPermissions("user:list")
     public ResponseResult Sel( @RequestBody Datum temp ) {
@@ -55,6 +63,37 @@ public class D_controller {
             result.getData().put("message", "fail");
         }
 
+        return result;
+    }
+
+    @RequestMapping("/upd")
+    //@RequiresPermissions("user:list")
+    public ResponseResult Eupd( @RequestBody Datum temp ) {
+        //System.out.println(listType);
+        //System.out.println("limit:"+limit+"page:"+page);
+
+        int i=d_service.D_upd(temp);
+
+        ResponseResult result = new ResponseResult();
+        if(i>0){
+            result.getData().put("message", "success");
+            System.out.println("成功更新");
+        }else{
+            result.getData().put("message", "fail");
+        }
+
+        return result;
+    }
+    @RequestMapping(value = "/del")
+    public ResponseResult Del( Integer id){
+        int i=d_service.D_del(id);
+        ResponseResult result = new ResponseResult();
+        if(i>0){
+            result.getData().put("message", "success");
+            System.out.println("成功删除");
+        }else{
+            result.getData().put("message", "fail");
+        }
         return result;
     }
 

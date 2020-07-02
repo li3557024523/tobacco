@@ -2,9 +2,17 @@
   <div class="block">
     <el-timeline>
       <el-timeline-item v-for="(item,index) of timeline" :key="index" :timestamp="item.timestamp" placement="top">
-        <el-card>
-          <h4>{{ item.title }}</h4>
-          <p>{{ item.content }}</p>
+        <el-card v-if="size!=null">
+
+          <h4>亲爱的管理员</h4>
+
+          <p>您还剩余{{size}}条报告未处理,请尽快处理</p>
+        </el-card>
+        <el-card v-if="size==null">
+
+          <h4>亲爱的管理员:</h4>
+
+          <p>您今天尚无任务安排</p>
         </el-card>
       </el-timeline-item>
     </el-timeline>
@@ -12,32 +20,38 @@
 </template>
 
 <script>
-export default {
+  import { asd } from '@/api/article'
+
+  export default {
+
   data() {
+
     return {
+      size:null,
       timeline: [
         {
-          timestamp: '2019/4/20',
-          title: 'Update Github template',
-          content: 'PanJiaChen committed 2019/4/20 20:46'
+          timestamp: new Date(),
         },
-        {
-          timestamp: '2019/4/21',
-          title: 'Update Github template',
-          content: 'PanJiaChen committed 2019/4/21 20:46'
-        },
-        {
-          timestamp: '2019/4/22',
-          title: 'Build Template',
-          content: 'PanJiaChen committed 2019/4/22 20:46'
-        },
-        {
-          timestamp: '2019/4/23',
-          title: 'Release New Version',
-          content: 'PanJiaChen committed 2019/4/23 20:46'
-        }
+
+
       ]
+
     }
-  }
+  },
+    created() {
+    this.made();
+    },
+    methods :{
+    made(){
+      asd().then(Response => {
+        this.size=Response.data.size
+        console.log("卧槽"+this.size)
+
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    }
+    }
 }
 </script>

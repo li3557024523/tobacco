@@ -1,21 +1,14 @@
 <template>
   <div class="app-container">
-    <el-header>廉政教育</el-header>
+    <el-header align="center" style="font-size: 50px">清风文苑</el-header>
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        Search
+        查询
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add
+        添加
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
-      </el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        reviewer
-      </el-checkbox>
     </div>
 
     <el-table
@@ -33,35 +26,35 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标题" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="标题" prop="username" sortable="custom" align="center" width="150" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="内容" prop="username" sortable="custom" align="center" width="473" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <div v-html="row.context"  class="asd"></div>
 
         </template>
       </el-table-column>
-      <el-table-column label="资讯类型" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="提供者" prop="username" sortable="custom" align="center" width="130" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.contributor }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="发布时间" prop="username" sortable="custom" align="center" width="130" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.createDate }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="创建者" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="创建者" v-if="false" prop="username" sortable="custom" align="center" width="160" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.createId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="创建者姓名" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="创建者姓名" prop="username" sortable="custom" align="center" width="130" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.creator }}</span>
         </template>
@@ -69,22 +62,18 @@
 
       <el-table-column label="状态" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.state }}</span>
+          <span v-if="row.state==1">创建</span>
+          <span v-if="row.state==2">待审核</span>
+          <span v-if="row.state==3">已审核</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            Edit
-          </el-button>
-          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            Publish
-          </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            Draft
+            修改
           </el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            Delete
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -95,15 +84,14 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <h1>这里是修改-----------------------</h1>
-        <el-form-item label="Title" prop="title">
+        <el-form-item label="标题" prop="title">
           <el-input v-model="temp.title" />
         </el-form-item>
-        <el-form-item label="contributor" prop="contributor">
+        <el-form-item label="发布人" prop="contributor">
           <el-input v-model="temp.contributor" />
         </el-form-item>
 
-        <el-form-item label="Status">
+        <el-form-item label="状态" v-if="temp.state!=null">
           <el-select v-model="temp.state" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key" />
           </el-select>
@@ -116,10 +104,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
+          提交
         </el-button>
       </div>
     </el-dialog>
@@ -137,7 +125,7 @@
 </template>
 
 <script>
-  import { fetchListLit,fetchListUser, fetchListEdu, fetchPv, createArticle,L_createArticle, updateArticle,L_updateArticle} from '@/api/article'
+  import { fetchListLit,fetchListUser, fetchListEdu, fetchPv, createArticle,L_createArticle, updateArticle,L_updateArticle,deleteLit} from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -352,7 +340,7 @@
           type: 'success',
           duration: 2000
         })
-        del(row.id).then((response) => {
+        deleteLit(row.id).then((response) => {
           this.getList()
           this.$notify({
             title: '成功',

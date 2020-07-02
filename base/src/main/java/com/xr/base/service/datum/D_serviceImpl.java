@@ -27,4 +27,19 @@ public class D_serviceImpl implements D_service {
         d.setId(null);
         return d_mapper.D_ins(d);
     }
+
+    @Override
+    public List<Datum> D_ListByType(Integer page, Integer limit, String title) {
+        return d_mapper.D_ListByType(page, limit, title);
+    }
+
+    @Override
+    public int D_upd(Datum d) {
+        return d_mapper.D_Upd(d);
+    }
+
+    @Override
+    public int D_del(Integer id) {
+        return d_mapper.D_del(id);
+    }
 }

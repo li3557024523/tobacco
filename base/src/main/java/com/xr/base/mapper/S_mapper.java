@@ -16,8 +16,10 @@ public interface S_mapper {
     @Update("update  supervision set  type=#{s.type},title=#{s.title},context=#{s.context},depId=#{s.depId},accessory=#{s.accessory},state=#{s.state} " +
             " where id=#{s.id} ")
     public int update(Supervision s);
-    @Update("update supervise set state=#{s.state} where depId=#{s.depId}")
+    @Update("update supervision set state=#{s.state} where depId=#{s.depId}")
     public int updateZT(Supervision s);
-    @Update("update supervise set state=#{state} where id=#{id}")
+    @Update("update supervision set state=#{state} where id=#{id}")
     int  deleteZT(Supervision superviseReport);
+    @Select("select * from supervision where state=2 or state=4 or state=6 ")
+    public List<Supervision> listUp(Integer page,Integer limit);
 }

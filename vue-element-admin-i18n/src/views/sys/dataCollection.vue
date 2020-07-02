@@ -1,21 +1,15 @@
 <template>
   <div class="app-container">
-    <el-header>廉政教育</el-header>
+    <el-header align="center" style="font-size: 50px">资料锦集</el-header>
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        Search
+        查询
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add
+        添加
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
-      </el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        reviewer
-      </el-checkbox>
     </div>
 
     <el-table
@@ -28,67 +22,66 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column  label="编号id" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column  label="编号id" prop="id" v-if="false" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标题" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="标题" prop="username" sortable="custom" align="center" width="250" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="资讯类型" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="文件名称" prop="username" sortable="custom" align="center" width="210" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.fileName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="创建时间" prop="username" sortable="custom" align="center" width="190" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.creatDate }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="创建者" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="创建者"  v-if="false" prop="username" sortable="custom" align="center" width="150" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.creatId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="创建者姓名" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="创建者姓名" prop="username" sortable="custom" align="center" width="190" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.creatName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="状态" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="状态" prop="username" sortable="custom" align="center" width="183" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.state }}</span>
+          <span v-if="row.state==1">创建</span>
+          <span v-if="row.state==2">待审核</span>
+          <span v-if="row.state==3">已审核</span>
         </template>
       </el-table-column>
-      <el-table-column label="地址" prop="fileAddress" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="地址" prop="fileAddress" v-if="false" sortable="custom" align="center" width="190" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.fileAddress }}</span>
         </template>
       </el-table-column>
 
 
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            Edit
-          </el-button>
-          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            Publish
-          </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            Draft
+            修改
           </el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            Delete
+            删除
           </el-button>
-          <a href=""></a>
+          <el-button type="warning" size="mini" v-if="row.state==3" >
+            下载
+          </el-button>
         </template>
+
       </el-table-column>
 
     </el-table>
@@ -100,9 +93,9 @@
         <el-form-item label="标题" prop="title">
           <el-input v-model="temp.title" />
         </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="temp.state" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key" />
+        <el-form-item label="状态" v-if="temp.state!=''">
+          <el-select v-model="temp.state"  class="filter-item" placeholder="Please select">
+            <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key"  />
           </el-select>
         </el-form-item>
         <el-form-item label="文件上传">
@@ -121,10 +114,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
+          提交
         </el-button>
       </div>
     </el-dialog>
@@ -144,7 +137,7 @@
 <script type="text/css" src="../../utils/webuploader/webuploader.css"></script>
 <script type="text/javascript" src="../../utils/webuploader/webuploader.min.js"></script>
 <script>
-  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle,createArticleDau, updateArticle,uploadfile } from '@/api/article'
+  import { fetchListDau,fetchListUser,deleteDatum, fetchListEdu, fetchPv, createArticle,createArticleDau, updateArticleD,updateArticle,uploadfile } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -338,7 +331,7 @@
           if (valid) {
             const tempData = Object.assign({}, this.temp)
             tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-            updateArticle(tempData).then(() => {
+            updateArticleD(tempData).then(() => {
               const index = this.list.findIndex(v => v.id === this.temp.id)
               this.list.splice(index, 1, this.temp)
               this.dialogFormVisible = false
@@ -359,7 +352,7 @@
           type: 'success',
           duration: 2000
         })
-        del(row.id).then((response) => {
+        deleteDatum(row.id).then((response) => {
           this.getList()
           this.$notify({
             title: '成功',

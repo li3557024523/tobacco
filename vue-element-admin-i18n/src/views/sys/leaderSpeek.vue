@@ -1,21 +1,16 @@
 <template>
   <div class="app-container">
-    <el-header>廉政教育</el-header>
+    <el-header align="center" style="font-size: 50px">领导讲话</el-header>
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        Search
+        查询
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add
+        增加
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
-      </el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        reviewer
-      </el-checkbox>
+
     </div>
 
     <el-table
@@ -33,7 +28,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标题" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="标题" prop="username" sortable="custom" align="center" width="103" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
@@ -43,32 +38,33 @@
           <span>{{ row.origin }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="资讯类型" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="资讯类型" prop="username" v-if="show" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.informationTypes }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="资讯内容" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="资讯内容" prop="username" sortable="custom" align="center" width="400" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <div v-html="row.context"  class="asd"></div>
 
         </template>
+
       </el-table-column>
 
-      <el-table-column label="资讯发布时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="资讯发布时间" prop="username" sortable="custom" align="center" width="140" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.pubdate }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="创建时间" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="创建时间" prop="username" sortable="custom" align="center" width="140" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.addTime }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="创建者" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="创建者"  v-if="show" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.createId }}</span>
         </template>
@@ -82,22 +78,21 @@
 
       <el-table-column label="状态" prop="username" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.state }}</span>
+          <span v-if="row.state==1">
+            开启
+          </span>
+          <span v-if="row.state==2">
+            关闭
+          </span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            Edit
-          </el-button>
-          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            Publish
-          </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            Draft
+            修改
           </el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            Delete
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -108,38 +103,38 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
+        <el-form-item label="类型" prop="type">
           <el-select v-model="temp.type"  class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.display_name" />
           </el-select>
         </el-form-item>
-        <el-form-item label="origin" prop="origin">
+        <el-form-item label="来源" prop="origin">
           <el-input v-model="temp.origin" />
         </el-form-item>
-        <h1>这里是修改-----------------------</h1>
-        <el-form-item label="pubdate" prop="pubdate">
+        <el-form-item label="发布时间" prop="pubdate">
           <el-date-picker v-model="temp.pubdate" type="datetime" placeholder="Please pick a date" />
         </el-form-item>
-        <el-form-item label="Title" prop="title">
+        <el-form-item label="标题" prop="title">
           <el-input v-model="temp.title" />
         </el-form-item>
-        <el-form-item label="Status">
-          <el-select v-model="temp.state" class="filter-item" placeholder="Please select">
+        <el-form-item label="状态" v-if="temp.state==null">
+          <el-select v-model="temp.state"   class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key" />
           </el-select>
         </el-form-item>
-
-        <el-card style="height: 610px;">
-          <quill-editor v-model="temp.context" ref="myQuillEditor" style="height: 500px;" :options="editorOption">
-          </quill-editor>
-        </el-card>
+        <el-form-item label="内容">
+          <el-card style="height: 610px;" >
+            <quill-editor v-model="temp.context" ref="myQuillEditor" style="height: 500px;" :options="editorOption">
+            </quill-editor>
+          </el-card>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
+          提交
         </el-button>
       </div>
     </el-dialog>
@@ -157,7 +152,7 @@
 </template>
 
 <script>
-  import { fetchListDau,fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
+  import { fetchListUser, fetchListEdu, fetchPv, createArticle, updateArticle } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -202,6 +197,7 @@
     },
     data() {
       return {
+        show:false,
         content: null,
         editorOption: {},
         tableKey: 0,
@@ -265,9 +261,11 @@
     methods: {
       getList() {
         this.listLoading = true
+
         fetchListEdu(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
+
 
           // Just to simulate the time of the request
           setTimeout(() => {
@@ -277,8 +275,8 @@
       },
       handleFilter() {
         this.listQuery.page = 1
-
         this.getList()
+
       },
       handleModifyStatus(row, status) {
         this.$message({
@@ -427,8 +425,21 @@
     }
   }
 </script>
-<style>
-
+<style lang="scss" type="text/css">
+  .context >>> img{
+    max-width: 100%
+  }
+  .asd >>> p {
+    text-indent: 32px;
+  }
+  .asd >>> p+img {
+    max-width: 100px;
+    height: 100px;
+  }
+  .asd >>> img{
+    max-width: 100px;
+    height: 100px;
+  }
   img{
     max-width:100%;height:auto;
   }

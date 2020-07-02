@@ -3,6 +3,7 @@ package com.xr.base.service.supervision;
 import com.xr.base.entity.Supervision;
 import com.xr.base.mapper.S_mapper;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Service
 public class S_serviceImpl implements S_service {
 
+    @Autowired
     private S_mapper s_mapper;
     @Override
     public int ins(Supervision s) {
@@ -45,5 +47,10 @@ public class S_serviceImpl implements S_service {
     @Override
     public int deleteZT(Supervision superviseReport) {
         return s_mapper.deleteZT(superviseReport);
+    }
+
+    @Override
+    public List<Supervision> listUp(Integer page, Integer limit) {
+        return s_mapper.listUp(page, limit);
     }
 }

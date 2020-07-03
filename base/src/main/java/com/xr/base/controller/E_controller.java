@@ -66,6 +66,9 @@ public class E_controller {
         //System.out.println(listType);
         //System.out.println("limit:"+limit+"page:"+page);
         int i=0;
+        if (temp.getInformationTypes()==null) {
+            temp.setInformationTypes(1);
+        }
         System.out.println(temp.getInformationTypes());
       if(temp!=null){
            i=e_service.E_Ins(temp);

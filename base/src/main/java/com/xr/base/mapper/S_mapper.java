@@ -20,6 +20,8 @@ public interface S_mapper {
     public int updateZT(Supervision s);
     @Update("update supervision set state=#{state} where id=#{id}")
     int  deleteZT(Supervision superviseReport);
-    @Select("select * from supervision where state=2 or state=4 or state=6 ")
+    @Select("select * from supervision where state=2 or state=4 or state=6  ")
     public List<Supervision> listUp(Integer page,Integer limit);
+    @Select("select * from supervision where state=2 or state=4 or state=6 limit #{page},#{limit} ")
+    public List<Supervision> lista(Integer page,Integer limit);
 }
